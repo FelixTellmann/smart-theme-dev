@@ -712,7 +712,7 @@
           "content": " "
         },
         "paragraph__15": {
-          "content": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/manual/online-store/os/store-speed/improving-speed#fonts)"
+          "content": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https:\/\/help.shopify.com\/manual\/online-store\/os\/store-speed\/improving-speed#fonts)"
         }
       }
     },
@@ -1054,39 +1054,39 @@
         },
         "social_twitter_link": {
           "label": "Twitter",
-          "info": "https://twitter.com/shopify"
+          "info": "https:\/\/twitter.com\/shopify"
         },
         "social_facebook_link": {
           "label": "Facebook",
-          "info": "https://facebook.com/shopify"
+          "info": "https:\/\/facebook.com\/shopify"
         },
         "social_pinterest_link": {
           "label": "Pinterest",
-          "info": "https://pinterest.com/shopify"
+          "info": "https:\/\/pinterest.com\/shopify"
         },
         "social_instagram_link": {
           "label": "Instagram",
-          "info": "https://instagram.com/shopify"
+          "info": "https:\/\/instagram.com\/shopify"
         },
         "social_tiktok_link": {
           "label": "TikTok",
-          "info": "https://tiktok.com/@shopify"
+          "info": "https:\/\/tiktok.com\/@shopify"
         },
         "social_tumblr_link": {
           "label": "Tumblr",
-          "info": "https://shopify.tumblr.com"
+          "info": "https:\/\/shopify.tumblr.com"
         },
         "social_snapchat_link": {
           "label": "Snapchat",
-          "info": "https://www.snapchat.com/add/shopify"
+          "info": "https:\/\/www.snapchat.com\/add\/shopify"
         },
         "social_youtube_link": {
           "label": "YouTube",
-          "info": "https://www.youtube.com/shopify"
+          "info": "https:\/\/www.youtube.com\/shopify"
         },
         "social_vimeo_link": {
           "label": "Vimeo",
-          "info": "https://vimeo.com/shopify"
+          "info": "https:\/\/vimeo.com\/shopify"
         }
       }
     },
@@ -1147,7 +1147,7 @@
         "cart_color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -1165,7 +1165,8 @@
   "sections": {
     "apps": {
       "name": "Apps",
-      "settings": {},
+      "settings": {
+      },
       "presets": {
         "apps": {
           "name": "Apps"
@@ -1229,7 +1230,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -1314,7 +1315,7 @@
         "free_shipping_bar__color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -1411,11 +1412,11 @@
             },
             "start_date": {
               "label": "Start Date",
-              "info": "Use Date format yyyy/mm/dd hh:mm:ss"
+              "info": "Use Date format yyyy\/mm\/dd hh:mm:ss"
             },
             "end_date": {
               "label": "End Date",
-              "info": "Use Date format yyyy/mm/dd hh:mm:ss"
+              "info": "Use Date format yyyy\/mm\/dd hh:mm:ss"
             }
           }
         }
@@ -1522,7 +1523,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -1790,7 +1791,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -2024,7 +2025,7 @@
           "name": "Dynamic Buy buttons",
           "settings": {
             "paragraph__1": {
-              "content": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+              "content": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)"
             },
             "grid_span": {
               "label": "Spacing",
@@ -2117,10 +2118,10 @@
           "name": "Share",
           "settings": {
             "paragraph__1": {
-              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https://help.shopify.com/manual/online-store/images/showing-social-media-thumbnail-images)."
+              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/images\/showing-social-media-thumbnail-images)."
             },
             "paragraph__2": {
-              "content": "A store title and description are included with the preview image. [Learn more](https://help.shopify.com/manual/promoting-marketing/seo/adding-keywords#set-a-title-and-description-for-your-online-store)."
+              "content": "A store title and description are included with the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/promoting-marketing\/seo\/adding-keywords#set-a-title-and-description-for-your-online-store)."
             },
             "grid_span": {
               "label": "Spacing",
@@ -2308,7 +2309,7 @@
           "name": "Product rating",
           "settings": {
             "paragraph__1": {
-              "content": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/page-types#product-rating-block)"
+              "content": "To display a rating, add a product rating app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/themes\/theme-structure\/page-types#product-rating-block)"
             },
             "grid_span": {
               "label": "Spacing",
@@ -2347,7 +2348,7 @@
               "info": "Fallback in case complimentary products are not set up."
             },
             "paragraph__1": {
-              "content": "To select complementary products, add the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/product-recommendations)"
+              "content": "To select complementary products, add the Search & Discovery app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/search-and-discovery\/product-recommendations)"
             }
           }
         },
@@ -2985,7 +2986,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -3083,7 +3084,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -3109,7 +3110,7 @@
             "color_scheme": {
               "label": "Color scheme",
               "options__1": {
-                "label": "Inherit from parent/theme"
+                "label": "Inherit from parent\/theme"
               },
               "options__2": {
                 "label": "Color group 1"
@@ -3204,7 +3205,7 @@
             "color_scheme": {
               "label": "Color scheme",
               "options__1": {
-                "label": "Inherit from parent/theme"
+                "label": "Inherit from parent\/theme"
               },
               "options__2": {
                 "label": "Color group 1"
@@ -3261,7 +3262,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -3474,10 +3475,10 @@
           "label": "Show social media icons"
         },
         "header__4": {
-          "content": "Country/region selector"
+          "content": "Country\/region selector"
         },
         "country_selector_show": {
-          "label": "Enable country/region selector"
+          "label": "Enable country\/region selector"
         },
         "header__5": {
           "content": "Language selector"
@@ -3497,7 +3498,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -3668,7 +3669,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -4049,7 +4050,7 @@
           "settings": {
             "name": {
               "label": "Element Name",
-              "info": "You can add any additional properties. There are some reserved keywords that enable extra functionality. I.e. `tags` adds tags to a customer when used in any of the Customer/newsletter related forms"
+              "info": "You can add any additional properties. There are some reserved keywords that enable extra functionality. I.e. `tags` adds tags to a customer when used in any of the Customer\/newsletter related forms"
             },
             "value": {
               "label": "Value",
@@ -4180,7 +4181,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -4395,7 +4396,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -4584,7 +4585,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -4672,7 +4673,7 @@
             "label": "Square"
           },
           "options__3": {
-            "label": "4/3 Landscape"
+            "label": "4\/3 Landscape"
           }
         },
         "image__order": {
@@ -4840,7 +4841,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -4865,7 +4866,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -4885,7 +4886,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -4907,7 +4908,7 @@
           "settings": {
             "image_height": {
               "label": "Featured image height",
-              "info": "For best results, use an image with a 16:9 aspect ratio. [Learn more](https://help.shopify.com/manual/shopify-admin/productivity-tools/image-editor#understanding-image-aspect-ratio)",
+              "info": "For best results, use an image with a 16:9 aspect ratio. [Learn more](https:\/\/help.shopify.com\/manual\/shopify-admin\/productivity-tools\/image-editor#understanding-image-aspect-ratio)",
               "options__1": {
                 "label": "Adapt to image"
               },
@@ -4944,10 +4945,10 @@
               "label": "Text"
             },
             "paragraph__1": {
-              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https://help.shopify.com/manual/online-store/images/showing-social-media-thumbnail-images)."
+              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/images\/showing-social-media-thumbnail-images)."
             },
             "paragraph__2": {
-              "content": "A store title and description are included with the preview image. [Learn more](https://help.shopify.com/manual/promoting-marketing/seo/adding-keywords#set-a-title-and-description-for-your-online-store)."
+              "content": "A store title and description are included with the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/promoting-marketing\/seo\/adding-keywords#set-a-title-and-description-for-your-online-store)."
             }
           }
         }
@@ -4981,12 +4982,12 @@
           "label": "Show author"
         },
         "paragraph__1": {
-          "content": "Change excerpts by editing your blog posts. [Learn more](https://help.shopify.com/manual/online-store/blogs/writing-blogs#display-an-excerpt-from-a-blog-post)"
+          "content": "Change excerpts by editing your blog posts. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/blogs\/writing-blogs#display-an-excerpt-from-a-blog-post)"
         },
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5036,7 +5037,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5161,7 +5162,7 @@
             "color_scheme": {
               "label": "Color scheme",
               "options__1": {
-                "label": "Inherit from parent/theme"
+                "label": "Inherit from parent\/theme"
               },
               "options__2": {
                 "label": "Color group 1"
@@ -5181,11 +5182,11 @@
       "name": "Collection banner",
       "settings": {
         "paragraph__1": {
-          "content": "Add a description or image by editing your collection. [Learn more](https://help.shopify.com/manual/products/collections/collection-layout)"
+          "content": "Add a description or image by editing your collection. [Learn more](https:\/\/help.shopify.com\/manual\/products\/collections\/collection-layout)"
         },
         "image__show": {
           "label": "Show collection image",
-          "info": "For best results, use an image with a 16:9 aspect ratio. [Learn more](https://help.shopify.com/manual/shopify-admin/productivity-tools/image-editor#understanding-image-aspect-ratio)"
+          "info": "For best results, use an image with a 16:9 aspect ratio. [Learn more](https:\/\/help.shopify.com\/manual\/shopify-admin\/productivity-tools\/image-editor#understanding-image-aspect-ratio)"
         },
         "image__overlay": {
           "label": "Overlay"
@@ -5277,7 +5278,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5382,7 +5383,7 @@
         },
         "filters__show": {
           "label": "Enable filtering",
-          "info": "Customize [filters](/admin/menus)"
+          "info": "Customize [filters](\/admin\/menus)"
         },
         "filters__type": {
           "label": "Desktop filter layout",
@@ -5418,7 +5419,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5471,7 +5472,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5560,7 +5561,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5656,7 +5657,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5678,7 +5679,7 @@
         },
         "filters__show": {
           "label": "Enable filtering",
-          "info": "Customize [filters](/admin/menus)"
+          "info": "Customize [filters](\/admin\/menus)"
         },
         "filters__type": {
           "label": "Desktop filter layout",
@@ -5702,7 +5703,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5727,7 +5728,7 @@
         },
         "rating__show": {
           "label": "Show product rating",
-          "info": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/page-types#product-grid-section-settings)"
+          "info": "To display a rating, add a product rating app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/themes\/theme-structure\/page-types#product-grid-section-settings)"
         },
         "labels__show": {
           "label": "Show labels"
@@ -5816,7 +5817,8 @@
     },
     "search_bar_input": {
       "name": "Search Bar Input",
-      "settings": {}
+      "settings": {
+      }
     },
     "main_404": {
       "name": "Main 404",
@@ -5863,7 +5865,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -5990,7 +5992,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -6164,7 +6166,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -6429,7 +6431,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -6690,7 +6692,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -6730,10 +6732,10 @@
           "label": "Show social media icons"
         },
         "header__3": {
-          "content": "Country/region selector"
+          "content": "Country\/region selector"
         },
         "country_selector_show": {
-          "label": "Enable country/region selector"
+          "label": "Enable country\/region selector"
         },
         "header__4": {
           "content": "Language selector"
@@ -6788,7 +6790,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -6831,7 +6833,8 @@
     },
     "predictive_search": {
       "name": "Predictive search",
-      "settings": {}
+      "settings": {
+      }
     },
     "product": {
       "name": "Product",
@@ -6918,7 +6921,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -7152,7 +7155,7 @@
           "name": "Dynamic Buy buttons",
           "settings": {
             "paragraph__1": {
-              "content": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+              "content": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)"
             },
             "grid_span": {
               "label": "Spacing",
@@ -7204,10 +7207,10 @@
           "name": "Share",
           "settings": {
             "paragraph__1": {
-              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https://help.shopify.com/manual/online-store/images/showing-social-media-thumbnail-images)."
+              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/images\/showing-social-media-thumbnail-images)."
             },
             "paragraph__2": {
-              "content": "A store title and description are included with the preview image. [Learn more](https://help.shopify.com/manual/promoting-marketing/seo/adding-keywords#set-a-title-and-description-for-your-online-store)."
+              "content": "A store title and description are included with the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/promoting-marketing\/seo\/adding-keywords#set-a-title-and-description-for-your-online-store)."
             },
             "grid_span": {
               "label": "Spacing",
@@ -7395,7 +7398,7 @@
           "name": "Product rating",
           "settings": {
             "paragraph__1": {
-              "content": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/page-types#product-rating-block)"
+              "content": "To display a rating, add a product rating app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/themes\/theme-structure\/page-types#product-rating-block)"
             },
             "grid_span": {
               "label": "Spacing",
@@ -7434,7 +7437,7 @@
               "info": "Fallback in case complimentary products are not set up."
             },
             "paragraph__1": {
-              "content": "To select complementary products, add the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/product-recommendations)"
+              "content": "To select complementary products, add the Search & Discovery app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/search-and-discovery\/product-recommendations)"
             }
           }
         },
@@ -8016,7 +8019,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -8060,7 +8063,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -8357,7 +8360,7 @@
           "name": "Dynamic Buy buttons",
           "settings": {
             "paragraph__1": {
-              "content": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+              "content": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay. [Learn more](https:\/\/help.shopify.com\/manual\/using-themes\/change-the-layout\/dynamic-checkout)"
             },
             "grid_span": {
               "label": "Spacing",
@@ -8409,10 +8412,10 @@
           "name": "Share",
           "settings": {
             "paragraph__1": {
-              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https://help.shopify.com/manual/online-store/images/showing-social-media-thumbnail-images)."
+              "content": "If you include a link in social media posts, the page’s featured image will be shown as the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/images\/showing-social-media-thumbnail-images)."
             },
             "paragraph__2": {
-              "content": "A store title and description are included with the preview image. [Learn more](https://help.shopify.com/manual/promoting-marketing/seo/adding-keywords#set-a-title-and-description-for-your-online-store)."
+              "content": "A store title and description are included with the preview image. [Learn more](https:\/\/help.shopify.com\/manual\/promoting-marketing\/seo\/adding-keywords#set-a-title-and-description-for-your-online-store)."
             },
             "grid_span": {
               "label": "Spacing",
@@ -8600,7 +8603,7 @@
           "name": "Product rating",
           "settings": {
             "paragraph__1": {
-              "content": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/page-types#product-rating-block)"
+              "content": "To display a rating, add a product rating app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/themes\/theme-structure\/page-types#product-rating-block)"
             },
             "grid_span": {
               "label": "Spacing",
@@ -8639,7 +8642,7 @@
               "info": "Fallback in case complimentary products are not set up."
             },
             "paragraph__1": {
-              "content": "To select complementary products, add the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/product-recommendations)"
+              "content": "To select complementary products, add the Search & Discovery app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/search-and-discovery\/product-recommendations)"
             }
           }
         },
@@ -9200,7 +9203,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -9451,7 +9454,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -9706,7 +9709,7 @@
         "color_scheme": {
           "label": "Color scheme",
           "options__1": {
-            "label": "Inherit from parent/theme"
+            "label": "Inherit from parent\/theme"
           },
           "options__2": {
             "label": "Color group 1"
@@ -9908,7 +9911,7 @@
         },
         "rating__show": {
           "label": "Show product rating",
-          "info": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/page-types#product-grid-section-settings)"
+          "info": "To display a rating, add a product rating app. [Learn more](https:\/\/help.shopify.com\/manual\/online-store\/themes\/theme-structure\/page-types#product-grid-section-settings)"
         },
         "labels__show": {
           "label": "Show labels"
@@ -10148,7 +10151,7 @@
             "color_scheme": {
               "label": "Color scheme",
               "options__1": {
-                "label": "Inherit from parent/theme"
+                "label": "Inherit from parent\/theme"
               },
               "options__2": {
                 "label": "Color group 1"
