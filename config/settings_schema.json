@@ -4,8 +4,8 @@
     "theme_name": "Accelerate",
     "theme_author": "Framework Labs",
     "theme_version": "0.0.1",
-    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
-    "theme_support_url": "https://support.shopify.com/"
+    "theme_documentation_url": "https:\/\/help.shopify.com\/manual\/online-store\/themes",
+    "theme_support_url": "https:\/\/support.shopify.com\/"
   },
   {
     "name": "t:settings_schema.branding.name",
@@ -401,7 +401,7 @@
         "id": "color_3_title",
         "label": "t:settings_schema.color_group_3.settings.color_3_title.label",
         "info": "t:settings_schema.color_group_3.settings.color_3_title.info",
-        "default": "Header / Footer / Cart"
+        "default": "Header \/ Footer \/ Cart"
       },
       {
         "type": "header",
