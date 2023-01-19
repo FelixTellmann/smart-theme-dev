@@ -1,0 +1,164 @@
+{%- liquid
+
+  assign variant_options = 'available,barcode,compare_at_price,featured_media,featured_media_id,id,incoming,inventory_management,inventory_policy,inventory_quantity,matched,next_incoming_date,option1,option2,option3,options,price,product_id,requires_selling_plan,requires_shipping,selected,selected_selling_plan_allocation,selling_plan_allocations,sku,store_availabilities,taxable,title,unit_price,unit_price_measurement,url,weight,weight_in_unit,weight_unit' | split: ','
+
+  assign variant_sub_selects = 'metafields' | split: ','
+
+  assign subset = select | strip_newlines | replace: ' ', "" | split: ',' | default: variant_options
+
+  assign subset_with_prefix = subset | join: ",|" | prepend: "|" | split: ','
+  assign select_with_prefix = subset_with_prefix | join: ","
+
+  for item in subset
+    assign test_item = item | split: '.' | first
+    if variant_options contains test_item
+      assign opt = opt | join: ',' | append: ',' | append: test_item | split: ','
+    endif
+  endfor
+
+  assign options = opt | join: ',' | split: ','
+
+  if options.size == 0
+    assign options = variant_options
+  endif
+
+  assign options = options | sort
+
+  for sub_select in variant_sub_selects
+    assign prefixed_sub_select = '|' | append: sub_select | append: '.'
+    assign sub_selection = null
+
+    if select_with_prefix contains prefixed_sub_select
+      unless options contains sub_select
+        assign options = options | join: ',' | append: ',' | append: sub_select | split: ','
+      endunless
+      assign opt = null
+      for option in subset_with_prefix
+        if option contains prefixed_sub_select
+          assign opt = opt | join: ',' | append: ',' | append: option | replace: prefixed_sub_select, '' | split: ','
+        endif
+      endfor
+      assign sub_selection = opt | join: ',' | remove_first: ','
+    endif
+
+    case sub_select
+      when 'variants'
+        assign variant_select = sub_selection | default: variant_options | join: ',' | remove_first: ',product'
+      when 'metafields'
+        assign metafields_namespaces = sub_selection | join: ','
+    endcase
+  endfor
+-%}
+
+{%- capture json -%}
+  {
+  {%- if options contains 'available' -%}
+    ,"available": {{- input['available'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'barcode' -%}
+    ,"barcode": {{- input['barcode'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'compare_at_price' -%}
+    ,"compare_at_price": {{- input['compare_at_price'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'featured_media' -%}
+    ,"featured_media": {{- input['featured_media'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'featured_media_id' -%}
+    ,"featured_media_id": {{- input['featured_media'].id | json -}}
+  {%- endif -%}
+  {%- if options contains 'id' -%}
+    ,"id": {{- input['id'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'incoming' -%}
+    ,"incoming": {{- input['incoming'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'inventory_management' -%}
+    ,"inventory_management": {{- input['inventory_management'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'inventory_policy' -%}
+    ,"inventory_policy": {{- input['inventory_policy'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'inventory_quantity' -%}
+    ,"inventory_quantity": {{- input['inventory_quantity'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'matched' -%}
+    ,"matched": {{- input['matched'] | json -}}
+  {%- endif -%}
+  {%- if metafields_namespaces.size > 0 -%}
+    ,"metafields": {
+    {%- for namespace in metafields_namespaces -%}
+      "{{- namespace -}}": {%- render '_json_metafields', input: input.metafields[namespace] -%}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+    }
+  {%- endif -%}
+  {%- if options contains 'next_incoming_date' -%}
+    ,"next_incoming_date": {{- input['next_incoming_date'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'option1' -%}
+    ,"option1": {{- input['option1'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'option2' -%}
+    ,"option2": {{- input['option2'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'option3' -%}
+    ,"option3": {{- input['option3'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'options' -%}
+    ,"options": {{- input['options'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'price' -%}
+    ,"price": {{- input['price'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'product_id' -%}
+    ,"product_id": {{- input['product_id'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'requires_selling_plan' -%}
+    ,"requires_selling_plan": {{- input['requires_selling_plan'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'requires_shipping' -%}
+    ,"requires_shipping": {{- input['requires_shipping'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'selected' -%}
+    ,"selected": {{- input['selected'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'selected_selling_plan_allocation' -%}
+    ,"selected_selling_plan_allocation": {{- input['selected_selling_plan_allocation'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'selling_plan_allocations' -%}
+    ,"selling_plan_allocations": {{- input['selling_plan_allocations'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'sku' -%}
+    ,"sku": {{- input['sku'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'store_availabilities' -%}
+    ,"store_availabilities": {{- input['store_availabilities'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'taxable' -%}
+    ,"taxable": {{- input['taxable'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'title' -%}
+    ,"title": {{- input['title'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'unit_price' -%}
+    ,"unit_price": {{- input['unit_price'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'unit_price_measurement' -%}
+    ,"unit_price_measurement": {{- input['unit_price_measurement'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'url' -%}
+    ,"url": {{- input['url'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'weight' -%}
+    ,"weight": {{- input['weight'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'weight_in_unit' -%}
+    ,"weight_in_unit": {{- input['weight_in_unit'] | json -}}
+  {%- endif -%}
+  {%- if options contains 'weight_unit' -%}
+    ,"weight_unit": {{- input['weight_unit'] | json -}}
+  {%- endif -%}
+  }
+{%- endcapture -%}
+
+{{- json | remove_first: ',' | trim | strip_newlines -}}

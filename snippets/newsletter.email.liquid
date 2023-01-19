@@ -1,0 +1,64 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign placeholder_text = block.settings.placeholder_text
+  assign button_text = block.settings.button_text
+  assign tag = block.settings.tag
+  assign margin_bottom = block.settings.margin_bottom
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="w-full max-w-2xl"
+     style="margin-bottom: {{ margin_bottom }}px;">
+  {%- form 'customer', id: id, class: 'block' -%}
+    <div class="flex sm:space-x-2 space-y-2 flex-col sm:flex-row sm:space-y-0">
+      <label class="flex sm:inline-flex flex-1">
+        <input
+            type="email"
+            name="contact[email]"
+            class="input-primary flex w-full placeholder:text-center sm:placeholder:text-left"
+            value="{{ form.email }}"
+            aria-required="true"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="email"
+            {% if form.errors %}
+              autofocus
+              aria-invalid="true"
+              aria-describedby="ContactFooter-error"
+            {% elsif form.posted_successfully? %}
+              aria-describedby="ContactFooter-success"
+            {% endif %}
+            placeholder="{{ placeholder_text }}"
+            required
+        >
+        <span class="sr-only">
+          {{ "newsletter.newsletter" | t }}
+        </span>
+
+        {%- if form.errors -%}
+          <small class="block">
+            {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+          </small>
+        {%- endif -%}
+
+        {%- if form.posted_successfully? -%}
+          <h3 class=""
+              tabindex="-1"
+              autofocus>
+            {{ "newsletter.thank_you" | t }}
+          </h3>
+        {%- endif -%}
+      </label>
+
+      <button type="submit"
+              class="button-primary w-full sm:w-auto">
+        {{ button_text }}
+      </button>
+    </div>
+    {% if tag and tag != blank %}
+      <input type="hidden"
+             name="customer[tags]"
+             value="{{ tag }}">
+    {% endif %}
+  {%- endform -%}
+</div>

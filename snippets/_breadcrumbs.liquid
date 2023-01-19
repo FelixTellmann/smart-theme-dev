@@ -1,0 +1,85 @@
+{%- assign templatePrefix = template | split: '.' | first -%}
+
+{% assign url_1 = false %}
+{% assign title_1 = false %}
+{% assign url_2 = false %}
+{% assign title_2 = false %}
+
+{%- capture tag_url -%}{{ collection.url }}/{{ current_tags | join: "+" }}{%- endcapture -%}
+
+{%- case templatePrefix -%}
+  {%- when 'page' -%}
+    {% assign url_1 = page.url %}
+    {% assign title_1 = page.title %}
+
+  {%- when 'product' -%}
+    {%- if collection.url -%}
+      {% assign url_1 = collection.url %}
+      {% assign title_1 = collection.title %}
+    {%- endif -%}
+
+    {% assign url_2 = product.url %}
+    {% assign title_2 = product.title %}
+
+  {%- when 'collection' and collection.handle -%}
+    {% assign url_1 = collection.url %}
+    {% assign title_1 = collection.title %}
+
+    {%- if current_tags -%}
+      {% assign url_2 = tag_url %}
+      {% assign title_2 = current_tags | join: " + " %}
+    {%- endif -%}
+
+  {%- when 'blog' -%}
+    {% assign url_1 = blog.url %}
+    {% assign title_1 = blog.title %}
+
+    {%- if current_tags -%}
+      {% assign url_2 = tag_url %}
+      {% assign title_2 = current_tags | join: " + " %}
+    {%- endif -%}
+
+  {%- when 'article' -%}
+    {% assign url_1 = blog.url %}
+    {% assign title_1 = blog.title %}
+
+    {% assign url_2 = article.url %}
+    {% assign title_2 = article.title %}
+
+  {%- else -%}
+    {% assign url_2 = request.path %}
+    {% assign title_2 = page_title %}
+
+{%- endcase -%}
+
+
+<nav class="grid auto-cols-min grid-flow-col-dense whitespace-nowrap gap-1 items-center text-xs font-medium select-none overflow-hidden max-w-full"
+     role="navigation"
+     aria-label="breadcrumbs">
+  <a class="hf:underline"
+     href="{{ routes.root_url }}">Home</a>
+
+  {% if url_1 and url_2 %}
+
+    {% render "_icon", icon: 'chevron-right', class: "w-2 h-2" %}
+    <a class="hf:underline"
+       href="{{ url_1 }}">{{ title_1 }}</a>
+
+    {% render "_icon", icon: 'chevron-right', class: "w-2 h-2" %}
+    <span class="text-theme-text/70 truncate">{{ title_2 }}</span>
+
+  {% else %}
+
+    {% if url_1 %}
+      {% render "_icon", icon: 'chevron-right', class: "w-2 h-2" %}
+      <span class="text-theme-text/70 truncate">{{ title_1 }}</span>
+    {% endif %}
+
+    {% if url_2 %}
+      {% render "_icon", icon: 'chevron-right', class: "w-2 h-2" %}
+      <span class="text-theme-text/70 truncate">{{ title_2 }}</span>
+    {% endif %}
+
+  {% endif %}
+
+</nav>

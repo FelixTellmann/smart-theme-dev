@@ -1,0 +1,36 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign accordion_style = block.settings.accordion_style
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="description"
+     class="col-span-12 " {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <div class="grid gap-3">
+    {% if product.description != blank %}
+      {% if accordion_style == false %}
+        <div class="prose prose-theme">
+          {{ product.description }}
+        </div>
+      {% endif %}
+      {% if accordion_style == true %}
+        {% assign description = product.description | split: '<h1' %}
+        {% for headingBlock in description %}
+          {% if headingBlock contains '</h1>' %}
+            {% assign accordionBlock = headingBlock | split: '</h1>' %}
+            {% assign title = "<h1" | append: accordionBlock[0] | append: "</h1>" | strip_html %}
+            {% assign content = accordionBlock[1] | strip_html %}
+            <div class="grid gap-3 border-b border-b-theme-text/50">
+              {% render '_collapsible', title: title, content: content %}
+            </div>
+          {% else %}
+            <div class="grid gap-3">
+              {{ headingBlock | strip_html }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  </div>
+</div>

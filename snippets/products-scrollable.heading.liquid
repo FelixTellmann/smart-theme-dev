@@ -1,0 +1,47 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign preheading = block.settings.preheading
+  assign preheading_font = block.settings.preheading_font
+  assign title = block.settings.title
+  assign title_font = block.settings.title_font
+  assign subtitle = block.settings.subtitle
+  assign subtitle_font = block.settings.subtitle_font
+  assign content = block.settings.content
+  assign button_primary__text = block.settings.button_primary__text
+  assign button_primary__url = block.settings.button_primary__url
+  assign button_primary__style = block.settings.button_primary__style
+  assign button_secondary__text = block.settings.button_secondary__text
+  assign button_secondary__url = block.settings.button_secondary__url
+  assign button_secondary__style = block.settings.button_secondary__style
+  assign align__horizontal = block.settings.align__horizontal
+  assign margin_bottom = block.settings.margin_bottom
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<header class="container h-full w-full flex flex-col {{ align__horizontal }}" {{ block.shopify_attributes }}
+        style="margin-bottom: {{ margin_bottom }}px">
+
+  <div class="max-w-lg grid gap-3">
+    {% render 'typography', type: preheading_font, content: preheading %}
+    {% render 'typography', type: title_font, content: title %}
+    {% render 'typography', type: subtitle_font, content: subtitle %}
+    {% render 'typography', type: "prose", content: content %}
+
+    {% if button_secondary__show or button_primary__show %}
+      <div class="mt-4 -mx-2 flex flex-col sm:flex-row {{ align__horizontal | replace: "items", "sm:justify" | replace: "items-end", "sm:justify-end" }}">
+        {% if button_secondary__show %}
+          <a href="{{ button_secondary__url }}"
+             class="{{ button_secondary__style }} m-2">
+            {{ button_secondary__text }}
+          </a>
+        {% endif %}
+        {% if button_primary__show %}
+          <a href="{{ button_primary__url }}"
+             class="{{ button_primary__style }} m-2">
+            {{ button_primary__text }}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</header>

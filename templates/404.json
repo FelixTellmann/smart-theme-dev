@@ -1,0 +1,50 @@
+{
+  "sections": {
+    "main404": {
+      "type": "main404",
+      "blocks": {
+        "bbe32df0-5d27-45f3-b4d4-03ae2c077d17": {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>404 Error<\/strong><\/p>",
+            "style": "h3"
+          }
+        },
+        "26bcaa1a-6e5b-411d-8452-0877b8ce3dba": {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>Page not found<\/strong><\/p>",
+            "style": "h1"
+          }
+        },
+        "4af9789a-4a84-43cd-89ce-310aca68ca73": {
+          "type": "buttons",
+          "settings": {
+            "button_primary__text": "Continue Shopping",
+            "button_primary__url": "\/",
+            "button_primary__style": "button-primary",
+            "button_secondary__text": "",
+            "button_secondary__url": "",
+            "button_secondary__style": "button-primary--outline"
+          }
+        }
+      },
+      "block_order": [
+        "bbe32df0-5d27-45f3-b4d4-03ae2c077d17",
+        "26bcaa1a-6e5b-411d-8452-0877b8ce3dba",
+        "4af9789a-4a84-43cd-89ce-310aca68ca73"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/iphone_14_hero_image_9.png",
+        "image__overlay": "linear-gradient(134deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3) 100%)",
+        "min_height": 320,
+        "align__vertical": "justify-center",
+        "align__horizontal": "items-center text-center",
+        "color_scheme": "bg-theme-bg text-theme-text color-group-2"
+      }
+    }
+  },
+  "order": [
+    "main404"
+  ]
+}

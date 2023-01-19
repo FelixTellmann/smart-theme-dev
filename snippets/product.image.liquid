@@ -1,0 +1,28 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image__ratio = block.settings.image__ratio
+  assign image__background = block.settings.image__background
+  assign image__drop_shadow = block.settings.image__drop_shadow
+  assign grid_span = block.settings.grid_span
+  assign grid_row_span = block.settings.grid_row_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{%- liquid
+  assign imageClasses = 'w-full h-full object-cover inset-0 '
+  if image__drop_shadow
+    assign imageClasses = imageClasses | append: "drop-shadow-product"
+  endif
+-%}
+
+
+<div data-product-block="image"
+     class="{{ grid_span }} {{ grid_row_span }}" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <figure class="grid relative outline-none hf:outline-none h-0 w-full {{ image__ratio }}">
+    <div class="w-full h-full inset-0 absolute overflow-hidden rounded-theme shadow-md"
+         style="background: {{ image__background }};">
+      {% render '_image', image: product.featured_image, width: 180, class: imageClasses, placeholder: 'product-1' %}
+    </div>
+  </figure>
+</div>

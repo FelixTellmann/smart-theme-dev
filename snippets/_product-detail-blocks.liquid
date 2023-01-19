@@ -1,0 +1,426 @@
+{% assign product_form_dynamic_buttons_id = product_form_id | append: '-dynamic' %}
+{% assign variant = product.selected_or_first_available_variant %}
+<div class="grid grid-cols-12 gap-3 {{ class }}">
+  {% for block in section.blocks %}
+    {% assign colSpanClasses = block.settings.grid_span | default: "col-span-12" %}
+    {% assign rowSpanClasses = block.settings.grid_row_span | default: "row-span-1" %}
+
+    {% case block.type %}
+      {% when '@app' %}
+        <div data-product-block="@app"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {% render block %}
+        </div>
+      {% when 'text' %}
+        <div data-product-block="text"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          <div class="prose prose-theme">
+            {{ block.settings.text }}
+          </div>
+        </div>
+      {% when 'rating' %}
+        <div data-product-block="rating"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+
+          <figure class="flex items-center mt-2">
+            {% render '_start-rating', rating: product.metafields.reviews.rating.value, class: "h-5", id_prefix: product.id %}
+            <figcaption class="ml-2 text-xs text-theme-text/70">
+              {% if product.metafields.reviews.rating_count %}
+                {{ product.metafields.reviews.rating_count }} review{% if product.metafields.reviews.rating_count > 1 %}s{% endif %}
+              {% else %}
+                No reviews
+              {% endif %}
+            </figcaption>
+          </figure>
+
+        </div>
+      {% when 'image' %}
+        <div data-product-block="image"
+             class="{{ colSpanClasses }} {{ rowSpanClasses }}" {{ block.shopify_attributes }}>
+          {%- liquid
+            assign image__ratio = block.settings.image__ratio | default: 'pb-[125%]'
+            assign image__background = block.settings.image__background | default: "transparent"
+            assign image__drop_shadow = block.settings.image__drop_shadow | default: false
+
+            assign imageClasses = 'w-full h-full object-cover inset-0 '
+            if image__drop_shadow
+              assign imageClasses = imageClasses | append: "drop-shadow-product"
+            endif
+          -%}
+
+          <figure class="grid relative outline-none hf:outline-none h-0 w-full {{ image__ratio }}">
+            <div class="w-full h-full inset-0 absolute overflow-hidden rounded-theme shadow-md"
+                 style="background: {{ image__background }};">
+              {% render '_image', image: product.featured_image, width: 300, class: imageClasses, placeholder: 'product-1' %}
+            </div>
+          </figure>
+        </div>
+      {% when 'title' %}
+        <div data-product-block="title"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}
+             style="--font-scale-h3: {{ block.settings.font_scale | divided_by: 100.0 }}">
+          <h1 class="h3 font-bold">{{ product.title | escape }}</h1>
+        </div>
+      {% when 'vendor' %}
+        <div data-product-block="vendor"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          <a href="{{ routes.collections_url }}/vendors?q={{ product.vendor | url_escape }}"
+             class="flex font-semibold text-sm hf:underline"
+             title="{{ product.vendor }}">{{ product.vendor }}</a>
+        </div>
+      {% when 'sku' %}
+        <div data-product-block="sku"
+             class="{{ colSpanClasses }} empty:hidden" {{ block.shopify_attributes }}>
+          <div role="status"
+               class="text-sm text-theme-text/80 flex"
+               data-product-sku
+               title="SKU">{{ variant.sku | escape }}</div>
+        </div>
+      {% when 'price' %}
+        <div data-product-block="price"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {% render '_price', product_or_variant: variant %}
+        </div>
+      {% when 'variant_selector' %}
+        <div data-product-block="variant_selector"
+             class="grid gap-2 {{ colSpanClasses }}" {{ block.shopify_attributes }}>
+
+          {% unless product.variants.size == 1 %}
+
+            {% if section.id == 'product-drawer' %}
+              {% if block.settings.image_selector %}
+                {% render "_variant-selector", type: 'image_selector--placeholder', product: product, product_form_id: product_form_id %}
+              {% endif %}
+
+              {% case block.settings.color_selector %}
+                {% when 'title' %}
+                  {% render "_variant-selector", type: 'color_title--placeholder', product: product %}
+                {% when 'image' %}
+                  {% render "_variant-selector", type: 'color_image--placeholder', product: product %}
+                {% when 'metafield' %}
+                  {% render "_variant-selector", type: 'color_metafield--placeholder', product: product %}
+              {% endcase %}
+
+              {% case block.settings.default_type %}
+                {% when 'radio' %}
+                  {% render "_variant-selector", type: 'radio--placeholder', product: product %}
+                {% when 'select' %}
+                  {% render "_variant-selector", type: 'select--placeholder', product: product %}
+              {% endcase %}
+            {% endif %}
+
+            {% if section.id != 'product-drawer' %}
+              {% assign allVariantsHaveImages = true %}
+              {% for variant in product.variants %}
+                {% if variant.image == blank %}
+                  {% assign allVariantsHaveImages = false %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+
+              <div class="no-js-hidden grid gap-2">
+                {% if block.settings.image_selector and product.variants.size <= 12 and allVariantsHaveImages %}
+                  {% render "_variant-selector", type: 'image_selector', product: product, product_form_id: product_form_id %}
+                {% endif %}
+
+                {% if block.settings.image_selector == false or product.variants.size > 12 or allVariantsHaveImages == false %}
+                  {% assign color_labels = 'color,colour,couleur,cor,colore,farbe,색,色,カラー,färg,farve,szín,barva' | split: ',' %}
+                  {% for option in variant.product.options_with_values %}
+                    {% assign option_downcase = option.name | downcase %}
+                    {% if color_labels contains option_downcase and block.settings.color_selector != "default_type" %}
+                      {% case block.settings.color_selector %}
+                        {% when 'title' %}
+                          {% render "_variant-selector", type: 'color_title', product: product, option: option %}
+                        {% when 'image' %}
+                          {% render "_variant-selector", type: 'color_image', product: product, option: option %}
+                        {% when 'metafield' %}
+                          {% render "_variant-selector", type: 'color_metafield', product: product, option: option %}
+                      {% endcase %}
+                      {% continue %}
+                    {% endif %}
+
+                    {% case block.settings.default_type %}
+                      {% when 'radio' %}
+                        {% render "_variant-selector", type: 'radio', product: product, option: option %}
+                      {% when 'select' %}
+                        {% render "_variant-selector", type: 'select', product: product, option: option %}
+                    {% endcase %}
+
+                  {% endfor %}
+
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endunless %}
+          <noscript>
+            {% render "_variant-selector", type: 'no-js', product: product, product_form_id: product_form_id %}
+          </noscript>
+        </div>
+      {% when 'quantity_selector' %}
+        <div data-product-block="quantity_selector"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {% render '_quantity-selector', product: product, product_form_id: product_form_id %}
+
+        </div>
+      {% when 'custom_liquid' %}
+        <div data-product-block="custom_liquid"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {{ block.settings.custom_liquid }}
+        </div>
+      {% when 'description' %}
+        <div data-product-block="description"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {% if product.description != blank %}
+            <div class="prose prose-theme">
+              {{ product.description }}
+            </div>
+          {% endif %}
+
+
+        </div>
+      {% when 'collapsible_tab' %}
+        <div data-product-block="collapsible_tab"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          <div class="grid border-b border-b-theme-text/50">
+            {% assign title = block.settings.heading | default: block.settings.page.title %}
+            {% assign content = block.settings.content | append: block.settings.page.content %}
+            {% render '_collapsible', title: title, content: content %}
+          </div>
+        </div>
+      {% when 'share' %}
+        <div data-product-block="share"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {%- assign share_url = shop.url | append: product.url | url_param_escape -%}
+          {%- assign twitter_text = product.title | url_param_escape -%}
+          {%- assign pinterest_description = product.description | strip_html | truncatewords: 15 | url_param_escape -%}
+          {%- assign pinterest_image = product.featured_media | img_url: '1024x' | prepend: 'https:' -%}
+          <div class="grid grid-flow-col-dense auto-cols-min gap-2"
+               role="list">
+            <a data-share="facebook"
+               class="text-theme-text/70 hf:text-theme-text"
+               title="Share on Facebook"
+               href="https://www.facebook.com/sharer.php?u={{ share_url }}"
+               target="_blank"
+               rel="noopener">
+              {%- render '_icon', icon: 'facebook', class: "w-4 h-4" -%}
+            </a>
+            <a data-share="pinterest"
+               class="text-theme-text/70 hf:text-theme-text"
+               title="Share on Pinterest"
+               href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}"
+               target="_blank"
+               rel="noopener">
+              {%- render '_icon', icon: 'pinterest', class: "w-4 h-4" -%}
+            </a>
+            <a data-share="twitter"
+               class="text-theme-text/70 hf:text-theme-text"
+               title="Share on Twitter"
+               href="https://twitter.com/share?{% if twitter_text != blank %}text={{ twitter_text }}&{% endif %}url={{ share_url }}"
+               target="_blank"
+               rel="noopener">
+              {%- render '_icon', icon: 'twitter', class: "w-4 h-4" -%}
+            </a>
+            <a data-share="email"
+               class="text-theme-text/70 hf:text-theme-text"
+               title="Share via Email"
+               href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}">
+              {% render '_icon', icon: 'email', class: "w-4 h-4" %}
+            </a>
+          </div>
+
+        </div>
+      {% when 'dynamic_buy_buttons' %}
+        <div data-product-block="dynamic_buy_buttons"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {% form 'product', product, id: product_form_dynamic_buttons_id %}
+            <input
+                type="hidden"
+                name="id"
+                value="{{ variant.id }}"
+                data-product-form-variant="{{ variant.id }}"
+            >
+            {{ form | payment_button }}
+          {% endform %}
+        </div>
+      {% when 'buy_buttons' %}
+        <div data-product-block="buy_buttons"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {% form 'product', product, id: product_form_id, novalidate: 'novalidate' %}
+            <input
+                type="hidden"
+                name="id"
+                value="{{ variant.id }}"
+                data-product-form-variant="{{ variant.id }}"
+                {% if variant.available == false %}
+                  disabled
+                {% endif %}
+            >
+            <button
+                type="submit"
+                name="add"
+                class="button-primary w-full"
+                data-product-form-submit
+                {% if variant.available == false %}
+                  disabled
+                {% endif %}
+            >
+              {% assign addToCartClasses = '' %}
+              {% assign soldOutClasses = 'hidden' %}
+              {% assign unavailableClasses = 'hidden' %}
+
+              {% if variant == blank %}
+                {% assign addToCartClasses = 'hidden' %}
+                {% assign soldOutClasses = 'hidden' %}
+                {% assign unavailableClasses = '' %}
+              {% endif %}
+              {% if variant.available == false %}
+                {% assign addToCartClasses = 'hidden' %}
+                {% assign soldOutClasses = '' %}
+                {% assign unavailableClasses = 'hidden' %}
+              {% endif %}
+              <span data-product-form-submit-add-to-cart
+                    class="{{ addToCartClasses }}">
+                {{ "product_detail_blocks.add_to" | t }}
+              </span>
+              <span data-product-form-submit-sold-out
+                    class="{{ soldOutClasses }}">
+                {{ "product_detail_blocks.sold_out" | t }}
+              </span>
+              <span data-product-form-submit-unavailable
+                    class="{{ unavailableClasses }}">
+                Unavailable
+              </span>
+              {% render '_loading-spinner', class: "bg-primary-bg" %}
+            </button>
+          {% endform %}
+        </div>
+      {% when 'complementary' %}
+        <div data-product-block="complementary"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          {% assign upsellProducts = product.metafields.shopify--discovery--product_recommendation.complementary_products.value %}
+          <h2 class="h4 text-lg font-bold">{{ block.settings.title }}</h2>
+          <main class="relative py-2"
+                data-scroll-slider="complementary-products">
+
+
+            <div class="grid gap-6 grid-flow-col-dense overflow-x-auto scroll-pl-8 py-8 -my-8 scrollbar-none relative snap-mandatory snap-x scroll-smooth "
+                 style="grid-auto-columns: 170px"
+                 data-scroll-container>
+              {% render '_product-card--small', product: product, settings: section.settings, class: 'hidden', html_attributes: 'data-complementary-product-placeholder' %}
+              {% assign complementaryClass = "" %}
+              {% for item in upsellProducts %}
+                {% assign complementaryClass = "hidden" %}
+                {% if item.id == product.id %}
+                  {% continue %}
+                {% endif %}
+                {% assign html_attributes = 'data-scroll-item data-complementary-product-complementary="' | append: item.id | append: '"' %}
+                {% render '_product-card--small', product: item, settings: section.settings, html_attributes: html_attributes %}
+              {% endfor %}
+
+              {% for item in block.settings.products %}
+                {% assign currentClass = complementaryClass %}
+                {% if item.id == product.id %}
+                  {% assign currentClass = complementaryClass | replace: "hidden", "" | append: "hidden" %}
+                {% endif %}
+                {% assign html_attributes = 'data-scroll-item data-complementary-product-block="' | append: item.id | append: '"' %}
+                {% render '_product-card--small', product: item, settings: section.settings, class: currentClass, html_attributes: html_attributes %}
+              {% endfor %}
+            </div>
+
+            <div class="max-w-[calc(var(--layout-page-width)-4rem)] mx-auto relative mt-8">
+              <div data-scroll-controls
+                   class="hidden select-none grid relative">
+                {% render 'scroll-bar-elements', element: 'scrollbar' %}
+              </div>
+            </div>
+          </main>
+        </div>
+      {% when 'icon_with_text' %}
+        <div data-product-block="icon_with_text"
+             class="{{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          <div class="{{ block.settings.layout }} flex justify-center py-2 gap-y-2.5">
+            {% for i in (1..3) %}
+              {% assign icon = 'icon_' | append: i %}
+              {% assign image = 'image_' | append: i %}
+              {% assign heading = 'heading_' | append: i %}
+              {% if block.settings[heading] == blank %}{% continue %}{% endif %}
+
+              <div class="flex items-center mr-2.5">
+                <span class="relative inline-flex items-center justify-center"
+                      style="width: {{ block.settings.size }}px; height: {{ block.settings.size }}px;">
+                  {% if block.settings[image] == blank %}
+                    {% render '_icon', icon: block.settings[icon], class: "w-full h-full relative" %}
+                  {% endif %}
+                  {% render '_image', image: block.settings[image], width: 20, class: "w-full h-full object-contain" %}
+                </span>
+                <span class="ml-1.5 text-[13px] tracking-tight">
+                  {{ block.settings[heading] }}
+                </span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% when 'inventory' %}
+
+        {% liquid
+          assign v = variant
+          assign threshold = block.settings.threshold | times: 1.0
+          assign available = variant.available
+          assign inventory_quantity = variant.inventory_quantity
+
+
+          if variant.inventory_policy == "continue" or inventory_quantity > threshold or variant.inventory_management != "shopify"
+            assign inStock = true
+            assign percentage = 100
+            assign color = 'success'
+          endif
+
+          if inStock != true and available
+            assign percentage = inventory_quantity | divided_by: threshold | times: 100.0
+
+
+            if percentage < 33
+              assign color = 'error'
+            endif
+            if percentage >= 33 and percentage < 66
+              assign color = 'warning'
+            endif
+            if percentage >= 66
+              assign color = 'success'
+            endif
+          endif
+
+
+          if available != true
+            assign percentage = 0
+          endif
+        %}
+        <div data-product-block="inventory_count"
+             data-product-inventory-threshold="{{ threshold }}"
+             class="grid grid-cols-[1fr_minmax(10%,80px)] items-center {{ colSpanClasses }}" {{ block.shopify_attributes }}>
+          <div class="w-full h-2 flex rounded-full bg-gray-300 max-w-xl overflow-hidden">
+            <div class="relative h-full flex-1">
+              <div class="h-full transition-all duration-500 ease-in-out data-[color=success]:bg-success data-[color=warning]:bg-warning data-[color=error]:bg-error"
+                   style="width: Max(0%, Min(100%, {{ percentage }}%))"
+                   data-color="{{ color }}"
+                   data-product-inventory-slider>
+              </div>
+            </div>
+          </div>
+          <span class="text-xs text-right font-medium"
+                data-product-inventory-display>
+            {% if inStock %}
+              In Stock
+            {% elsif available != true %}
+              Out of stock
+            {% elsif variant.inventory_quantity == 1 %}
+              Last item
+            {% else %}
+              {{ variant.inventory_quantity }} items left
+            {% endif %}
+          </span>
+        </div>
+
+    {% endcase %}
+  {% endfor %}
+</div>

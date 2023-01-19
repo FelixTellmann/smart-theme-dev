@@ -1,0 +1,102 @@
+{% case section.settings.gallery__layout %}
+  {% when 'horizontal' %}
+    {% assign galleryClasses = "" %}
+  {% when 'vertical' %}
+    {% assign galleryClasses = "lg:hidden" %}
+  {% when 'grid' %}
+    {% assign galleryClasses = "lg:hidden" %}
+{% endcase %}
+
+{% assign thumbnails = "" %}
+
+{% comment %} Mobile & Horizontal {% endcomment %}
+<section class="{{ galleryClasses }}"
+         data-product-media-gallery="horizontal">
+  <main class="relative grid">
+    <div class="md:min-h-56 flex flex-1 gap-8 overflow-x-auto pb-8 scroll-smooth snap-mandatory snap-x max-w-full"
+         data-product-media-container>
+      {% for media in product.media %}
+        <figure class="relative grid aspect-1 transition-all ease-in-out md:aspect-[unset] snap-start min-w-full md:min-w-full snap-always pt-[100%] md:pt-[min(42rem,100%)]"
+                data-product-media="{{ media.id }}">
+          {% render "_media", media: media, class: "absolute top-0 left-0 h-full w-full bg-inherit object-contain" %}
+        </figure>
+      {% endfor %}
+    </div>
+  </main>
+  {% assign thumbnails = "" %}
+  {% if section.settings.gallery__show_thumbnails %}
+    <footer class="min-h-[100px] mt-12 pb-2 flex flex-1 gap-1 overflow-x-auto relative scrollbar-x-slim"
+            data-product-media-thumbnail-container>
+      {% for variant in product.variants %}
+        {% if variant.featured_media == blank or thumbnails contains variant.featured_media.id %}
+          {% continue %}
+        {% endif %}
+        {% assign thumbnails = thumbnails | append: variant.featured_media.id | append: "|||" %}
+        <button class="relative grid h-[100px] shrink-0 border border-gray-200"
+                data-product-media-thumbnail="{{ variant.featured_media.id }}">
+          {% render "_image", image: variant.featured_media.preview_image, class: "h-full w-full object-contain", height: 100 %}
+        </button>
+      {% endfor %}
+    </footer>
+  {% endif %}
+</section>
+
+{% assign thumbnails = "" %}
+{% if section.settings.gallery__layout != "horizontal" %}
+
+  {% if section.settings.gallery__show_thumbnails %}
+    {% assign thumbnailClasses = "grid-cols-[100px_1fr] gap-6" %}
+  {% endif %}
+  <section class="hidden lg:grid relative {{ thumbnailClasses }}"
+           data-product-media-gallery="vertical">
+    {% if section.settings.gallery__show_thumbnails %}
+      <aside class="h-min sticky top-spacing-8 max-h-[calc(100vh-var(--top-bar-spacing)-4rem)] overflow-y-auto scrollbar-none pr-1 grid gap-1"
+             data-product-media-thumbnail-container>
+        {% for variant in product.variants %}
+          {% if variant.featured_media == blank or thumbnails contains variant.featured_media.id %}
+            {% continue %}
+          {% endif %}
+          {% assign thumbnails = thumbnails | append: variant.featured_media.id | append: "|||" %}
+          <button class="relative grid w-full h-full border border-gray-200"
+                  data-product-media-thumbnail="{{ variant.featured_media.id }}">
+            {% render "_image", image: variant.featured_media.preview_image, class: "h-full w-full object-contain", width: 100 %}
+          </button>
+        {% endfor %}
+      </aside>
+    {% endif %}
+
+    {% case section.settings.gallery__layout %}
+      {% when 'vertical' %}
+        {% assign gridContainerClasses = "gap-6" %}
+      {% when 'grid' %}
+        {% assign gridContainerClasses = "gap-3 grid-cols-2" %}
+    {% endcase %}
+    <main class="grid {{ gridContainerClasses }}"
+          data-product-media-container>
+      {% assign modOdd = 0 %}
+      {% for media in product.media %}
+        {% assign gridItemClasses = "" %}
+        {% assign order = forloop.index | times: 10 %}
+
+        {% if media.aspect_ratio > 1.75 and section.settings.gallery__layout == "grid" %}
+          {% assign gridItemClasses = "col-span-2" %}
+          {% assign mod = forloop.index | modulo: 2 %}
+          {% if mod == modOdd %}
+            {% assign order = order | plus: 11 %}
+            {% if modOdd == 0 %}
+              {% assign modOdd = 1 %}
+            {% else %}
+              {% assign modOdd = 0 %}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+
+        <figure class="relative grid w-full h-full transition-all ease-in-out {{ gridItemClasses }} ac:ring ac:ring-primary-outline rounded-theme-sm ac:overflow-hidden"
+                data-product-media="{{ media.id }}"
+                style="order: {{ order }}">
+          {% render "_media", media: media, class: "h-full w-full bg-inherit object-contain", reserverSpace: true %}
+        </figure>
+      {% endfor %}
+    </main>
+  </section>
+{% endif %}

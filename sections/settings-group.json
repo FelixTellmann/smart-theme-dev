@@ -1,0 +1,198 @@
+{
+  "type": "header",
+  "name": "Global Components",
+  "sections": {
+    "product-drawer": {
+      "type": "product-drawer",
+      "blocks": {
+        "af7b8f48-73e7-4ee5-b6c3-9393b2e904d4": {
+          "type": "image",
+          "settings": {
+            "image__ratio": "pb-[125%]",
+            "image__background": "linear-gradient(135deg, rgb(var(--color-text) \/ 0.01) 0%, rgb(var(--color-text) \/ 0.05) 100%)",
+            "image__drop_shadow": true,
+            "grid_span": "col-span-4",
+            "grid_row_span": "row-span-5"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "font_scale": 65,
+            "grid_span": "col-span-8"
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "grid_span": "col-span-8"
+          }
+        },
+        "a0c3557e-f626-42f4-b609-eb97fc445cae": {
+          "type": "rating",
+          "settings": {
+            "grid_span": "col-span-8"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "grid_span": "col-span-8"
+          }
+        },
+        "32b952ba-c791-40c9-a7d7-34a93c648ca4": {
+          "type": "sku",
+          "disabled": true,
+          "settings": {
+            "grid_span": "col-span-8"
+          }
+        },
+        "4f496452-8570-40b1-b4d8-675f94b60b14": {
+          "type": "vendor",
+          "settings": {
+            "grid_span": "col-span-8"
+          }
+        },
+        "2f02c743-4b0e-4288-aeec-e1abd5db6f75": {
+          "type": "inventory",
+          "settings": {
+            "threshold": 100
+          }
+        },
+        "6d9e4d3c-db73-44e5-9494-8aed9804461b": {
+          "type": "variant_selector",
+          "settings": {
+            "disable_unavailable": true,
+            "image_selector": true,
+            "color_selector": true,
+            "color_list": "color,colour,couleur,cor,colore,farbe,색,色,カラー,färg,farve,szín,barva",
+            "default_type": "radio"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "grid_span": "col-span-12"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "grid_span": "col-span-8",
+            "button__style": "button-primary"
+          }
+        },
+        "16eae1aa-2b18-4ddb-b435-b481ac775019": {
+          "type": "dynamic_buy_buttons",
+          "settings": {
+            "grid_span": "col-span-4",
+            "button__style": "button-primary"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "accordion_style": true
+          }
+        },
+        "collapsible-row-0": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Materials",
+            "icon": "leather",
+            "content": "",
+            "page": "test-page"
+          }
+        },
+        "collapsible-row-1": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "<p>asdasdasdasdas<\/p>",
+            "page": ""
+          }
+        },
+        "collapsible-row-2": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Dimensions",
+            "icon": "ruler",
+            "content": "<p>    class=\"share-button quick-add-hidden\"&gt;  &lt;button class=\"share-button__button hidden\"&gt;    &lcub;% render 'icon-share'    &lt;summary class=\"share-button__button\"&gt;      &lcub;% render 'icon-share' %&rcub;      &lcub;&lcub; block.settings.share_label | esc<\/p>",
+            "page": ""
+          }
+        },
+        "collapsible-row-3": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Care Instructions",
+            "icon": "heart",
+            "content": "<p>Lorem ipsum long<\/p>",
+            "page": ""
+          }
+        },
+        "601e50bf-1ed0-424c-945e-f7489a137200": {
+          "type": "complementary",
+          "settings": {
+            "title": "Complementary Products",
+            "image__show_secondary": true,
+            "products": [
+              "angelica-plaid-button-down-shirt",
+              "amal-cotton-poplin-blouse",
+              "aida-lace-tank",
+              "alexxis-slim-jean",
+              "arlo-long-sleeve-button-down-shirt"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "af7b8f48-73e7-4ee5-b6c3-9393b2e904d4",
+        "title",
+        "share",
+        "a0c3557e-f626-42f4-b609-eb97fc445cae",
+        "price",
+        "32b952ba-c791-40c9-a7d7-34a93c648ca4",
+        "4f496452-8570-40b1-b4d8-675f94b60b14",
+        "2f02c743-4b0e-4288-aeec-e1abd5db6f75",
+        "6d9e4d3c-db73-44e5-9494-8aed9804461b",
+        "quantity_selector",
+        "buy_buttons",
+        "16eae1aa-2b18-4ddb-b435-b481ac775019",
+        "description",
+        "collapsible-row-0",
+        "collapsible-row-1",
+        "collapsible-row-2",
+        "collapsible-row-3",
+        "601e50bf-1ed0-424c-945e-f7489a137200"
+      ],
+      "settings": {
+        "active": true,
+        "color_scheme": "color-inherit"
+      }
+    },
+    "search": {
+      "type": "search",
+      "settings": {
+        "show": true,
+        "vendor__show": true,
+        "rating__show": true,
+        "labels__show": true,
+        "labels__discount": "value",
+        "image__ratio": "pb-[125%]",
+        "image__show_secondary": true,
+        "image__background": "linear-gradient(135deg, rgb(var(--color-text) \/ 0.01) 0%, rgb(var(--color-text) \/ 0.05) 100%)",
+        "image__drop_shadow": true,
+        "search_count": 5,
+        "columns__desktop": "lg:grid-cols-5",
+        "columns__mobile": "grid-cols-2",
+        "article_show_date": true,
+        "article_show_author": false
+      }
+    }
+  },
+  "order": [
+    "product-drawer",
+    "search"
+  ]
+}

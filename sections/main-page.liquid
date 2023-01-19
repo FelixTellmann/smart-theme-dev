@@ -1,0 +1,139 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign width = section.settings.width
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="{{ color_scheme }} {{ section_layout }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+  <article class="container {{ width }}">
+    <header>
+      <h1 class="h3 font-bold mt-3">{{ page.title }}</h1>
+    </header>
+    <main class="prose max-w-none w-full prose-theme mt-4 lg:prose-img:-mx-8 lg:prose-img:w-[calc(100%+4rem)] lg:prose-img:max-w-[calc(100%+4rem)] lg:prose-img:grid lg:prose-video:-mx-8 lg:prose-video:w-[calc(100%+4rem)] lg:prose-video:max-w-[calc(100%+4rem)] lg:prose-img:grid lg:prose-pre:-mx-8 lg:prose-pre:w-[calc(100%+4rem)] lg:prose-pre:max-w-[calc(100%+4rem)] lg:prose-img:grid">
+      {{ page.content }}
+    </main>
+  </article>
+</div>
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.page.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:sections.page.settings.width.label",
+      "default": "max-w-xl",
+      "options": [
+        {
+          "value": "max-w-full",
+          "label": "t:sections.page.settings.width.options__1.label"
+        },
+        {
+          "value": "max-w-[var(--layout-page-width)]",
+          "label": "t:sections.page.settings.width.options__2.label"
+        },
+        {
+          "value": "max-w-3xl",
+          "label": "t:sections.page.settings.width.options__3.label"
+        },
+        {
+          "value": "max-w-2xl",
+          "label": "t:sections.page.settings.width.options__4.label"
+        },
+        {
+          "value": "max-w-xl",
+          "label": "t:sections.page.settings.width.options__5.label"
+        },
+        {
+          "value": "max-w-lg",
+          "label": "t:sections.page.settings.width.options__6.label"
+        },
+        {
+          "value": "max-w-md",
+          "label": "t:sections.page.settings.width.options__7.label"
+        },
+        {
+          "value": "max-w-sm",
+          "label": "t:sections.page.settings.width.options__8.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.page.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.page.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.page.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.page.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.page.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.page.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.page.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.page.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.page.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.page.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.page.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.page.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.page.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.page.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.page.settings.color_scheme.label"
+    }
+  ]
+}
+{% endschema %}

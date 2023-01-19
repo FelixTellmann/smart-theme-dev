@@ -1,0 +1,219 @@
+{
+  "sections": {
+    "a2139d2a-72d3-4a90-b86f-336436371087": {
+      "type": "features",
+      "blocks": {
+        "a34d6bd7-0f00-44fe-a9ec-158515704c5b": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "lightning_bolt",
+            "title": "Lighting",
+            "content": "<p>Very very frightening! Veniam necessitatibus reiciendis fugit explicabo dolorem .Very very frightening! Veniam necessitatibus reiciendis fugit explicabo dolorem<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "f536a651-bf07-4550-a0f9-450440ba4a05": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "fire",
+            "title": "Invite team members",
+            "content": "<p>You can manage phone, email and chat conversations all from a single mailbox. Find what you need with advanced filters, bulk actions, and quick views.<\/p>",
+            "url": "#",
+            "svg": ""
+          }
+        },
+        "5af2db75-3600-447e-9ec7-231e5eb73dbb": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "bottle",
+            "title": "Boards",
+            "content": "<p>Find what you need with advanced filters, bulk actions, and quick views.<\/p><p>Find what you need with advanced filters, bulk actions, and quick views. Find what you need with advanced filters, bulk actions, and quick views.<\/p>",
+            "url": "#",
+            "svg": ""
+          }
+        },
+        "69f589c7-8a89-43b4-b375-fecb6730c840": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "question_mark",
+            "title": "Ask then!",
+            "content": "<p>Find what you need with advanced filters, bulk actions, and quick views. Find what you need with advanced filters, bulk actions, and quick views.<\/p><p>Find what you need with advanced filters, bulk actions, and quick views.<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "db3fe861-caa5-4580-a6e1-6025e89938be": {
+          "type": "feature",
+          "disabled": true,
+          "settings": {
+            "icon_list": "heart",
+            "title": "Love",
+            "content": "<p>Omnis, illo delectus? Libero, possimus nulla nemo tenetur adipisci repellat dolore eligendi velit doloribus mollitia.<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "e3227227-431f-425e-b0d2-b346d34778ad": {
+          "type": "feature",
+          "disabled": true,
+          "settings": {
+            "icon_list": "heart",
+            "title": "Feature with SVG",
+            "content": "<p>Corporis quisquam nostrum nulla veniam recusandae temporibus aperiam officia incidunt at distinctio ratione.<\/p>",
+            "url": "",
+            "svg": "<svg viewbox=\"0 0 20 20\" fill=\"currentColor\" focusable=\"false\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M2.5 1a1.5 1.5 0 0 0-1.5 1.5v11a1.5 1.5 0 0 0 1.5 1.5h4.5c0 .525-.015.793-.144 1.053-.12.239-.416.61-1.303 1.053a1 1 0 0 0 .469 1.894h7.956a1.004 1.004 0 0 0 .995-.77 1.001 1.001 0 0 0-.544-1.134c-.873-.439-1.166-.806-1.285-1.043-.13-.26-.144-.528-.144-1.053h4.5a1.5 1.5 0 0 0 1.5-1.5v-11a1.5 1.5 0 0 0-1.5-1.5h-15zm8.883 16a2.621 2.621 0 0 1-.027-.053c-.357-.714-.357-1.42-.356-1.895v-.052h-2v.052c0 .475.001 1.181-.356 1.895a2.913 2.913 0 0 1-.027.053h2.766zm5.617-6h-14v2h14v-2z\"><\/path><\/svg>"
+          }
+        },
+        "38abdcbf-2c25-47af-8002-556abd08d958": {
+          "type": "feature",
+          "disabled": true,
+          "settings": {
+            "icon_list": "eye",
+            "title": "spy",
+            "content": "<p>with my little.... Corporis quisquam nostrum nulla veniam recusan<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "e302598c-f31e-4262-b05c-581d72bcd05b": {
+          "type": "feature",
+          "disabled": true,
+          "settings": {
+            "icon_list": "recycle",
+            "title": "Recycle",
+            "content": "<p>Ac euismod vel sit<strong>maecenas<\/strong>id pellentesque eu sed consectetur.<em>Malesuada<\/em>adipiscing sagittis vel nulla nec.<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        }
+      },
+      "block_order": [
+        "a34d6bd7-0f00-44fe-a9ec-158515704c5b",
+        "f536a651-bf07-4550-a0f9-450440ba4a05",
+        "5af2db75-3600-447e-9ec7-231e5eb73dbb",
+        "69f589c7-8a89-43b4-b375-fecb6730c840",
+        "db3fe861-caa5-4580-a6e1-6025e89938be",
+        "e3227227-431f-425e-b0d2-b346d34778ad",
+        "38abdcbf-2c25-47af-8002-556abd08d958",
+        "e302598c-f31e-4262-b05c-581d72bcd05b"
+      ],
+      "settings": {
+        "preheading": "Everything you need",
+        "title": "Accelerate Theme",
+        "description": "<p>Ac euismod vel sit <strong>maecenas <\/strong>id pellentesque eu sed consectetur. <em>Malesuada <\/em>adipiscing sagittis vel nulla nec.<\/p>",
+        "layout": "icon-minimal",
+        "color_scheme": "bg-theme-bg text-theme-text color-group-1"
+      }
+    },
+    "a2139d2a-72d3-4a90-b86f-336436371086": {
+      "type": "features",
+      "blocks": {
+        "f536a651-bf07-4550-a0f9-450440ba4a05": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "fire",
+            "title": "Invite team members",
+            "content": "<p>You can manage phone, email and chat conversations all from a single mailbox.<\/p>",
+            "url": "#",
+            "svg": ""
+          }
+        },
+        "5af2db75-3600-447e-9ec7-231e5eb73dbb": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "bottle",
+            "title": "Boards",
+            "content": "<p>Find what you need with advanced filters, bulk actions, and quick views.<\/p>",
+            "url": "#",
+            "svg": ""
+          }
+        },
+        "69f589c7-8a89-43b4-b375-fecb6730c840": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "question_mark",
+            "title": "Ask then!",
+            "content": "<p>Find what you need with advanced filters, bulk actions, and quick views.<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "db3fe861-caa5-4580-a6e1-6025e89938be": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "heart",
+            "title": "Love",
+            "content": "<p>Omnis, illo delectus? Libero, possimus nulla nemo tenetur adipisci repellat dolore eligendi velit doloribus mollitia.<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "a34d6bd7-0f00-44fe-a9ec-158515704c5b": {
+          "type": "feature",
+          "settings": {
+            "icon_list": "lightning_bolt",
+            "title": "Lighting",
+            "content": "<p>Very very frightening! Veniam necessitatibus reiciendis fugit explicabo dolorem<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "e3227227-431f-425e-b0d2-b346d34778ad": {
+          "type": "feature",
+          "disabled": true,
+          "settings": {
+            "icon_list": "heart",
+            "title": "Feature with SVG",
+            "content": "<p>Corporis quisquam nostrum nulla veniam recusandae temporibus aperiam officia incidunt at distinctio ratione.<\/p>",
+            "url": "",
+            "svg": "<svg viewbox=\"0 0 20 20\" fill=\"currentColor\" focusable=\"false\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M2.5 1a1.5 1.5 0 0 0-1.5 1.5v11a1.5 1.5 0 0 0 1.5 1.5h4.5c0 .525-.015.793-.144 1.053-.12.239-.416.61-1.303 1.053a1 1 0 0 0 .469 1.894h7.956a1.004 1.004 0 0 0 .995-.77 1.001 1.001 0 0 0-.544-1.134c-.873-.439-1.166-.806-1.285-1.043-.13-.26-.144-.528-.144-1.053h4.5a1.5 1.5 0 0 0 1.5-1.5v-11a1.5 1.5 0 0 0-1.5-1.5h-15zm8.883 16a2.621 2.621 0 0 1-.027-.053c-.357-.714-.357-1.42-.356-1.895v-.052h-2v.052c0 .475.001 1.181-.356 1.895a2.913 2.913 0 0 1-.027.053h2.766zm5.617-6h-14v2h14v-2z\"><\/path><\/svg>"
+          }
+        },
+        "38abdcbf-2c25-47af-8002-556abd08d958": {
+          "type": "feature",
+          "disabled": true,
+          "settings": {
+            "icon_list": "eye",
+            "title": "spy",
+            "content": "<p>with my little.... Corporis quisquam nostrum nulla veniam recusan<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        },
+        "e302598c-f31e-4262-b05c-581d72bcd05b": {
+          "type": "feature",
+          "disabled": true,
+          "settings": {
+            "icon_list": "recycle",
+            "title": "Recycle",
+            "content": "<p>Ac euismod vel sit<strong>maecenas<\/strong>id pellentesque eu sed consectetur.<em>Malesuada<\/em>adipiscing sagittis vel nulla nec.<\/p>",
+            "url": "",
+            "svg": ""
+          }
+        }
+      },
+      "block_order": [
+        "f536a651-bf07-4550-a0f9-450440ba4a05",
+        "5af2db75-3600-447e-9ec7-231e5eb73dbb",
+        "69f589c7-8a89-43b4-b375-fecb6730c840",
+        "db3fe861-caa5-4580-a6e1-6025e89938be",
+        "a34d6bd7-0f00-44fe-a9ec-158515704c5b",
+        "e3227227-431f-425e-b0d2-b346d34778ad",
+        "38abdcbf-2c25-47af-8002-556abd08d958",
+        "e302598c-f31e-4262-b05c-581d72bcd05b"
+      ],
+      "settings": {
+        "preheading": "Everything you need",
+        "title": "Accelerate Theme",
+        "description": "<p>Ac euismod vel sit <strong>maecenas <\/strong>id pellentesque eu sed consectetur. <em>Malesuada <\/em>adipiscing sagittis vel nulla nec.<\/p>",
+        "layout": "icon-cards",
+        "color_scheme": "bg-theme-bg text-theme-text color-group-1"
+      }
+    }
+  },
+  "order": [
+    "a2139d2a-72d3-4a90-b86f-336436371087",
+    "a2139d2a-72d3-4a90-b86f-336436371086"
+  ]
+}

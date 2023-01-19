@@ -1,0 +1,13 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign grid_span = block.settings.grid_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="vendor"
+     class="{{ grid_span }}" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <a href="{{ routes.collections_url }}/vendors?q={{ product.vendor | url_escape }}"
+     class="flex font-semibold text-sm hf:underline"
+     title="{{ product.vendor }}">{{ product.vendor }}</a>
+</div>

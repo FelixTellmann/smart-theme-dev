@@ -1,0 +1,211 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign layout = section.settings.layout
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="container-bg-full {{ color_scheme }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+  <section class="grid lg:grid-cols-2 gap-6"
+           data-scroll-slider>
+    <div>
+      <main class="relative flex justify-center">
+        <div class="lg:max-w-lg mx-auto flex flex-1 gap-8 overflow-x-auto pb-8 scroll-smooth snap-mandatory snap-x w-full"
+             data-scroll-container>
+          {% for block in section.blocks %}
+            {% render 'benefit-tabs.benefit', block: block, forloop: forloop, type: 'image-mobile-content' %}
+          {% endfor %}
+        </div>
+        <div data-scroll-controls
+             class="hidden select-none bottom-0 absolute left-0 w-full flex justify-center">
+          {% for block in section.blocks %}
+            {% render 'benefit-tabs.benefit', block: block, forloop: forloop, type: 'scroll-tab-button' %}
+          {% endfor %}
+
+        </div>
+      </main>
+    </div>
+    <div class="flex flex-col justify-center h-full max-w-xl mx-auto {{ layout }}">
+      <div class="hidden lg:grid gap-6 justify-center items-center auto-rows-min ">
+        {% for block in section.blocks %}
+          {% render 'benefit-tabs.benefit', block: block, forloop: forloop, type: 'desktop-text-content' %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</div>
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.benefit_tabs.name",
+  "settings": [
+    {
+      "type": "radio",
+      "id": "layout",
+      "label": "t:sections.benefit_tabs.settings.layout.label",
+      "default": "order-2",
+      "options": [
+        {
+          "value": "order-2",
+          "label": "t:sections.benefit_tabs.settings.layout.options__1.label"
+        },
+        {
+          "value": "-order-1",
+          "label": "t:sections.benefit_tabs.settings.layout.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.benefit_tabs.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.benefit_tabs.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.benefit_tabs.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.benefit_tabs.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.benefit_tabs.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.benefit_tabs.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.benefit_tabs.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.benefit_tabs.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.benefit_tabs.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.benefit_tabs.settings.padding_bottom.label"
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.benefit_tabs.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.benefit_tabs.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.benefit_tabs.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.benefit_tabs.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.benefit_tabs.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.benefit_tabs.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.benefit_tabs.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.benefit_tabs.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.benefit_tabs.settings.color_scheme.label"
+    }
+  ],
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "name": "t:sections.benefit_tabs.blocks.benefit.name",
+      "type": "benefit",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.benefit_tabs.blocks.benefit.settings.image.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.benefit_tabs.blocks.benefit.settings.header__1.content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.benefit_tabs.blocks.benefit.settings.title.label",
+          "default": "phasellus vocibus sem metus postulant"
+        },
+        {
+          "type": "range",
+          "id": "title_font",
+          "label": "t:sections.benefit_tabs.blocks.benefit.settings.title_font.label",
+          "default": 4,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.benefit_tabs.blocks.benefit.settings.title_font.info"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.benefit_tabs.blocks.benefit.settings.content.label",
+          "default": "<p>See you later, Pop. Whoo! Time to change that oil.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.benefit_tabs.presets.benefit_tabs.name",
+      "blocks": [
+        {
+          "type": "benefit"
+        },
+        {
+          "type": "benefit"
+        },
+        {
+          "type": "benefit"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,21 @@
+<div class="relative flex">
+  <div class="flex space-x-2.5 rounded-theme border border-gray-300 px-1.5 py-0.5 mr-auto mt-2 text-[13px] font-semibold select-none">
+    <a class="p-1.5 flex justify-center items-center text-gray-600 hf:text-gray-900"
+       href="/cart/change?quantity={{ line_item.quantity | minus: 1 }}&line={{ line }}">
+      <span class="sr-only">Decrease quantity by 1</span>
+      {% render "_icon", icon: 'minus', class: "w-2 h-2 stroke-2" %}
+    </a>
+    <span class="text-gray-800">{{ line_item.quantity }}</span>
+    <a class="p-1.5 flex justify-center items-center text-gray-600 hf:text-gray-900"
+       href="/cart/change?quantity={{ line_item.quantity | plus: 1 }}&line={{ line }}">
+      <span class="sr-only">Increase quantity by 1</span>
+      {% render "_icon", icon: 'plus', class: "w-2 h-2 stroke-2" %}
+    </a>
+  </div>
+  <span class="block text-center text-xs absolute top-full mt-0.5 left-0 w-full">
+    <a href="/cart/change?quantity=0&line={{ line }}"
+       class="hf:underline text-gray-400 hf:text-gray-500">
+      Remove
+    </a>
+  </span>
+</div>

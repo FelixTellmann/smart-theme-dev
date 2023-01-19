@@ -1,0 +1,62 @@
+<div class="group fixed pointer-events-none inset-0 z-50 ac:pointer-events-auto"
+     data-drawer="nav">
+  <div class="fixed inset-y-0 left-0 w-full max-w-[30rem] bg-white border-r border-r-gray-100 shadow-lg z-10 transition-all -translate-x-full group-ac:translate-x-0 ease-linear flex flex-col h-full justify-between max-h-screen "
+       data-drawer-content
+       data-mobile-nav>
+    <header class="flex justify-between items-center w-full h-header px-4 absolute top-0 inset-x-0 bg-white">
+      {% render "header.logo" %}
+      <button type="button"
+              class="w-8 h-8 flex items-center justify-center text-gray-400 hf:text-gray-900 transition-all"
+              data-drawer-close="nav">
+        <span class="sr-only">
+          {{ "header.close_nav" | t }}
+        </span>
+        {% render "_icon", icon: 'x-close', class: "w-3 h-3 stroke-2" %}
+      </button>
+    </header>
+    <main class="relative top-header bottom-0 flex-1 overflow-hidden">
+      {% render "header.mobile-nav-links", megaMenus: megaMenus, handle: section.settings.menu.handle, links: section.settings.menu.links, level: 1 %}
+    </main>
+    <footer class="z-10 absolute bg-white border-t border-t-gray-200 py-8 shadow-invert-sm relative bottom-0 w-full justify-end space-y-5 inset-x-0 px-4">
+      <div class="">
+        {% if customer %}
+          <a href="{{ routes.account_url }}"
+             class="inline-flex items-center text-gray-500 hf:text-gray-900 hf:underline transition-all">
+            {% render "_icon", icon: 'user', class: 'w-5 h-5 stroke-2' %}
+            <span class="ml-4">
+              {{ "header.account" | t }}
+            </span>
+          </a>
+        {% endif %}
+        {% if customer == null %}
+          <a href="{{ routes.account_login_url }}"
+             class="inline-flex items-center text-gray-500 hf:text-gray-900 hf:underline transition-all">
+            {% render "_icon", icon: 'user', class: 'w-5 h-5 stroke-2' %}
+            <span class="ml-4">
+              {{ "header.login" | t }}
+            </span>
+          </a>
+        {% endif %}
+      </div>
+      <div class="flex space-x-3 overflow-x-scroll scrollbar-none">
+
+        {% assign socialLinks = "social_twitter_link,social_facebook_link,social_pinterest_link,social_instagram_link,social_tiktok_link,social_tumblr_link,social_snapchat_link,social_youtube_link,social_vimeo_link" | split: ',' %}
+        {% for link in socialLinks %}
+          {% if settings[link] %}
+            {% assign icon = link | replace: "social_", "" | replace: "_link", "" %}
+            <a href="{{ settings[link] }}"
+               class="transition-all text-gray-500 hf:text-gray-900"
+               target="_blank"
+               referrerpolicy="no-referrer">
+              <span class="sr-only">{{ icon | capitalize }}</span>
+              {% render "_icon", icon: icon, class: "w-6 h-6" %}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </footer>
+  </div>
+  <div class="fixed inset-0 bg-gray-900/30 backdrop-blur transition-all opacity-0 group-ac:opacity-100"
+       data-drawer-overlay>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div {{ block.shopify_attributes }}>
+  {% render "_image", image: image %}
+</div>
+

@@ -1,0 +1,165 @@
+{
+  "cart_drawer": {
+    "you_may": "You may also like",
+    "checkout": "Checkout",
+    "subtotal": "Subtotal",
+    "shipping_and": "Shipping and taxes calculated at checkout."
+  },
+  "main_article": {
+    "share": "Share",
+    "comments": "Comments",
+    "no_comments": "No comments yet",
+    "comments_2": "comments",
+    "add_a": "Add a Comment",
+    "all_comments": "All comments are require moderation",
+    "previous_article": "Previous Article",
+    "next_article": "Next Article"
+  },
+  "main_blog": {
+    "view_all": "View All"
+  },
+  "main_cart": {
+    "my_cart": "My Cart",
+    "product": "Product",
+    "sku": "SKU",
+    "quantity": "Quantity",
+    "total": "Total",
+    "shipping_and": "Shipping and taxes calculated at checkout.",
+    "checkout": "Checkout",
+    "this_is": "This is a gift",
+    "cart_note": "Cart note",
+    "your_cart": "Your Cart is Empty",
+    "have_an": "Have an account?",
+    "log_in": "Log in",
+    "to_check": "to check out faster.",
+    "continue_shopping": "Continue Shopping"
+  },
+  "main_collection_filter_sort_bar": {
+    "reset": "Reset",
+    "apply_filters": "Apply Filters",
+    "filters": "Filters",
+    "sort_by": "Sort by",
+    "apply_sort": "Apply Sort",
+    "sort": "Sort",
+    "clear_all": "clear all"
+  },
+  "main_collection_product_grid": {
+    "no_products": "No products Found",
+    "use_fewer": "Use Fewer links"
+  },
+  "main_collections_list": {
+    "no_collections": "No Collections Found"
+  },
+  "main_order": {
+    "account": "Account",
+    "order_history": "Order History",
+    "addresses": "Addresses",
+    "log_out": "Log Out",
+    "order": "Order",
+    "back_to": "Back to Orders",
+    "product": "Product",
+    "sku": "SKU",
+    "quantity": "Quantity",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "tax_included": "Tax included",
+    "tax_excluded": "Tax excluded",
+    "refunded_amount": "Refunded amount",
+    "billing_address": "Billing Address",
+    "no_billing": "No Billing Address",
+    "shipping_address": "Shipping Address",
+    "no_shipping": "No shipping address was required for this order."
+  },
+  "main_search_filters": {
+    "reset": "Reset",
+    "apply_filters": "Apply Filters",
+    "filters": "Filters",
+    "sort_by": "Sort by",
+    "apply_sort": "Apply Sort",
+    "sort": "Sort",
+    "clear_all": "clear all"
+  },
+  "main_search_input": {
+    "search_results": "Search Results",
+    "article": "Article",
+    "page": "Page",
+    "product": "Product",
+    "apply_changes": "Apply changes"
+  },
+  "product_add_to_cart_bar": {
+    "add_to": "Add to Cart"
+  },
+  "product_drawer": {
+    "close": "Close"
+  },
+  "products_scrollable": {
+    "show_previous": "Show Previous Item",
+    "show_next": "Show Next Item",
+    "view_all": "View all"
+  },
+  "search": {
+    "loading": "Loading...",
+    "no_results": "No results found"
+  },
+  "benefit_tabs": {
+    "select_tab": "Select tab"
+  },
+  "features": {
+    "read_more": "Read more"
+  },
+  "header": {
+    "show_previous": "Show Previous Item",
+    "show_next": "Show Next Item",
+    "menu": "Menu",
+    "back": "Back",
+    "close_nav": "Close nav",
+    "account": "Account",
+    "login": "Login",
+    "search": "Search",
+    "close": "Close"
+  },
+  "main_collection_banner": {
+    "products": "Products"
+  },
+  "newsletter": {
+    "newsletter": "Newsletter",
+    "thank_you": "Thank you for Signing Up"
+  },
+  "object_over_image": {
+    "view_product": "View Product",
+    "sold_out": "Sold Out",
+    "shop_now": "Shop now"
+  },
+  "product": {
+    "add_to": "Add to Cart",
+    "sold_out": "Sold Out",
+    "unavailable": "Unavailable",
+    "in_stock": "In Stock",
+    "available": "Available",
+    "last_item": "Last item",
+    "items_left": "items left",
+    "quantity": "Quantity:",
+    "no_reviews": "No reviews",
+    "sold_out_2": "Sold out"
+  },
+  "product_card": {
+    "sold_out": "Sold out",
+    "view_product": "View Product",
+    "choose_an": "Choose an option",
+    "view_more": "View more",
+    "sold_out_2": "Sold Out"
+  },
+  "collection_card": {
+    "starting_at": "Starting at"
+  },
+  "form": {
+    "newsletter": "Newsletter",
+    "thank_you": "Thank you for Signing Up"
+  },
+  "product_detail_blocks": {
+    "add_to": "Add to Cart",
+    "sold_out": "Sold Out"
+  }
+}

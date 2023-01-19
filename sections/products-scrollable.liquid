@@ -1,0 +1,622 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign product_source = section.settings.product_source
+  assign product_limit = section.settings.product_limit
+  assign hide_out_of_stock = section.settings.hide_out_of_stock
+  assign hide_if_empty = section.settings.hide_if_empty
+  assign container_overflow = section.settings.container_overflow
+  assign center_products = section.settings.center_products
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign scrollWrapperClasses = "container"
+
+  if container_overflow
+    assign scrollWrapperClasses = ""
+    assign scrollContainerClasses = "scroll-pl-4 sm:scroll-pl-[max(2rem,calc((100%-var(--layout-page-width)+4rem)/2))] px-4 sm:px-[max(2rem,calc((100%-var(--layout-page-width)+4rem)/2))]"
+  endif
+
+  if center_products
+    assign centerProductsClasses = "flex justify-center"
+  endif
+
+  for block in section.blocks
+    assign default_title = default_title | default: block.settings.source.title
+    assign default_url = default_url | default: block.settings.source.url
+    if default_title and default_url
+      break
+    endif
+  endfor
+%}
+
+<div style="display: var(--scrollable-display, block);">
+  <div class="{{ color_scheme }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+    <section class="relative block mb-8"
+             data-scroll-slider>
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'heading' %}
+            {% render 'products-scrollable.heading', block: block %}
+            {% break %}
+          {% when 'view_all_bar' %}
+            {% render 'products-scrollable.view_all_bar', block: block, default_title: default_title, default_url: default_url %}
+            {% break %}
+        {% endcase %}
+      {% endfor %}
+
+      <main class="{{ scrollWrapperClasses }} {{ centerProductsClasses }}">
+        <div class="grid grid-flow-col-dense auto-cols-auto w-min max-w-full gap-6 overflow-x-auto pb-8 scroll-smooth snap-mandatory snap-x w-full {{ scrollContainerClasses }}"
+             data-scroll-container
+             {% if product_source == "recently_viewed_products" %}data-recently-viewed{% endif %}>
+
+          {% if product_source == 'blocks' %}
+            {% assign productIds = product.id | append: "|||" %}
+            {% assign break = false %}
+
+            {% if hide_out_of_stock %}
+              {% for block in section.blocks %}
+                {% assign scrollableProducts = null %}
+                {% case block.type %}
+                  {% when 'source_products' %}
+                    {% assign scrollableProducts = block.settings.source | where: 'available' %}
+                  {% when 'source_collection' %}
+                    {% assign scrollableProducts = block.settings.source.products | where: 'available' %}
+                  {% when 'source_metafield' %}
+                    {% assign namespace = block.settings.source | split: '.' | first %}
+                    {% assign key = block.settings.source | split: '.' | last %}
+
+                    {% assign metafield = product.metafields[namespace][key] | default: collection.metafields[namespace][key] %}
+
+                    {% case metafield.type %}
+                      {% when 'product_reference' %}
+                        {% assign scrollableProducts = metafield.value | unique | where: 'available' %}
+                      {% when 'list.product_reference' %}
+                        {% assign scrollableProducts = metafield.value | where: 'available' %}
+                      {% when 'collection_reference' %}
+                        {% assign scrollableProducts = metafield.value.products | where: 'available' %}
+                      {% when 'list.collection_reference' %}
+                        {% assign scrollableProducts = metafield.value | first %}
+                        {% assign scrollableProducts = scrollableProducts.products | where: 'available' %}
+                    {% endcase %}
+                {% endcase %}
+
+                {% for _product in scrollableProducts %}
+                  {% if productIds contains _product.id %}{% continue %}{% endif %}
+                  {% render "product-card", product: _product, class: 'min-w-[180px] w-[calc(100vw/2)] md:w-[calc(var(--layout-page-width)/4)]', html_attributes: 'data-scroll-item' %}
+                  {% assign productIds = productIds | append: "|||" | append: _product.id %}
+                  {% assign product_limit = product_limit | minus: 1 %}
+                  {% if product_limit <= 0 %}
+                    {% assign break = true %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+                {% if break %}{% break %}{% endif %}
+              {% endfor %}
+            {% else %}
+              {% for block in section.blocks %}
+                {% assign scrollableProducts = null %}
+                {% case block.type %}
+                  {% when 'source_products' %}
+                    {% assign scrollableProducts = block.settings.source %}
+                  {% when 'source_collection' %}
+                    {% assign scrollableProducts = block.settings.source.products %}
+                  {% when 'source_metafield' %}
+                    {% assign namespace = block.settings.source | split: '.' | first %}
+                    {% assign key = block.settings.source | split: '.' | last %}
+
+                    {% assign metafield = product.metafields[namespace][key] | default: collection.metafields[namespace][key] %}
+
+                    {% case metafield.type %}
+                      {% when 'product_reference' %}
+                        {% assign scrollableProducts = metafield.value | unique %}
+                      {% when 'list.product_reference' %}
+                        {% assign scrollableProducts = metafield.value %}
+                      {% when 'collection_reference' %}
+                        {% assign scrollableProducts = metafield.value.products %}
+                      {% when 'list.collection_reference' %}
+                        {% assign scrollableProducts = metafield.value | first %}
+                        {% assign scrollableProducts = scrollableProducts.products %}
+                    {% endcase %}
+                {% endcase %}
+
+                {% for _product in scrollableProducts %}
+                  {% if productIds contains _product.id %}{% continue %}{% endif %}
+                  {% render "product-card", product: _product, class: 'min-w-[180px] w-[calc(100vw/2)] md:w-[calc(var(--layout-page-width)/4)]', html_attributes: 'data-scroll-item' %}
+                  {% assign productIds = productIds | append: "|||" | append: _product.id %}
+                  {% assign product_limit = product_limit | minus: 1 %}
+                  {% if product_limit <= 0 %}
+                    {% assign break = true %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+                {% if break %}{% break %}{% endif %}
+              {% endfor %}
+            {% endif %}
+
+          {% endif %}
+
+        </div>
+      </main>
+
+      <footer data-scroll-controls
+              class="hidden select-none container relative">
+        <div class="relative">
+          {% render 'scroll-bar-elements', element: 'scrollbar' %}
+        </div>
+        <button class="group absolute -top-96 left-4 2xl:-left-12 w-10 h-10 text-gray-400 hf:text-gray-900 transition-all ease-in-out stroke-2 bg-theme-bg/80 rounded-full flex items-center justify-center border border-gray-200 shadow-sm"
+                style="opacity: 0; pointer-events: none"
+                data-scroll-prev>
+          <span class="sr-only">
+            {{ "products_scrollable.show_previous" | t }}
+          </span>
+          <svg class="mr-1 h-3 w-3 stroke-2 rotate-180"
+               fill="none"
+               viewBox="0 0 10 10"
+               aria-hidden="true"
+               stroke="currentColor"
+          >
+            <path class="opacity-0 transition group-hover:opacity-100"
+                  d="M0 5h7"
+            ></path>
+            <path class="transition group-hover:translate-x-[3px]"
+                  d="M1 1l4 4-4 4"
+            ></path>
+          </svg>
+        </button>
+        <button class="group absolute -top-96 right-4 2xl:-right-12 w-10 h-10 text-gray-400 hf:text-gray-900 transition-all ease-in-out stroke-2 bg-theme-bg/80 rounded-full flex items-center justify-center border border-gray-200 shadow-sm"
+                style="opacity: 0; pointer-events: none"
+                data-scroll-next>
+          <span class="sr-only">
+            {{ "products_scrollable.show_next" | t }}
+          </span>
+          <svg class="ml-1 h-3 w-3 stroke-2"
+               fill="none"
+               viewBox="0 0 10 10"
+               aria-hidden="true"
+               stroke="currentColor"
+          >
+            <path class="opacity-0 transition group-hover:opacity-100"
+                  d="M0 5h7"
+            ></path>
+            <path class="transition group-hover:translate-x-[3px]"
+                  d="M1 1l4 4-4 4"
+            ></path>
+          </svg>
+        </button>
+      </footer>
+    </section>
+  </div>
+</div>
+
+
+{% if hide_if_empty and request.design_mode != true %}
+  {% if product_source == "recently_viewed_products" or product_limit == section.settings.product_limit %}
+    <style>
+      #shopify-section-{{ section.id }} {
+        --scrollable-display: none;
+      }
+    </style>
+  {% endif %}
+{% endif %}
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.products_scrollable.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "product_source",
+      "label": "t:sections.products_scrollable.settings.product_source.label",
+      "default": "blocks",
+      "options": [
+        {
+          "value": "blocks",
+          "label": "t:sections.products_scrollable.settings.product_source.options__1.label"
+        },
+        {
+          "value": "recently_viewed_products",
+          "label": "t:sections.products_scrollable.settings.product_source.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "t:sections.products_scrollable.settings.product_limit.label",
+      "default": 12,
+      "min": 4,
+      "max": 24,
+      "step": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_out_of_stock",
+      "label": "t:sections.products_scrollable.settings.hide_out_of_stock.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_if_empty",
+      "label": "t:sections.products_scrollable.settings.hide_if_empty.label",
+      "info": "t:sections.products_scrollable.settings.hide_if_empty.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products_scrollable.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "container_overflow",
+      "label": "t:sections.products_scrollable.settings.container_overflow.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "center_products",
+      "label": "t:sections.products_scrollable.settings.center_products.label"
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.products_scrollable.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.products_scrollable.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.products_scrollable.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.products_scrollable.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.products_scrollable.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.products_scrollable.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.products_scrollable.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.products_scrollable.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.products_scrollable.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.products_scrollable.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.products_scrollable.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.products_scrollable.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.products_scrollable.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.products_scrollable.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.products_scrollable.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.products_scrollable.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.products_scrollable.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.products_scrollable.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.products_scrollable.settings.color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.products_scrollable.blocks.heading.name",
+      "type": "heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.products_scrollable.blocks.heading.settings.header__1.content"
+        },
+        {
+          "type": "text",
+          "id": "preheading",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.preheading.label"
+        },
+        {
+          "type": "range",
+          "id": "preheading_font",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.preheading_font.label",
+          "default": 3,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.products_scrollable.blocks.heading.settings.preheading_font.info"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.title.label"
+        },
+        {
+          "type": "range",
+          "id": "title_font",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.title_font.label",
+          "default": 1,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.products_scrollable.blocks.heading.settings.title_font.info"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.subtitle.label"
+        },
+        {
+          "type": "range",
+          "id": "subtitle_font",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.subtitle_font.label",
+          "default": 2,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.products_scrollable.blocks.heading.settings.subtitle_font.info"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.content.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.products_scrollable.blocks.heading.settings.header__2.content"
+        },
+        {
+          "type": "text",
+          "id": "button_primary__text",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.button_primary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_primary__url",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.button_primary__url.label"
+        },
+        {
+          "type": "radio",
+          "id": "button_primary__style",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.button_primary__style.label",
+          "default": "button-primary",
+          "options": [
+            {
+              "value": "button-primary",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_primary__style.options__1.label"
+            },
+            {
+              "value": "button-primary--outline",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_primary__style.options__2.label"
+            },
+            {
+              "value": "button-secondary",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_primary__style.options__3.label"
+            },
+            {
+              "value": "button-secondary--outline",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_primary__style.options__4.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.products_scrollable.blocks.heading.settings.header__3.content"
+        },
+        {
+          "type": "text",
+          "id": "button_secondary__text",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.button_secondary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_secondary__url",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.button_secondary__url.label"
+        },
+        {
+          "type": "radio",
+          "id": "button_secondary__style",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.button_secondary__style.label",
+          "default": "button-primary--outline",
+          "options": [
+            {
+              "value": "button-primary",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_secondary__style.options__1.label"
+            },
+            {
+              "value": "button-primary--outline",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_secondary__style.options__2.label"
+            },
+            {
+              "value": "button-secondary",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_secondary__style.options__3.label"
+            },
+            {
+              "value": "button-secondary--outline",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.button_secondary__style.options__4.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.products_scrollable.blocks.heading.settings.header__4.content"
+        },
+        {
+          "type": "radio",
+          "id": "align__horizontal",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.align__horizontal.label",
+          "default": "items-center text-center",
+          "options": [
+            {
+              "value": "items-start text-left",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.align__horizontal.options__1.label"
+            },
+            {
+              "value": "items-center text-center",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.align__horizontal.options__2.label"
+            },
+            {
+              "value": "items-end text-right",
+              "label": "t:sections.products_scrollable.blocks.heading.settings.align__horizontal.options__3.label"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "label": "t:sections.products_scrollable.blocks.heading.settings.margin_bottom.label",
+          "default": 0,
+          "min": -6,
+          "max": 42,
+          "step": 2,
+          "unit": "px"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.products_scrollable.blocks.view_all_bar.name",
+      "type": "view_all_bar",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.products_scrollable.blocks.view_all_bar.settings.title.label"
+        },
+        {
+          "type": "range",
+          "id": "title_font",
+          "label": "t:sections.products_scrollable.blocks.view_all_bar.settings.title_font.label",
+          "default": 1,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.products_scrollable.blocks.view_all_bar.settings.title_font.info"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.products_scrollable.blocks.view_all_bar.settings.url.label"
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "label": "t:sections.products_scrollable.blocks.view_all_bar.settings.margin_bottom.label",
+          "default": 0,
+          "min": -6,
+          "max": 42,
+          "step": 2,
+          "unit": "px"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.products_scrollable.blocks.source_product_list.name",
+      "type": "source_products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product_list",
+          "id": "source",
+          "label": "t:sections.products_scrollable.blocks.source_product_list.settings.source.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.products_scrollable.blocks.source_collection.name",
+      "type": "source_collection",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "source",
+          "label": "t:sections.products_scrollable.blocks.source_collection.settings.source.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.products_scrollable.blocks.source_metafield_selector.name",
+      "type": "source_metafield",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "source",
+          "label": "t:sections.products_scrollable.blocks.source_metafield_selector.settings.source.label",
+          "placeholder": "t:sections.products_scrollable.blocks.source_metafield_selector.settings.source.placeholder",
+          "default": "shopify--discovery--product_recommendation.complementary_products"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.products_scrollable.presets.products_scrollable.name",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "source_products"
+        },
+        {
+          "type": "source_collection"
+        },
+        {
+          "type": "source_metafield"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

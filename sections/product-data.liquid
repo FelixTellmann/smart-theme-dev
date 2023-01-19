@@ -1,0 +1,55 @@
+<script data-product-json="{{ product.id }}"
+        type="application/json">{% render '_json_product', input: product, select: '
+id,
+handle,
+variants.available,
+variants.featured_media,
+variants.option1,
+variants.option2,
+variants.option3,
+variants.options,
+variants.price,
+variants.compare_at_price,
+variants.id,
+variants.sku,
+variants.title,
+variants.metafields.accelerate,
+variants.inventory_quantity,
+variants.inventory_policy,
+variants.inventory_management,
+options,
+option1,
+option2,
+option3,
+price,
+price_min,
+price_varies,
+compare_at_price,
+compare_at_price_min,
+compare_at_price_varies,
+options_with_values,
+title,
+featured_media,
+media,
+seo_description,
+description,
+vendor,
+url,
+available,
+metafields.reviews,
+metafields.accelerate,
+metafields.shopify--discovery--product_recommendation,
+selected_or_first_available_variant
+' %}</script>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.product_data.name",
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  }
+}
+{% endschema %}

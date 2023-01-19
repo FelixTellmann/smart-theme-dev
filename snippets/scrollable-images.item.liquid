@@ -1,0 +1,28 @@
+<a {% if url %}href="{{ url }}"{% endif %}
+   class="group relative grid aspect-1 transition-all ease-in-out md:aspect-[unset] snap-start min-w-full md:min-w-full snap-always pt-[100%] md:pt-[min(42rem,100%)] hf:shadow-xl"
+   data-scroll-item>
+  <figure class="rounded-theme-md overflow-hidden absolute grid w-full h-full">
+    {% render "_image", image: image, class: "absolute top-0 left-0 h-full w-full bg-inherit object-cover" %}
+    <figcaption class="w-full h-full z-10 absolute inset-0 flex flex-col justify-between p-4"
+                style="background-image: {{ overlay }}">
+      {% render 'typography', type: title_type, content: title, class: "text-theme-overlay-text" %}
+      {% if url %}
+        <i class="flex h-8 w-8 items-center justify-center rounded-full bg-theme-bg/50 backdrop-blur text-theme-text/80">
+          <svg class="ml-1 h-3 w-3 stroke-2"
+               fill="none"
+               viewBox="0 0 10 10"
+               aria-hidden="true"
+               stroke="currentColor"
+          >
+            <path class="opacity-0 transition group-hover:opacity-100"
+                  d="M0 5h7"
+            ></path>
+            <path class="transition group-hover:translate-x-[3px]"
+                  d="M1 1l4 4-4 4"
+            ></path>
+          </svg>
+        </i>
+      {% endif %}
+    </figcaption>
+  </figure>
+</a>

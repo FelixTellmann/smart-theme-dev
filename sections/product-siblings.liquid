@@ -1,0 +1,65 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{%- capture productSiblingsJson -%}
+  [{%- for block in section.blocks -%}
+  {
+  "title": "{{ block.settings.title }}",
+  "options": "{{ block.settings.options }}",
+  "products": [{%- for _product in block.settings.products -%}
+    {
+    "id": {{ _product.id | json }},
+    "handle": {{ _product.handle | json }},
+    "image": {{ _product.featured_image | json }}
+    }{%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}]
+  }{%- unless forloop.last -%},{%- endunless -%}
+{%- endfor -%}]
+{%- endcapture -%}
+
+<script type="application/json"
+        data-product-siblings>
+  {{ productSiblingsJson }}
+
+
+</script>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.product_sibling_groups.name",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.product_sibling_groups.settings.paragraph__1.content"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.product_sibling_groups.blocks.siblings_group.name",
+      "type": "siblings",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.product_sibling_groups.blocks.siblings_group.settings.title.label"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "t:sections.product_sibling_groups.blocks.siblings_group.settings.products.label"
+        },
+        {
+          "type": "textarea",
+          "id": "options",
+          "label": "t:sections.product_sibling_groups.blocks.siblings_group.settings.options.label",
+          "info": "t:sections.product_sibling_groups.blocks.siblings_group.settings.options.info"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

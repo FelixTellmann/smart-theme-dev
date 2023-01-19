@@ -1,0 +1,36 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign button_primary__text = block.settings.button_primary__text
+  assign button_primary__url = block.settings.button_primary__url
+  assign button_primary__style = block.settings.button_primary__style
+  assign button_secondary__text = block.settings.button_secondary__text
+  assign button_secondary__url = block.settings.button_secondary__url
+  assign button_secondary__style = block.settings.button_secondary__style
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  if button_primary__text and button_primary__url
+    assign button_primary__show = true
+  endif
+
+  if button_secondary__text and button_secondary__url
+    assign button_secondary__show = true
+  endif
+%}
+
+<div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+     class="max-w-lg space-x-3">
+  {% if button_primary__show %}
+    <a href="{{ button_primary__url }}"
+       class="{{ button_primary__style }}">
+      {{ button_primary__text }}
+    </a>
+  {% endif %}
+  {% if button_secondary__show %}
+    <a href="{{ button_secondary__url }}"
+       class="{{ button_secondary__style }}">
+      {{ button_secondary__text }}
+    </a>
+  {% endif %}
+</div>

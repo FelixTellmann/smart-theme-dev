@@ -1,0 +1,96 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign tab_title_1 = block.settings.tab_title_1
+  assign match_from_1 = block.settings.match_from_1
+  assign match_to_1 = block.settings.match_to_1
+  assign tab_title_2 = block.settings.tab_title_2
+  assign match_from_2 = block.settings.match_from_2
+  assign match_to_2 = block.settings.match_to_2
+  assign tab_title_3 = block.settings.tab_title_3
+  assign match_from_3 = block.settings.match_from_3
+  assign match_to_3 = block.settings.match_to_3
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  if tab_title_1 != blank and match_from_1 == blank and match_to_1 != blank
+    assign tab_content_1 = product.description | split: match_to_1 | first
+  endif
+  if tab_title_1 != blank and match_from_1 != blank and match_to_1 != blank
+    assign tab_content_array_1 = product.description | split: match_from_1
+    assign tab_content_1 = tab_content_array_1[1] | split: match_to_1 | first
+  endif
+  if tab_title_2 != blank and match_from_2 == blank and match_to_2 != blank
+    assign tab_content_2 = product.description | split: match_to_2 | first
+  endif
+  if tab_title_2 != blank and match_from_2 != blank and match_to_2 != blank
+    assign tab_content_array_2 = product.description | split: match_from_2
+    assign tab_content_2 = tab_content_array_2[1] | split: match_to_2 | first
+  endif
+  if tab_title_3 != blank and match_from_3 == blank and match_to_3 != blank
+    assign tab_content_3 = product.description | split: match_to_3 | first
+  endif
+  if tab_title_3 != blank and match_from_3 != blank and match_to_3 != blank
+    assign tab_content_array_3 = product.description | split: match_from_3
+    assign tab_content_3 = tab_content_array_3[1] | split: match_to_3 | first
+  endif
+
+  assign title_first = true
+  assign content_first = true
+%}
+
+<section data-tabs
+         class="col-span-12">
+  <header class="mb-6 grid grid-flow-col-dense auto-cols-min gap-3">
+
+    {% if tab_title_1 != blank and tab_content_1 != blank %}
+      <button type="button"
+              class="label-primary border border-primary-text/20 {% if title_first %}active{% endif %}"
+              data-tabs-button="1">
+        {{ tab_title_1 }}
+      </button>
+      {% assign title_first = false %}
+    {% endif %}
+
+    {% if tab_title_2 != blank and tab_content_2 != blank %}
+      <button type="button"
+              class="label-primary border border-primary-text/20 {% if title_first %}active{% endif %}"
+              data-tabs-button="2">
+        {{ tab_title_2 }}
+      </button>
+      {% assign title_first = false %}
+    {% endif %}
+
+    {% if tab_title_3 != blank and tab_content_3 != blank %}
+      <button type="button"
+              class="label-primary border border-primary-text/20 {% if title_first %}active{% endif %}"
+              data-tabs-button="3">
+        {{ tab_title_3 }}
+      </button>
+    {% endif %}
+  </header>
+  <main class="relative">
+    {% if tab_title_1 != blank and tab_content_1 != blank %}
+      <section class="absolute inset-0 h-full opacity-0 pointer-events-none transition-all ac:opacity-100 ac:pointer-events-auto ac:relative {% if content_first %}active{% endif %}"
+               data-tabs-content="1">
+        {% render 'typography', type: 'prose', content: tab_content_1 %}
+      </section>
+      {% assign content_first = false %}
+    {% endif %}
+
+    {% if tab_title_2 != blank and tab_content_2 != blank %}
+      <section class="absolute inset-0 h-full opacity-0 pointer-events-none transition-all ac:opacity-100 ac:pointer-events-auto ac:relative {% if content_first %}active{% endif %}"
+               data-tabs-content="2">
+        {% render 'typography', type: 'prose', content: tab_content_2 %}
+      </section>
+      {% assign content_first = false %}
+    {% endif %}
+
+    {% if tab_title_3 != blank and tab_content_3 != blank %}
+      <section class="absolute inset-0 h-full opacity-0 pointer-events-none transition-all ac:opacity-100 ac:pointer-events-auto ac:relative {% if content_first %}active{% endif %}"
+               data-tabs-content="3">
+        {% render 'typography', type: 'prose', content: tab_content_3 %}
+      </section>
+    {% endif %}
+  </main>
+</section>

@@ -1,0 +1,270 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+  assign logo = section.settings.logo
+  assign logo_height = section.settings.logo_height
+  assign menu = section.settings.menu
+  assign force_hamburger_menu = section.settings.force_hamburger_menu
+  assign center_logo = section.settings.center_logo
+  assign height = section.settings.height
+  assign position = section.settings.position
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% capture megaMenus %}{% for block in section.blocks %}--{{ block.settings.handle }}--{% endfor %}{% endcapture %}
+
+<section class="header--desktop shadow-md z-50 relative bg-theme-bg {{ color_scheme }}"
+         data-section="header">
+  <div class="container flex flex justify-around items-center w-full h-header">
+    {% render "header.hamburger-menu" %}
+    {% render "header.logo" %}
+    {% render "header.desktop-nav" %}
+    {% render "header.settings" %}
+  </div>
+  {% render "header.desktop-nav-dropdown", megaMenus: megaMenus %}
+  {% render "header.megamenu", megaMenus: megaMenus %}
+  {% render "header.mobile-nav", megaMenus: megaMenus %}
+</section>
+
+{% assign topbarSpacingMultiplier = 0 %}
+{% if position == 'sticky' %}
+  {% assign topbarSpacingMultiplier = 1 %}
+{% endif %}
+
+
+<style>
+  :root {
+    --header-height: {{ height }}px;
+    --header-position: {{ position }};
+    --top-bar-spacing-multiplier: {{ topbarSpacingMultiplier }};
+    --top-bar-spacing: calc((var(--header-height, 0px) + var(--announcement-height, 0px) + var(--free-shipping-bar-height, 0px)) * var(--top-bar-spacing-multiplier));
+  }
+</style>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.header.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.header.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.header.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.header.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.header.settings.color_scheme.label"
+    },
+    {
+      "type": "select",
+      "id": "logo",
+      "default": "branding_logo_dark_on_light",
+      "options": [
+        {
+          "value": "branding_logo_dark_on_light",
+          "label": "t:sections.header.settings.logo.options__1.label"
+        },
+        {
+          "value": "branding_logo_light_on_dark",
+          "label": "t:sections.header.settings.logo.options__2.label"
+        },
+        {
+          "value": "branding_logo_none",
+          "label": "t:sections.header.settings.logo.options__3.label"
+        }
+      ],
+      "label": "t:sections.header.settings.logo.label"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "t:sections.header.settings.logo_height.label",
+      "default": 80,
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "t:sections.header.settings.menu.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "force_hamburger_menu",
+      "label": "t:sections.header.settings.force_hamburger_menu.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "center_logo",
+      "label": "t:sections.header.settings.center_logo.label",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "t:sections.header.settings.height.label",
+      "default": 75,
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "radio",
+      "id": "position",
+      "label": "t:sections.header.settings.position.label",
+      "default": "sticky",
+      "options": [
+        {
+          "value": "sticky",
+          "label": "t:sections.header.settings.position.options__1.label"
+        },
+        {
+          "value": "relative",
+          "label": "t:sections.header.settings.position.options__2.label"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.header.blocks.megamenu.name",
+      "type": "megamenu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "handle",
+          "label": "t:sections.header.blocks.megamenu.settings.handle.label",
+          "info": "t:sections.header.blocks.megamenu.settings.handle.info"
+        },
+        {
+          "type": "range",
+          "id": "font_scale",
+          "min": 50,
+          "max": 150,
+          "step": 5,
+          "unit": "%",
+          "label": "t:sections.header.blocks.megamenu.settings.font_scale.label",
+          "default": 100
+        },
+        {
+          "type": "radio",
+          "id": "rows",
+          "label": "t:sections.header.blocks.megamenu.settings.rows.label",
+          "default": "1",
+          "options": [
+            {
+              "value": "1",
+              "label": "t:sections.header.blocks.megamenu.settings.rows.options__1.label"
+            },
+            {
+              "value": "2",
+              "label": "t:sections.header.blocks.megamenu.settings.rows.options__2.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.header.blocks.megamenu.settings.header__1.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_images",
+          "label": "t:sections.header.blocks.megamenu.settings.show_images.label",
+          "default": true
+        },
+        {
+          "type": "color_background",
+          "id": "image_overlay",
+          "label": "t:sections.header.blocks.megamenu.settings.image_overlay.label",
+          "default": "linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.25) 100%)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_caption",
+          "label": "t:sections.header.blocks.megamenu.settings.show_caption.label",
+          "default": true,
+          "info": "t:sections.header.blocks.megamenu.settings.show_caption.info"
+        },
+        {
+          "type": "color",
+          "id": "image_caption_color",
+          "label": "t:sections.header.blocks.megamenu.settings.image_caption_color.label",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.header.blocks.megamenu.settings.header__2.content"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.header.blocks.megamenu.settings.paragraph__1.content"
+        },
+        {
+          "type": "text",
+          "id": "override_1_handle",
+          "label": "t:sections.header.blocks.megamenu.settings.override_1_handle.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "override_1_image",
+          "label": "t:sections.header.blocks.megamenu.settings.override_1_image.label"
+        },
+        {
+          "type": "text",
+          "id": "override_2_handle",
+          "label": "t:sections.header.blocks.megamenu.settings.override_2_handle.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "override_2_image",
+          "label": "t:sections.header.blocks.megamenu.settings.override_2_image.label"
+        },
+        {
+          "type": "text",
+          "id": "override_3_handle",
+          "label": "t:sections.header.blocks.megamenu.settings.override_3_handle.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "override_3_image",
+          "label": "t:sections.header.blocks.megamenu.settings.override_3_image.label"
+        },
+        {
+          "type": "text",
+          "id": "override_4_handle",
+          "label": "t:sections.header.blocks.megamenu.settings.override_4_handle.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "override_4_image",
+          "label": "t:sections.header.blocks.megamenu.settings.override_4_image.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

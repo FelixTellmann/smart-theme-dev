@@ -1,0 +1,881 @@
+{%- comment -%}
+    Renders a JSON blobs
+
+    Accepts:
+    - input: {object}
+    - type: {string}
+    - select: {string}
+    - page_size: {number}
+
+    Usage:
+    {%- render '_json', input: product, type: 'product', select: 'options, variants, variants.price' -%}
+    {%- render '_json', input: product.variant, type: 'variant', select: 'option1, option2' -%}
+{%- endcomment -%}
+
+{%- assign page_size = page_size | default: 50 -%}
+
+{%- if type == null -%}
+  {%- if input.url contains "/collections/" -%}
+    {%- assign type = 'collection' -%}
+  {%- elsif input.url contains "?variant=" -%}
+    {%- assign type = 'variant' -%}
+  {%- elsif input.url contains "/products/" -%}
+    {%- assign type = 'product' -%}
+  {%- elsif input.url contains "/blogs/" and input.articles_count != blank -%}
+    {%- assign type = 'blog' -%}
+  {%- elsif input.url contains "/blogs/" and input.author -%}
+    {%- assign type = 'article' -%}
+  {%- elsif input.url contains "/pages/" -%}
+    {%- assign type = 'page' -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign productOptions = 'available,collections,compare_at_price,compare_at_price_max,compare_at_price_min,compare_at_price_varies,content,created_at,description,seo_description,featured_image,featured_media,featured_image_id,featured_image_url,featured_media_id,featured_media_url,first_available_variant,gift_card,handle,has_only_default_variant,id,images,media,metafields,options,options_by_name,options_with_values,price,price_max,price_min,price_varies,published_at,requires_selling_plan,selected_or_first_available_selling_plan_allocation,selected_or_first_available_variant,selected_selling_plan,selected_selling_plan_allocation,selected_variant,selling_plan_groups,tags,template_suffix,title,type,url,variants,vendor' | split: ',' -%}
+
+{%- assign variantOptions = 'available,barcode,compare_at_price,featured_image,featured_media,featured_image_id,featured_image_url,featured_image_id,featured_image_url,featured_media_id,featured_media_url,id,image,incoming,inventory_management,inventory_policy,inventory_quantity,matched,metafields,next_incoming_date,option1,option2,option3,options,price,product,requires_selling_plan,requires_shipping,selected,selected_selling_plan_allocation,selling_plan_allocations,sku,store_availabilities,taxable,title,unit_price,unit_price_measurement,url,weight,weight_in_unit,weight_unit' | split: ',' -%}
+
+{%- assign collectionOptions = 'all_products_count,all_tags,all_types,all_vendors,current_type,current_vendor,default_sort_by,description,seo_description,featured_image,filters,handle,id,image,metafields,next_product,previous_product,products,product_pagination,products_count,published_at,sort_by,sort_options,tags,template_suffix,title,url' | split: ',' -%}
+
+
+{%- assign imageOptions = 'alt,aspect_ratio,height,id,media_type,preview_image,src,width' | split: ',' -%}
+
+{%- assign filterOptions = 'active_values,false_value,inactive_values,label,max_value,min_value,param_name,range_max,true_value,type,url_to_remove,values' | split: ',' -%}
+
+{%- assign filterOptionsValues = 'activecount,label,param_name,url_to_add,url_to_remove,value' | split: ',' -%}
+
+{%- assign pageOptions = 'author,content,handle,id,metafields,published_at,template_suffix,title,url' | split: ',' -%}
+
+{%- assign blogOptions = 'all_tags,articles,articles_count,comments_enabled,handle,id,metafields,moderated,next_article,previous_article,tags,template_suffix,title,url' | split: ',' -%}
+
+{%- assign articleOptions = 'author,comment_post_url,comments,comments_count,comments_enabled,content,created_at,excerpt,excerpt_or_content,handle,id,image,metafields,moderated,published_at,tags,template_suffix,title,updated_at,url,user' | split: ',' -%}
+
+{%- assign userOptions = 'account_owner,bio,email,first_name,homepage,image,last_name' | split: ',' -%}
+
+{%- assign globalOptions = 'global_settings,global_shop,global_request,global_linklists,global_product,global_collection,global_page,global_blog,global_article,global_handle,global_description,global_title,global_template,global_recommendations,global_routes' | split: ',' -%}
+
+{%- assign routesOptions = 'account_addresses_url,account_login_url,account_logout_url,account_recover_url,account_register_url,account_url,all_products_collection_url,cart_add_url,cart_change_url,cart_clear_url,cart_update_url,cart_url,collections_url,predictive_search_url,product_recommendations_url,root_url,search_url' | split: ',' -%}
+
+{%- assign recommendationsOptions = 'products,products_count,performed' | split: ',' -%}
+
+{%- assign shopOptions = 'address,address_city,address_company,address_country,address_country_upper,address_province,address_province_code,address_street,address_summary,address_zip,checkout,collections_count,currency,customer_accounts_enabled,customer_accounts_optional,description,domain,email,enabled_payment_types,id,metafields,money_format,money_with_currency_format,name,password_message,permanent_domain,phone,policies,privacy_policy,published_locales,refund_policy,shipping_policy,subscription_policy,terms_of_service,products_count,secure_url,types,url,vendors' | split: ',' -%}
+
+{%- assign requestOptions = 'design_mode,host,locale,origin,path,page_type' | split: ',' -%}
+
+{%- assign fontOptions = 'baseline_ratio,fallback_families,family,style,system,weight' | split: ',' -%}
+
+{%- assign colorOptions = 'hex,alpha,red,green,blue,rgb,hue,lightness,saturation' | split: ',' -%}
+
+{%- assign linklistOptions = 'handle,levels,links,title' | split: ',' -%}
+
+{%- assign linkOptions = 'active,child_active,current,child_current,levels,handle,links,object,title,type,url' | split: ',' -%}
+
+{%- assign sectionOptions = 'id,type,settings,blocks' | split: ',' -%}
+
+{%- assign blockOptions = 'id,type,settings' | split: ',' -%}
+
+{%- case type -%}
+  {%- when 'global' -%}
+    {% if request %}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: globalOptions -%}
+      {%- for option in options -%}{%- if globalOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+
+      {%- if select contains 'global_product.' -%}
+        {%- unless opts contains 'global_product' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_product' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_product.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_product.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_productSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_routes.' -%}
+        {%- unless opts contains 'global_routes' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_routes' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_routes.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_routes.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_routesSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_shop.' -%}
+        {%- unless opts contains 'global_shop' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_shop' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_shop.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_shop.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_shopSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_recommendations.' -%}
+        {%- unless opts contains 'global_recommendations' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_recommendations' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_recommendations.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_recommendations.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_recommendationsSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_routes.' -%}
+        {%- unless opts contains 'global_routes' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_routes' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_routes.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_routes.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_routesSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_collection.' -%}
+        {%- unless opts contains 'global_collection' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_collection' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_collection.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_collection.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_collectionSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_page.' -%}
+        {%- unless opts contains 'global_page' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_page' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_page.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_page.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_pageSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_blog.' -%}
+        {%- unless opts contains 'global_blog' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_blog' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_blog.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_blog.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_blogSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_article.' -%}
+        {%- unless opts contains 'global_article' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_article' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_article.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_article.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_articleSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'global_settings.' -%}
+        {%- unless opts contains 'global_settings' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'global_settings' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'global_settings.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'global_settings.', '|||' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign global_settingsSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+    {% endif %}
+
+  {%- when 'global_routes' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: routesOptions -%}
+      {%- for option in options -%}{%- if routesOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'global_shop' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: shopOptions -%}
+      {%- for option in options -%}{%- if shopOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'global_request' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: requestOptions -%}
+      {%- for option in options -%}{%- if requestOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'global_recommendations' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: recommendationsOptions -%}
+      {%- for option in options -%}{%- if recommendationsOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'linklist' -%}
+    {%- if input.handle contains "-legacy-" -%}
+      null
+    {%- elsif input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: linklistOptions -%}
+      {%- for option in options -%}{%- if linklistOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'font' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: fontOptions -%}
+      {%- for option in options -%}{%- if fontOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'settings' -%}
+    {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' -%}
+    {%- assign opt = null -%}
+    {%- for option in options -%}
+      {%- if option contains '|||image.' -%}{%- assign imageOpt = imageOpt | join: ',' | append: ',' | append: option | replace: '|||image.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||collection.' -%}{%- assign collectionOpt = collectionOpt | join: ',' | append: ',' | append: option | replace: '|||collection.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||product.' -%}{%- assign productOpt = productOpt | join: ',' | append: ',' | append: option | replace: '|||product.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||blog.' -%}{%- assign blogOpt = blogOpt | join: ',' | append: ',' | append: option | replace: '|||blog.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||article.' -%}{%- assign articleOpt = articleOpt | join: ',' | append: ',' | append: option | replace: '|||article.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||page.' -%}{%- assign pageOpt = pageOpt | join: ',' | append: ',' | append: option | replace: '|||page.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||linklist.' -%}{%- assign linklistOpt = linklistOpt | join: ',' | append: ',' | append: option | replace: '|||linklist.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||font.' -%}{%- assign fontOpt = fontOpt | join: ',' | append: ',' | append: option | replace: '|||font.', '' | split: ',' -%}{%- endif -%}
+      {%- if option contains '|||color.' -%}{%- assign colorOpt = colorOpt | join: ',' | append: ',' | append: option | replace: '|||color.', '' | split: ',' -%}{%- endif -%}
+    {%- endfor -%}
+    {%- assign imageSelect = imageOpt | join: ',' | remove_first: ',' -%}
+    {%- assign collectionSelect = collectionOpt | join: ',' | remove_first: ',' -%}
+    {%- assign productSelect = productOpt | join: ',' | remove_first: ',' -%}
+    {%- assign blogSelect = blogOpt | join: ',' | remove_first: ',' -%}
+    {%- assign articleSelect = articleOpt | join: ',' | remove_first: ',' -%}
+    {%- assign pageSelect = pageOpt | join: ',' | remove_first: ',' -%}
+    {%- assign linklistSelect = linklistOpt | join: ',' | remove_first: ',' -%}
+    {%- assign fontSelect = fontOpt | join: ',' | remove_first: ',' -%}
+    {%- assign colorSelect = colorOpt | join: ',' | remove_first: ',' -%}
+
+    {%- if input -%}
+      {
+      {%- for id in input -%}
+        {%- assign value = input[id] -%}
+        {%- if value.src != blank -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'image', select: imageSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/collections/" and value.id != blank -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'collection', select: collectionSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/products/" and value.id != blank -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'product', select: productSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.count -%}
+          "{{- id -}}":[
+          {%- for item in value -%}
+            {%- if item.url contains "/products/" -%}
+              {%- render '_json', input: value, type: 'product', select: productSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+            {%- elsif item.url contains "/collections/" -%}
+              {%- render '_json', input: value, type: 'collection', select: collectionSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+          ]{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/blogs/" and value.articles_count != blank and value.id != blank -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'blog', select: blogSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/blogs/" and value.author and value.id != blank -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'article', select: articleSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/pages/" and value.id != blank -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'page', select: pageSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.levels -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'linklist', select: linklistSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.family -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'font', select: fontSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.alpha and value.alpha > 0 -%}
+          "{{- id -}}": {%- render '_json', input: value, type: 'color', select: colorSelect -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value contains "<" or value contains "=" and react == true -%}
+          "{{- id -}}": {%- assign value = value
+            | replace: "<animatemotion", "<animateMotion"
+            | replace: "</animatemotion", "</animateMotion"
+            | replace: "<animatetransform", "<animateTransform"
+            | replace: "</animatetransform", "</animateTransform"
+            | replace: "<clippath", "<clipPath"
+            | replace: "</clippath", "</clipPath"
+            | replace: "<feblend", "<feBlend"
+            | replace: "</feblend", "</feBlend"
+            | replace: "<fecolormatrix", "<feColorMatrix"
+            | replace: "</fecolormatrix", "</feColorMatrix"
+            | replace: "<fecomponenttransfer", "<feComponentTransfer"
+            | replace: "</fecomponenttransfer", "</feComponentTransfer"
+            | replace: "<fecomposite", "<feComposite"
+            | replace: "</fecomposite", "</feComposite"
+            | replace: "<feconvolvematrix", "<feConvolveMatrix"
+            | replace: "</feconvolvematrix", "</feConvolveMatrix"
+            | replace: "<fediffuselighting", "<feDiffuseLighting"
+            | replace: "</fediffuselighting", "</feDiffuseLighting"
+            | replace: "<fedisplacementmap", "<feDisplacementMap"
+            | replace: "</fedisplacementmap", "</feDisplacementMap"
+            | replace: "<fedistantlight", "<feDistantLight"
+            | replace: "</fedistantlight", "</feDistantLight"
+            | replace: "<fedropshadow", "<feDropShadow"
+            | replace: "</fedropshadow", "</feDropShadow"
+            | replace: "<feflood", "<feFlood"
+            | replace: "</feflood", "</feFlood"
+            | replace: "<fefunca", "<feFuncA"
+            | replace: "</fefunca", "</feFuncA"
+            | replace: "<fefuncb", "<feFuncB"
+            | replace: "</fefuncb", "</feFuncB"
+            | replace: "<fefuncg", "<feFuncG"
+            | replace: "</fefuncg", "</feFuncG"
+            | replace: "<fefuncr", "<feFuncR"
+            | replace: "</fefuncr", "</feFuncR"
+            | replace: "<fegaussianblur", "<feGaussianBlur"
+            | replace: "</fegaussianblur", "</feGaussianBlur"
+            | replace: "<feimage", "<feImage"
+            | replace: "</feimage", "</feImage"
+            | replace: "<femerge", "<feMerge"
+            | replace: "</femerge", "</feMerge"
+            | replace: "<femergenode", "<feMergeNode"
+            | replace: "</femergenode", "</feMergeNode"
+            | replace: "<femorphology", "<feMorphology"
+            | replace: "</femorphology", "</feMorphology"
+            | replace: "<feoffset", "<feOffset"
+            | replace: "</feoffset", "</feOffset"
+            | replace: "<fepointlight", "<fePointLight"
+            | replace: "</fepointlight", "</fePointLight"
+            | replace: "<fespecularlighting", "<feSpecularLighting"
+            | replace: "</fespecularlighting", "</feSpecularLighting"
+            | replace: "<fespotlight", "<feSpotLight"
+            | replace: "</fespotlight", "</feSpotLight"
+            | replace: "<fetile", "<feTile"
+            | replace: "</fetile", "</feTile"
+            | replace: "<feturbulence", "<feTurbulence"
+            | replace: "</feturbulence", "</feTurbulence"
+            | replace: "<foreignobject", "<foreignObject"
+            | replace: "</foreignobject", "</foreignObject"
+            | replace: "<lineargradient", "<linearGradient"
+            | replace: "</lineargradient", "</linearGradient"
+            | replace: "<radialgradient", "<radialGradient"
+            | replace: "</radialgradient", "</radialGradient"
+            | replace: "<textpath", "<textPath"
+            | replace: "</textpath", "</textPath"
+            | replace: "filterunits=", "filterUnits="
+            | replace: "stddeviation=", "stdDeviation="
+            | replace: "filterres=", "filterRes="
+            | replace: "primitiveunits=", "primitiveUnits="
+            | replace: "attributename=", "attributeName="
+            | replace: "attributetype=", "attributeType="
+            | replace: "basefrequency=", "baseFrequency="
+            | replace: "baseprofile=", "baseProfile="
+            | replace: "calcmode=", "calcMode="
+            | replace: "clippathunits=", "clipPathUnits="
+            | replace: "contentscripttype=", "contentScriptType="
+            | replace: "contentstyletype=", "contentStyleType="
+            | replace: "diffuseconstant=", "diffuseConstant="
+            | replace: "edgemode=", "edgeMode="
+            | replace: "glyphref=", "glyphRef="
+            | replace: "gradienttransform=", "gradientTransform="
+            | replace: "gradientunits=", "gradientUnits="
+            | replace: "kernelmatrix=", "kernelMatrix="
+            | replace: "kernelunitlength=", "kernelUnitLength="
+            | replace: "keypoints=", "keyPoints="
+            | replace: "keysplines=", "keySplines="
+            | replace: "keytimes=", "keyTimes="
+            | replace: "lengthadjust=", "lengthAdjust="
+            | replace: "limitingconeangle=", "limitingConeAngle="
+            | replace: "markerheight=", "markerHeight="
+            | replace: "markerunits=", "markerUnits="
+            | replace: "markerwidth=", "markerWidth="
+            | replace: "maskcontentunits=", "maskContentUnits="
+            | replace: "maskunits=", "maskUnits="
+            | replace: "numoctaves=", "numOctaves="
+            | replace: "pathlength=", "pathLength="
+            | replace: "patterncontentunits=", "patternContentUnits="
+            | replace: "patterntransform=", "patternTransform="
+            | replace: "patternunits=", "patternUnits="
+            | replace: "pointsatx=", "pointsAtX="
+            | replace: "pointsaty=", "pointsAtY="
+            | replace: "pointsatz=", "pointsAtZ="
+            | replace: "preservealpha=", "preserveAlpha="
+            | replace: "preserveaspectratio=", "preserveAspectRatio="
+            | replace: "primitiveunits=", "primitiveUnits="
+            | replace: "referrerpolicy=", "referrerPolicy="
+            | replace: "refx=", "refX="
+            | replace: "refy=", "refY="
+            | replace: "repeatcount=", "repeatCount="
+            | replace: "repeatdur=", "repeatDur="
+            | replace: "requiredextensions=", "requiredExtensions="
+            | replace: "requiredfeatures=", "requiredFeatures="
+            | replace: "specularconstant=", "specularConstant="
+            | replace: "specularexponent=", "specularExponent="
+            | replace: "spreadmethod=", "spreadMethod="
+            | replace: "startoffset=", "startOffset="
+            | replace: "stddeviation=", "stdDeviation="
+            | replace: "stitchtiles=", "stitchTiles="
+            | replace: "surfacescale=", "surfaceScale="
+            | replace: "systemlanguage=", "systemLanguage="
+            | replace: "tablevalues=", "tableValues="
+            | replace: "targetx=", "targetX="
+            | replace: "targety=", "targetY="
+            | replace: "textlength=", "textLength="
+            | replace: "viewbox=", "viewBox="
+            | replace: "viewtarget=", "viewTarget="
+            | replace: "xchannelselector=", "xChannelSelector="
+            | replace: "ychannelselector=", "yChannelSelector="
+            | replace: "zoomandpan=", "zoomAndPan="
+        -%}{{- value | json -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- else -%}
+          "{{- id -}}": {{- value | json -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+      }
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'block' -%}
+    {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | concat: blockOptions -%}
+    {%- for option in options -%}{%- if blockOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+    {%- assign opts = opt | join: ',' | split: ',' -%}
+
+    {%- if select contains 'settings.' -%}
+      {%- unless opts contains 'settings' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'settings' | split: ',' -%}{%- endunless -%}
+      {%- assign opt = null -%}
+      {%- for option in options -%}{%- if option contains 'settings.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'settings.', '|||' | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign settingsSelect = opt | join: ',' | remove_first: ',' -%}
+
+    {%- endif -%}
+
+  {%- when 'section' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | concat: sectionOptions -%}
+
+      {%- for option in options -%}{%- if sectionOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+
+      {%- if select contains 'settings.' -%}
+        {%- unless opts contains 'settings' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'settings' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'settings.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'settings.', '|||' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign settingsSelect = opt | join: ',' | remove_first: ',' -%}
+
+      {%- endif -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+  {%- when 'color' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: colorOptions -%}
+      {%- for option in options -%}{%- if colorOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'link' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: linkOptions -%}
+      {%- for option in options -%}{%- if linkOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'link_object' -%}
+    {%- if input -%}
+      {%- if input.url contains "/collections/" and input.id != blank -%}
+        {%- render '_json', input: input, type: 'collection' -%}
+      {%- elsif input.url contains "/products/" and input.id != blank -%}
+        {%- render '_json', input: input, type: 'product' -%}
+      {%- elsif input.url contains "/blogs/" and input.articles_count != blank and input.id != blank -%}
+        {%- render '_json', input: input, type: 'blog' -%}
+      {%- elsif input.url contains "/blogs/" and input.author and input.id != blank -%}
+        {%- render '_json', input: input, type: 'article' -%}
+      {%- elsif input.url contains "/pages/" and input.id != blank -%}
+        {%- render '_json', input: input, type: 'page' -%}
+      {%- else -%}
+        {{- input | json -}}
+      {%- endif -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+  {%- when 'image' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: imageOptions -%}
+      {%- for option in options -%}{%- if imageOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'blog' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: blogOptions -%}
+      {%- for option in options -%}{%- if blogOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+
+      {%- if select contains 'article.' -%}
+        {%- unless opts contains 'articles' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'articles' | split: ',' -%}{%- endunless -%}
+        {%- unless opts contains 'next_article' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'next_article' | split: ',' -%}{%- endunless -%}
+        {%- unless opts contains 'previous_article' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'previous_article' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'article.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'article.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign articleSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if articleSelect == null and opts contains 'article' or select == null -%}
+        {%- assign articleSelect = articleOptions | join: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'article' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: articleOptions -%}
+      {%- for option in options -%}{%- if articleOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+
+      {%- if select contains 'user.' -%}
+        {%- unless opts contains 'user' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'user' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'user.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'user.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign userSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if userSelect == null and opts contains 'user' or select == null -%}
+        {%- assign userSelect = userOptions | join: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'user' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: userOptions -%}
+      {%- for option in options -%}{%- if userOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+  {%- when 'page' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: pageOptions -%}
+      {%- for option in options -%}{%- if pageOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'collection' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: collectionOptions -%}
+      {%- for option in options -%}{%- if collectionOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+      {%- if opts.size == 0 -%}
+        {%- assign opts = collectionOptions -%}
+      {%- endif -%}
+
+      {%- if select contains 'products.' -%}
+        {%- unless opts contains 'products' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'products' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'products.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'products.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign productSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'filters.' -%}
+        {%- unless opts contains 'filters' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'filters' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'filters.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'products.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign filterSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if filterSelect == null and opts contains 'filters' or select == null -%}
+        {%- assign filterSelect = filterOptions | join: ',' -%}
+      {%- endif -%}
+
+      {%- if productSelect == null and opts contains 'products' or select == null -%}
+        {%- assign productSelect = productOptions | join: ',' -%}
+      {%- endif -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+
+    {%- else -%}
+      null
+    {%- endif -%}
+
+  {%- when 'collection_filter' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: filterOptions -%}
+      {%- for option in options -%}{%- if filterOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'collection_filter_value' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: filterOptionsValues -%}
+      {%- for option in options -%}{%- if filterOptionsValues contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'product' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: productOptions -%}
+      {%- for option in options -%}{%- if productOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+      {%- if opts.size == 0 -%}
+        {%- assign opts = productOptions -%}
+      {%- endif -%}
+
+      {%- if select contains 'variants.' -%}
+        {%- unless opts contains 'variants' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'variants' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'variants.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'variants.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign variantSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if variantSelect == null and opts contains 'variants' or select == null -%}
+        {%- assign variantSelect = variantOptions | join: ',' | remove_first: ',product' -%}
+      {%- endif -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'variant' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: variantOptions -%}
+      {%- for option in options -%}{%- if variantOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'metafields' -%}
+    {%- if input -%}
+      {
+      {%- for key in input -%}
+        {%- assign metafield = input[key[0]] -%}
+        {{- key[0] | json -}}:
+        {%- if metafield.type == "page_reference" -%}
+          {%- render '_json', input: metafield.value, type: 'page' -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "list.page_reference" -%}
+          {{- metafield -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "dimension" or metafield.type == "weight" or metafield.type == "volume" -%}
+          {
+          "type": {{- metafield.value.type | json -}},
+          "unit": {{- metafield.value.unit | json -}},
+          "value": {{- metafield.value.value | json -}}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "rating" -%}
+          {
+          "rating": {{- metafield.value.rating | json -}},
+          "scale_max": {{- metafield.value.scale_max | json -}},
+          "scale_min": {{- metafield.value.scale_min | json -}}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "product_reference" -%}
+          {%- render '_json', input: metafield.value, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "list.product_reference" -%}
+          [{%- for p in metafield.value -%}{%- render '_json', input: p, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- unless forloop.last -%},{%- endunless -%}
+        {%- else -%}
+          {{- metafield.value | json -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+      }
+    {%- else -%}
+      {}
+    {%- endif -%}
+
+{%- endcase -%}
+
+{%- if opts -%}
+  {% assign opts = opts | sort %}
+  {
+  {%- for option in opts -%}
+    {%- case option -%}
+      {%- when "" -%}
+        {%- continue -%}
+      {%- when 'created_at' or 'published_at' or 'updated_at' -%}
+        "{{- option -}}": "{{- input[option] | date: "%Y-%m-%dT%H:%M:%S%z" -}}"
+      {%- when 'metafields' -%}
+        "{{- option -}}": {
+        {%- for namespace in metafieldNamespaces -%}
+          "{{- namespace -}}": {%- render '_json', input: input.metafields[namespace], type: 'metafields' -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+        }
+      {%- when 'variants' -%}
+        "{{- option -}}": [{%- for variant in input[option] -%}{%- render '_json', input: variant, select: variantSelect, type: 'variant' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'selected_or_first_available_variant' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], select: variantSelect, type: 'variant' -%}
+
+      {%- when 'featured_image' or 'image' or 'featured_media' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'image' -%}
+
+      {%- when 'featured_media_url' -%}
+        "{{- option -}}": {% if input['featured_media'].src %}{{ input['featured_media'].src | image_url | prepend: "https:" | json }}{% else %}null{% endif %}
+
+      {%- when 'featured_image_url' -%}
+        "{{- option -}}": {% if input['featured_image'].src %}{{ input['featured_image'].src | image_url | prepend: "https:" | json }}{% else %}null{% endif %}
+
+      {%- when 'featured_image_id' -%}
+        "{{- option -}}": {{ input['featured_image'].id | json }}
+
+      {%- when 'featured_media_id' -%}
+        "{{- option -}}": {{ input['featured_media'].id | json }}
+
+      {%- when 'filters' -%}
+        "{{- option -}}": [{%- for filter in input[option] -%}{%- render '_json', input: filter, type: 'collection_filter' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'images' or 'media' -%}
+        "{{- option -}}": [{%- for image in input[option] -%}{%- render '_json', input: image, type: 'image' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'products' -%}
+        "{{- option -}}": [{%- paginate input.products by page_size -%}{%- for product in input[option] -%}{%- render '_json', input: product, select: productSelect, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- endpaginate -%}]
+
+      {%- when 'product_pagination' -%}
+        "{{- option -}}": {%- paginate input.products by page_size -%}{{- paginate | json -}}{%- endpaginate -%}
+
+      {%- when 'active_values' or 'inactive_values' or 'values' -%}
+        "{{- option -}}": [{%- for value in input[option] -%}{%- render '_json', input: value, type: 'collection_filter_value' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'false_value' or 'max_value' or 'min_value' or 'true_value' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'collection_filter_value' -%}
+
+      {%- when 'user' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'user', select: userSelect -%}
+
+      {%- when 'articles' -%}
+        "{{- option -}}": [{%- for article in input[option] -%}{%- render '_json', input: article, select: articleSelect, type: 'article' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'next_article' or 'previous_article' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'user', select: articleSelect -%}
+
+      {%- when 'linklist' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'linklist', select: linklistSelect -%}
+
+      {%- when 'hex' -%}
+        "{{- option -}}": "{{- input -}}"
+
+      {%- when 'rgb' -%}
+        "{{- option -}}": "{{- input.red -}} {{- input.green -}} {{- input.blue -}}"
+
+      {%- when 'links' -%}
+        "{{- option -}}":[{%- for link in input[option] -%}{%- render '_json', input: link, type: 'link', select: linkSelect -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'object' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'link_object' -%}
+
+      {%- when 'settings' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'settings', select: settingsSelect -%}
+
+      {%- when 'blocks' -%}
+        "{{- option -}}": [{%- for block in input[option] -%}{%- render '_json', input: block, type: 'block', select: select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'global_settings' -%}
+        "{{- option -}}": {%- render '_json', input: settings, type: 'settings', select: global_settingsSelect -%}
+
+      {%- when 'global_shop' -%}
+        "{{- option -}}": {%- render '_json', input: shop, type: 'global_shop', select: global_shopSelect -%}
+
+      {%- when 'global_request' -%}
+        "{{- option -}}": {%- render '_json', input: request, type: 'global_request', select: global_requestSelect -%}
+
+      {%- when 'global_recommendations' -%}
+        "{{- option -}}": {%- render '_json', input: recommendations, type: 'global_request', select: global_recommendationsSelect -%}
+
+      {%- when 'global_routes' -%}
+        "{{- option -}}": {%- render '_json', input: routes, type: 'global_request', select: global_routesSelect -%}
+
+      {%- when 'global_linklists' -%}
+        "{{- option -}}": [{%- for l in linklists -%}{%- render '_json', input: l, type: 'linklist', select: global_linklistsSelect -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'global_product' -%}
+        "{{- option -}}": {%- render '_json', input: product, type: 'product', select: global_productSelect -%}
+
+      {%- when 'global_collection' -%}
+        "{{- option -}}": {%- render '_json', input: collection, type: 'collection', select: global_collectionSelect -%}
+
+      {%- when 'global_page' -%}
+        "{{- option -}}": {%- render '_json', input: page, type: 'page', select: global_pageSelect -%}
+
+      {%- when 'global_blog' -%}
+        "{{- option -}}": {%- render '_json', input: blog, type: 'blog', select: global_blogSelect -%}
+
+      {%- when 'global_article' -%}
+        "{{- option -}}": {%- render '_json', input: article, type: 'article', select: global_articleSelect -%}
+
+      {%- when 'global_handle' -%}
+        "{{- option -}}": {{- handle | json -}}
+
+      {%- when 'global_description' -%}
+        "{{- option -}}": {{- description | json -}}
+
+      {%- when 'global_title' -%}
+        "{{- option -}}": {{- title | json -}}
+
+      {%- when 'global_template' -%}
+        "{{- option -}}": {{- template | json -}}
+
+      {%- when 'seo_description' -%}
+        "{{- option -}}": {% if input['content'] %}{{- input['content'] | strip_html | truncate: 200 | json -}}{% else %}{{- input['description'] | strip_html | truncate: 200 | json -}}{% endif %}
+
+      {%- else -%}
+        "{{- option -}}": {{- input[option] | json -}}
+    {%- endcase -%}{%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+  }
+{%- endif -%}

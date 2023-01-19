@@ -1,0 +1,38 @@
+{% comment %}{% case section.settings.layout %}
+  {% when "logo_menu_settings" %}
+    {% assign positionClasses = "lg:hidden" %}
+  {% when "menu_logo_settings" %}
+    {% assign positionClasses = "lg:hidden" %}
+  {% when "hamburger_logo_settings" %}
+    {% assign positionClasses = "" %}
+  {% when "hamburger_logo_center_settings" %}
+    {% assign positionClasses = "flex-grow basis-0 justify-start" %}
+{% endcase %}{% endcomment %}
+
+
+{% case section.settings.center_logo %}
+  {% when true %}
+    {% case section.settings.force_hamburger_menu %}
+      {% when true %}
+        {% assign positionClasses = "flex-grow basis-0 justify-start" %}
+      {% when false %}
+        {% assign positionClasses = "flex-grow basis-0 justify-start lg:hidden" %}
+    {% endcase %}
+  {% when false %}
+    {% case section.settings.force_hamburger_menu %}
+      {% when true %}
+        {% assign positionClasses = "" %}
+      {% when false %}
+        {% assign positionClasses = "lg:hidden" %}
+    {% endcase %}
+{% endcase %}
+
+<button type="button"
+        class="flex items-center w-8 h-8 mr-4 text-gray-500 hf:text-gray-900 {{ positionClasses }}"
+        data-drawer-open="nav"
+        data-hamburger-menu>
+  <span class="sr-only">
+    {{ "header.menu" | t }}
+  </span>
+  {% render "_icon", icon: 'hamburger', class: "w-6 h-6 stroke-2" %}
+</button>

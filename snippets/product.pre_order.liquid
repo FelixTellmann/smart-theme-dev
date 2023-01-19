@@ -1,0 +1,90 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign preorder_date = block.settings.preorder_date
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign product_form_id = 'product-form-' | append: section.id | append: "-" | append: product.id
+
+  assign pre_order = variant.metafields.accelerate.pre_order.value
+  assign pre_order_date = variant.metafields.accelerate.pre_order_date.value
+  assign pre_order_limit = variant.metafields.accelerate.pre_order_limit.value
+  assign now_date = 'now' | date: '%s'
+  assign target_date = variant.metafields.accelerate.pre_order_date.value | date: '%s'
+  assign target_day = variant.metafields.accelerate.pre_order_date.value | date: '%d' | times: 1.0
+  assign target_month = variant.metafields.accelerate.pre_order_date.value | date: '%b'
+  assign difference = target_date | minus: now_date | date: "%j" | times: 1.0
+
+  assign timeOfMonth = "early "
+
+  if target_day > 7
+    assign timeOfMonth = "mid "
+  endif
+  if target_day > 20
+    assign timeOfMonth = "end of "
+  endif
+
+
+  assign label = "Preorder Shipping this week"
+
+  if difference > 7
+    assign label = "Preorder Shipping next week"
+  endif
+  if difference > 15
+    assign label = "Preorder Shipping end of the month"
+  endif
+  if difference > 31
+    assign label = "Preorder Shipping early next month"
+  endif
+  if difference > 45
+    assign label = "Preorder Shipping " | append: timeOfMonth | append: target_month
+  endif
+%}
+
+<div data-product-block="pre_order"
+     class="col-span-12" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <div>
+    {% if pre_order %}
+      {% if variant.inventory_management != 'shopify' or variant.inventory_policy == "continue" and variant.inventory_quantity <= 0 %}
+        {% case preorder_date %}
+          {% when "estimate" %}
+            {% if pre_order_date %}
+              <span class="font-bold text-primary-bg">{{ label }}</span>
+              <input type="hidden"
+                     name="properties[preorder]"
+                     form="{{ product_form_id }}"
+                     value="{{ label }}">
+            {% else %}
+              <span class="font-bold text-primary-bg">On Preorder</span>
+              <input type="hidden"
+                     name="properties[preorder]"
+                     form="{{ product_form_id }}"
+                     value="On Preorder">
+            {% endif %}
+          {% when "precise" %}
+            {% if pre_order_date %}
+              <span class="font-bold text-primary-bg">Preorder shipping {{ pre_order_date | date: format: "on_date" }}</span>
+              <input type="hidden"
+                     name="properties[preorder]"
+                     form="{{ product_form_id }}"
+                     value="Preorder shipping {{ pre_order_date | date: format: "on_date" }}">
+            {% else %}
+              <span class="font-bold text-primary-bg">On Preorder</span>
+              <input type="hidden"
+                     name="properties[preorder]"
+                     form="{{ product_form_id }}"
+                     value="On Preorder">
+            {% endif %}
+          {% when "none" %}
+            <span class="font-bold text-primary-bg">On Preorder</span>
+            <input type="hidden"
+                   name="properties[preorder]"
+                   form="{{ product_form_id }}"
+                   value="On Preorder">
+        {% endcase %}
+      {% endif %}
+    {% endif %}
+  </div>
+</div>

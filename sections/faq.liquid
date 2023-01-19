@@ -1,0 +1,255 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title = section.settings.title
+  assign width = section.settings.width
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="{{ color_scheme }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+  <section class="container"
+           data-tabs>
+    <header class="mb-6 mx-auto {{ width }}">
+      {% if title %}
+        <h2 class="h3 font-bold mb-4">{{ section.settings.title }}</h2>
+      {% endif %}
+      <div class="relative grid"
+           data-scroll-slider>
+        <div class="grid grid-flow-col-dense auto-cols-min gap-3 overflow-x-auto pb-6 pt-1 scroll-smooth snap-mandatory snap-x max-w-full"
+             data-scroll-container
+             data-product-media-container>
+          <div class="grid grid-flow-col-dense auto-cols-min gap-3">
+            {% assign tabIndex = 0 %}
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'group' %}
+                  {% render 'faq.group', block: block, index: tabIndex %}
+                  {% assign tabIndex = tabIndex | plus: 1 %}
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div data-scroll-controls
+             class="hidden select-none">
+          {% render 'scroll-bar-elements', element: 'scrollbar' %}
+        </div>
+      </div>
+    </header>
+    <main class="relative mx-auto grid grid-flow-col-dense auto-cols-[100%] overflow-hidden {{ width }}">
+      {% assign tabIndex = 0 %}
+      {% for block in section.blocks %}
+        {% if block.type == 'group' %}
+          {% assign index = forloop.index0 %}
+          <section class="absolute inset-0 w-full h-full opacity-0 pointer-events-none transition-all ac:opacity-100 ac:pointer-events-auto ac:relative {% if tabIndex == 0 %}active{% endif %}"
+                   data-tabs-content="{{ tabIndex }}">
+            {% assign tabIndex = tabIndex | plus: 1 %}
+            {% for faq in section.blocks %}
+              {% if forloop.index0 <= index %}
+                {% continue %}
+              {% endif %}
+              {% if faq.type == 'group' %}
+                {% break %}
+              {% endif %}
+              {% if faq.type == 'faq' %}
+                {% render 'faq.faq', block: faq %}
+              {% endif %}
+            {% endfor %}
+          </section>
+        {% endif %}
+
+      {% endfor %}
+    </main>
+  </section>
+
+</div>
+
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.faq.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.faq.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:sections.faq.settings.width.label",
+      "default": "max-w-xl",
+      "options": [
+        {
+          "value": "max-w-full",
+          "label": "t:sections.faq.settings.width.options__1.label"
+        },
+        {
+          "value": "max-w-[var(--layout-page-width)]",
+          "label": "t:sections.faq.settings.width.options__2.label"
+        },
+        {
+          "value": "max-w-3xl",
+          "label": "t:sections.faq.settings.width.options__3.label"
+        },
+        {
+          "value": "max-w-2xl",
+          "label": "t:sections.faq.settings.width.options__4.label"
+        },
+        {
+          "value": "max-w-xl",
+          "label": "t:sections.faq.settings.width.options__5.label"
+        },
+        {
+          "value": "max-w-lg",
+          "label": "t:sections.faq.settings.width.options__6.label"
+        },
+        {
+          "value": "max-w-md",
+          "label": "t:sections.faq.settings.width.options__7.label"
+        },
+        {
+          "value": "max-w-sm",
+          "label": "t:sections.faq.settings.width.options__8.label"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.faq.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.faq.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.faq.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.faq.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.faq.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.faq.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.faq.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.faq.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.faq.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.faq.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.faq.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.faq.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.faq.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.faq.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.faq.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.faq.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.faq.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.faq.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.faq.settings.color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.faq.blocks.group.name",
+      "type": "group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.faq.blocks.group.settings.title.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.faq.blocks.question_answer.name",
+      "type": "faq",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.faq.blocks.question_answer.settings.title.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "t:sections.faq.blocks.question_answer.settings.answer.label"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "t:sections.faq.blocks.question_answer.settings.page.label",
+          "info": "t:sections.faq.blocks.question_answer.settings.page.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.faq.presets.faq.name"
+    }
+  ]
+}
+{% endschema %}

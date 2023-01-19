@@ -1,0 +1,100 @@
+{% assign levelClasses = "" %}
+{% assign neveLevel = level | plus: 1 %}
+
+{% case level %}
+  {% when 1 %}
+    {% assign levelClasses = "" %}
+  {% when 2 %}
+    {% assign levelClasses = "translate-x-full opacity-0" %}
+  {% when 3 %}
+    {% assign levelClasses = "translate-x-full opacity-0" %}
+{% endcase %}
+
+
+{% comment %}{% case section.settings.layout %}
+  {% when 'logo_menu_settings' %}
+    {% assign hamburgerOnly = false %}
+  {% when 'menu_logo_settings' %}
+    {% assign hamburgerOnly = false %}
+  {% when "hamburger_logo_settings" %}
+    {% assign hamburgerOnly = true %}
+  {% when "hamburger_logo_center_settings" %}
+    {% assign hamburgerOnly = true %}
+{% endcase %}{% endcomment %}
+
+
+{% if links.size > 0 %}
+  <nav {% if hamburgerOnly %}{{ block.shopify_attributes }}{% endif %}
+      class="absolute !m-0 inset-0 h-full bg-white overflow-y-auto px-4 pb-32 pt-8 transition-all ease-in-out duration-200 grid grid-cols-2 gap-4 {{ levelClasses }}"
+      data-mobile-menu-level="{{ level }}"
+      data-mobile-menu-dropdown="{{ handle }}">
+    {% if level > 1 %}
+      <button type="button"
+              data-mobile-menu-prev-dropdown="{{ prevHandle }}"
+              data-mobile-menu-back="{{ handle }}"
+              class="peer flex items-center w-full space-x-3 text-gray-600 hfa:text-gray-900 stroke-0 [&:hover_>_svg]:stroke-2 [&:focus_>_svg]:stroke-2 [&:active_>_svg]:stroke-2 mb-8 col-span-2">
+        {% render "_icon", icon: 'arrow-left', class: "w-3 h-3 stroke-[1.5px]" %}
+        <span class="pr-6 whitespace-nowrap font-medium">
+          {{ "header.back" | t }}
+        </span>
+      </button>
+    {% endif %}
+
+    {% for link in links %}
+
+      {% assign overrideImage = null %}
+      {% for i in (1..4) %}
+        {% assign overrideHandleSetting = "override_" | append: i | append: "_handle" %}
+        {% assign overrideImageSetting = "override_" | append: i | append: "_image" %}
+        {% if block.settings[overrideHandleSetting] == link.handle %}
+          {% assign overrideImage = block.settings[overrideImageSetting] %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      {% assign image = overrideImage | default: link.object.image | default: link.object.featured_image | default: null %}
+      {% assign title = link.title %}
+      {% assign caption = link.object.metafields.accelerate.megamenu_caption | default: link.object.title %}
+
+
+      <section class="">
+        <a href="{{ link.url }}"
+           data-mobile-menu-current-dropdown="{{ handle }}"
+           data-mobile-menu-link="{{ link.handle }}"
+           {% if link.links.size > 0 %}data-mobile-menu-link-dropdown{% endif %}
+           class="peer flex items-center w-full justify-between text-gray-600 hfa:text-gray-900 py-2 stroke-0 [&:hover_>_svg]:stroke-2 [&:focus_>_svg]:stroke-2 [&:active_>_svg]:stroke-2 {% if link.links.size == 0 %}hf:underline{% endif %}">
+          <span class="pr-6 whitespace-nowrap truncate">{{ link.title }}</span>
+          {% if link.links.size > 0 %}{% render "_icon", icon: 'arrow-right', class: "w-3 h-3 stroke-[1.5px]" %}{% endif %}
+          {% if link.links.size == 0 %}{% render "_icon", icon: 'link-external', class: "w-3 h-3 -ml-2 mr-auto" %}{% endif %}
+        </a>
+        {% if image and block.settings.show_images %}
+          <a href="{{ link.url }}"
+             class="block pb-3">
+            <figure class="group block relative overflow-hidden rounded-theme select-none aspect-1"
+                    style="--color-text-hex: {{ block.settings.image_caption_color }};">
+              {% render "_image", image: image, class: 'object-cover w-full h-full', placeholder: 'lifestyle-1', height: 400 %}
+
+              <div class="z-10 bg-primary-bg/10 border-2 border-theme-text-hex justify-center w-8 h-8 flex items-center absolute left-4 bottom-4 text-theme-text rounded-full bg-theme-bg/80 opacity-70 group-hfa:opacity-100">
+                {% render "_icon", icon: 'arrow-right', class: "w-4 h-4 stroke-2" %}
+              </div>
+
+              <figcaption class="absolute inset-0 w-full h-full"
+                          style="background: {{ block.settings.image_overlay }};">
+                {% if block.settings.show_caption %}
+                  <h4 class="ml-4 mt-4 text-base font-bold text-theme-text-hex">
+                    {{ caption }}
+                  </h4>
+                {% endif %}
+              </figcaption>
+            </figure>
+          </a>
+        {% endif %}
+      </section>
+    {% endfor %}
+  </nav>
+{% endif %}
+
+
+{% for link in links %}
+  {% if link.links.size <= 0 %}{% continue %}{% endif %}
+  {% render "header.mobile-nav-links", links: link.links, level: neveLevel, handle: link.handle, prevHandle: handle %}
+{% endfor %}

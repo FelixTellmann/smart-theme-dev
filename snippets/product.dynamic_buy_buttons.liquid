@@ -1,0 +1,24 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign grid_span = block.settings.grid_span
+  assign button__style = block.settings.button__style
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign product_form_id = 'product-form-' | append: section.id | append: "-" | append: product.id
+  assign product_form_dynamic_buttons_id = product_form_id | append: '-dynamic'
+%}
+<div data-product-block="dynamic_buy_buttons"
+     class="{{ grid_span }}" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  {% form 'product', product, id: product_form_dynamic_buttons_id %}
+    <input
+        type="hidden"
+        name="id"
+        value="{{ variant.id }}"
+        data-product-form-variant="{{ variant.id }}"
+    >
+    {{ form | payment_button }}
+  {% endform %}
+</div>

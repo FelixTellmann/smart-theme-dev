@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "main-cart": {
+      "type": "main-cart",
+      "blocks": {
+        "21519b5b-ab57-4805-906a-122ee1371346": {
+          "type": "empty",
+          "disabled": true,
+          "settings": {
+            "image__overlay": "",
+            "preheading": "",
+            "no_display_title": "Your Cart is Empty",
+            "subtitle": "Have an account?",
+            "content": "<p><a href=\"https:\/\/frame-brands-demo-1.myshopify.com\/account\/login\">Log in<\/a> to check out faster.<\/p>",
+            "button_primary__text": "Continue Shopping",
+            "button_primary__url": "shopify:\/\/collections\/all",
+            "button_secondary__text": "",
+            "button_secondary__url": "",
+            "min_height": 400,
+            "align__vertical": "justify-center",
+            "align__horizontal": "items-center text-center",
+            "section_layout": "fullwidth",
+            "padding_top": "pt-0",
+            "padding_bottom": "pb-0",
+            "color_scheme": "bg-theme-bg text-theme-text color-group-1"
+          }
+        }
+      },
+      "block_order": [
+        "21519b5b-ab57-4805-906a-122ee1371346"
+      ],
+      "settings": {
+        "padding_top": "pt-0",
+        "padding_bottom": "pb-0",
+        "color_scheme": "bg-theme-bg text-theme-text color-inherit"
+      }
+    }
+  },
+  "order": [
+    "main-cart"
+  ]
+}

@@ -1,0 +1,45 @@
+{%- if colorGroup and colorGroup != "bg-theme-bg text-theme-text color-inherit" -%}
+  {%- assign index = colorGroup | replace: "bg-theme-bg text-theme-text color-group-" -%}
+  {%- assign selector_title = 'color_' | append: index | append: '_title' -%}
+  {%- assign selector_text = 'color_' | append: index | append: '_text' -%}
+  {%- assign selector_overlay_text = 'color_' | append: index | append: '_overlay_text' -%}
+  {%- assign selector_bg = 'color_' | append: index | append: '_bg' -%}
+  {%- assign selector_bg_gradient = 'color_' | append: index | append: '_bg_gradient' -%}
+  {%- assign selector_primary_text = 'color_' | append: index | append: '_primary_text' -%}
+  {%- assign selector_primary_bg = 'color_' | append: index | append: '_primary_bg' -%}
+  {%- assign selector_primary_bg_gradient = 'color_' | append: index | append: '_primary_bg_gradient' -%}
+  {%- assign selector_primary_outline = 'color_' | append: index | append: '_primary_outline' -%}
+  {%- assign selector_primary = 'rounded_' | append: index | append: '_primary' -%}
+  {%- assign selector_secondary_text = 'color_' | append: index | append: '_secondary_text' -%}
+  {%- assign selector_secondary_bg = 'color_' | append: index | append: '_secondary_bg' -%}
+  {%- assign selector_secondary_bg_gradient = 'color_' | append: index | append: '_secondary_bg_gradient' -%}
+  {%- assign selector_secondary_outline = 'color_' | append: index | append: '_secondary_outline' -%}
+  {%- assign selector_secondary = 'rounded_' | append: index | append: '_secondary' -%}
+  {%- assign selector_title = settings[selector_title] -%}
+  {%- assign selector_text = settings[selector_text] -%}
+  {%- assign selector_overlay_text = settings[selector_overlay_text] -%}
+  {%- assign selector_bg = settings[selector_bg] -%}
+  {%- assign selector_bg_gradient = settings[selector_bg_gradient] -%}
+  {%- assign selector_primary_text = settings[selector_primary_text] -%}
+  {%- assign selector_primary_bg = settings[selector_primary_bg] -%}
+  {%- assign selector_primary_bg_gradient = settings[selector_primary_bg_gradient] -%}
+  {%- assign selector_primary_outline = settings[selector_primary_outline] -%}
+  {%- assign selector_primary = settings[selector_primary] -%}
+  {%- assign selector_secondary_text = settings[selector_secondary_text] -%}
+  {%- assign selector_secondary_bg = settings[selector_secondary_bg] -%}
+  {%- assign selector_secondary_bg_gradient = settings[selector_secondary_bg_gradient] -%}
+  {%- assign selector_secondary_outline = settings[selector_secondary_outline] -%}
+  {%- assign selector_secondary = settings[selector_secondary] -%}
+{%- endif -%}
+
+{% if paddingTop contains 'pt-sm' or paddingBottom contains 'pb-sm' %}
+  {%- assign selector_layout_section_padding_sm = settings.layout_section_padding_sm -%}
+{% endif %}
+
+{% if paddingTop contains 'pt-md' or paddingBottom contains 'pb-md' %}
+  {%- assign selector_layout_section_padding_md = settings.layout_section_padding_md -%}
+{% endif %}
+
+{% if paddingTop contains 'pt-lg' or paddingBottom contains 'pb-lg' %}
+  {%- assign selector_layout_section_padding_lg = settings.layout_section_padding_lg -%}
+{% endif %}

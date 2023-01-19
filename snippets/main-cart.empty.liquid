@@ -1,0 +1,100 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+  assign image__overlay = block.settings.image__overlay
+  assign preheading = block.settings.preheading
+  assign no_display_title = block.settings.no_display_title
+  assign subtitle = block.settings.subtitle
+  assign content = block.settings.content
+  assign button_primary__text = block.settings.button_primary__text
+  assign button_primary__url = block.settings.button_primary__url
+  assign button_secondary__text = block.settings.button_secondary__text
+  assign button_secondary__url = block.settings.button_secondary__url
+  assign min_height = block.settings.min_height
+  assign align__vertical = block.settings.align__vertical
+  assign align__horizontal = block.settings.align__horizontal
+  assign section_layout = block.settings.section_layout
+  assign padding_top = block.settings.padding_top
+  assign padding_bottom = block.settings.padding_bottom
+  assign color_scheme = block.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% unless block %}
+  {% capture no_display_title %}
+    {{ "main_cart.your_cart" | t }}
+  {% endcapture %}
+  {% capture subtitle %}
+    {{ "main_cart.have_an" | t }}
+  {% endcapture %}
+  {% capture content %}
+    <p>
+      <a href="/account/login">
+        {{ "main_cart.log_in" | t }}
+      </a>
+      {{ "main_cart.to_check" | t }}
+    </p>
+  {% endcapture %}
+  {% capture button_primary__text %}
+    {{ "main_cart.continue_shopping" | t }}
+  {% endcapture %}
+  {% assign button_primary__url = '/collections/all' %}
+  {% assign min_height = 360 %}
+  {% assign align__vertical = "justify-center" %}
+  {% assign align__horizontal = "items-center text-center" %}
+  {% assign section_layout = "container" %}
+  {% assign color_scheme = "bg-theme-bg text-theme-text color-inherit" %}
+{% endunless %}
+
+{% liquid
+
+  assign align_content = align__vertical | append: ' ' | append: align__horizontal
+
+  if button_primary__text and button_primary__url
+    assign button_primary__show = true
+  endif
+
+  if button_secondary__text and button_secondary__url
+    assign button_secondary__show = true
+  endif
+  if cart.items.size > 0
+    assign hidden = "hidden"
+  endif
+%}
+
+<div class="{{ color_scheme }} {{ section_layout }} {{ padding_top }} {{ padding_bottom }} {{ hidden }}"
+     data-cart-empty>
+  <figure class="grid w-full relative isolate"
+          style="min-height: {{ min_height }}px;">
+    {% render '_image', image: image, class: 'absolute inset-0 w-full h-full object-cover z-0' %}
+    <figcaption class="relative z-10 inset-0 w-full h-full px-6 py-8"
+                style="background-image: {{ image__overlay }};">
+      <div class="container h-full w-full flex flex-col {{ align_content }} space-y-3">
+
+        <div class="max-w-lg">
+          <p class="pre-heading">{{ preheading }}</p>
+          <h2 class="h2">{{ no_display_title }}</h2>
+          <h3 class="h4">{{ subtitle | newline_to_br }}</h3>
+          <div class="prose prose-theme">
+            {{ content }}
+          </div>
+
+          <div class="max-w-lg mt-6">
+            {% if button_primary__show %}
+              <a href="{{ button_primary__url }}"
+                 class="button-primary mx-1">
+                {{ button_primary__text }}
+              </a>
+            {% endif %}
+            {% if button_secondary__show %}
+              <a href="{{ button_secondary__url }}"
+                 class="button-primary--outline mx-1">
+                {{ button_secondary__text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </figcaption>
+  </figure>
+</div>

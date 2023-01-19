@@ -1,0 +1,337 @@
+{% liquid
+  assign color_scheme = section.settings.color_scheme
+  assign image__show = section.settings.image__show
+  assign image__background = section.settings.image__background
+  assign image__ratio = section.settings.image__ratio
+  assign author__show = section.settings.author__show
+  assign date__show = section.settings.date__show
+%}
+
+<div class="bg-theme-bg text-theme-text scroll-mt-top-bar-spacing {{ color_scheme }}">
+  <article class="container py-16 max-w-2xl">
+    <header>
+      <picture class="grid relative overflow-hidden rounded-theme-lg shadow">
+        {% render '_image', image: article.image, class: 'relative w-full h-full inset-0 object-cover group-hf:scale-105 transition-all ease-in' %}
+      </picture>
+      <h1 class="h4 font-bold mt-3">{{ article.title }}</h1>
+      <div class="flex justify-between text-gray-600 mt-2">
+        <span class="font-medium">{{ article.author }}</span>
+        <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+      </div>
+      <div class="flex items-center text-sm gap-4 mt-3">
+        {%- assign share_url = shop.url | append: article.url | url_param_escape -%}
+        {%- assign twitter_text = article.title | url_param_escape -%}
+        {%- assign pinterest_description = article.excerpt_or_content | strip_html | truncatewords: 15 | url_param_escape -%}
+        {%- assign pinterest_image = article.image | img_url: 'large' | prepend: 'https:' -%}
+        {{ "main_article.share" | t }}
+        <div class="grid grid-flow-col-dense auto-cols-min gap-2"
+             role="list">
+          <a class="text-theme-text/70 hf:text-theme-text"
+             title="Share on Facebook"
+             href="https://www.facebook.com/sharer.php?u={{ share_url }}"
+             target="_blank"
+             rel="noopener">
+            {%- render '_icon', icon: 'facebook', class: "w-4 h-4" -%}
+          </a>
+          <a class="text-theme-text/70 hf:text-theme-text"
+             title="Share on Pinterest"
+             href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}"
+             target="_blank"
+             rel="noopener">
+            {%- render '_icon', icon: 'pinterest', class: "w-4 h-4" -%}
+          </a>
+          <a class="text-theme-text/70 hf:text-theme-text"
+             title="Share on Twitter"
+             href="https://twitter.com/share?{% if twitter_text != blank %}text={{ twitter_text }}&{% endif %}url={{ share_url }}"
+             target="_blank"
+             rel="noopener">
+            {%- render '_icon', icon: 'twitter', class: "w-4 h-4" -%}
+          </a>
+          <a class="text-theme-text/70 hf:text-theme-text"
+             title="Share via Email"
+             href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}">
+            {% render '_icon', icon: 'email', class: "w-4 h-4" %}
+          </a>
+        </div>
+
+      </div>
+
+    </header>
+    <main class="prose max-w-none w-full prose-theme mt-4 lg:prose-img:-mx-8 lg:prose-img:w-[calc(100%+4rem)] lg:prose-img:max-w-[calc(100%+4rem)] lg:prose-img:grid lg:prose-video:-mx-8 lg:prose-video:w-[calc(100%+4rem)] lg:prose-video:max-w-[calc(100%+4rem)] lg:prose-img:grid lg:prose-pre:-mx-8 lg:prose-pre:w-[calc(100%+4rem)] lg:prose-pre:max-w-[calc(100%+4rem)] lg:prose-img:grid">
+      {{ article.content }}
+    </main>
+    <section>
+      {%- if article.comments_enabled? -%}
+        <header class="mb-4">
+          <h3 class="h4 font-bold">
+            {{ "main_article.comments" | t }}
+          </h3>
+          {% if article.comments_count == 0 %}
+            <h4 class="mt-1">
+              {{ "main_article.no_comments" | t }}
+            </h4>
+          {% endif %}
+          {% if article.comments_count > 0 %}
+            <h4 class="mt-1">{{ article.comments_count }}
+              {{ "main_article.comments_2" | t }}
+            </h4>
+          {% endif %}
+        </header>
+        {%- if article.comments_count > 0 -%}
+          <main class="grid gap-4 mb-6">
+            {%- paginate article.comments by 50 -%}
+              {%- for comment in article.comments -%}
+                <div class="p-4 rounded-theme bg-gray-50 border border-gray-200">
+                  <div class="flex justify-between text-sm mb-2">
+                    <p class="font-medium">{{ comment.author }}</p>
+                    <span class="text-gray-600">
+                      {{ comment.created_at | time_tag: format: 'date' }}
+                    </span>
+                  </div>
+                  <div class="prose prose-theme">
+                    {{- comment.content -}}
+                  </div>
+                </div>
+              {%- endfor -%}
+
+              <div class="py-4 flex justify-center">
+                {% render '_pagination', paginate: paginate %}
+              </div>
+            {%- endpaginate -%}
+          </main>
+        {%- endif -%}
+
+        <footer>
+
+          {% liquid
+            assign type = 'new_comment'
+            assign success_message = "Thank you for commenting."
+            assign formClasses = 'group/form flex flex-col md:justify-center md:grid md:grid-cols-12 mx-auto gap-4 w-full'
+
+
+            assign blockTypes = section.blocks | map: "type"
+            assign blockNames = section.blocks | map: "settings" | map: "name"
+          %}
+
+          {% form type, article, id: id, class: formClasses, data-form-type: type %}
+            {% liquid
+              assign formElementClasses = ""
+              if form.posted_successfully?
+                assign formElementClasses = "hidden"
+              endif
+
+            %}
+
+            {% comment %} Fallback input in case its not added as a block {% endcomment %}
+            {% if formElementClasses != 'hidden' %}
+              <h3 class="text-lg font-bold mb-2 mt-4 col-span-12">
+                {{ "main_article.add_a" | t }}
+              </h3>
+              {%- if blog.moderated? -%}
+                <p class="mb-2 text-sm">
+                  {{ "main_article.all_comments" | t }}
+                </p>
+              {%- endif -%}
+
+              {%- assign form_author = form.author | default: customer.name | escape -%}
+              {%- assign form_email = form.email | default: customer.email | escape -%}
+
+              {%
+                  render '_form-elements',
+                  form: form,
+                  type: 'text',
+                  name: 'comment[author]',
+                  class: 'col-span-12',
+                  label: "Name",
+                  placeholder: "tim@apple.com",
+                  value: form_author,
+                  required: true
+              %}
+              {%
+                  render '_form-elements',
+                  form: form,
+                  type: 'email',
+                  name: 'comment[email]',
+                  class: 'col-span-12',
+                  label: "Email",
+                  value: form_email,
+                  placeholder: "tim@apple.com",
+                  required: true
+              %}
+              {%
+                  render '_form-elements',
+                  form: form,
+                  type: 'textarea',
+                  name: 'comment[body]',
+                  class: 'col-span-12',
+                  label: "Message",
+                  placeholder: "Your Message",
+                  required: true,
+                  body: form.body,
+                  rows: 4
+              %}
+              <div class="col-end-13 flex justify-end">
+                {%
+                    render '_form-elements',
+                    form: form,
+                    type: 'submit',
+                    label: "Comment"
+                %}
+              </div>
+            {% endif %}
+
+
+            {% if form.errors %}
+              <small class="text-xs col-span-12 grid gap-2 text-error sm:mx-auto sm:text-center">
+                {%- if form.errors contains 'form' -%}
+                  {% if form.errors.messages['form'] contains 'verify your email' %}
+                    <small class="text-info font-medium flex items-center mt-1.5 ml-1 text-xs">
+                      {% render '_icon', icon: 'warning', class: 'w-6 h-6 mr-2 opacity-70' %}
+                      <span>
+                        {{ form.errors.messages['form'] }}.
+                      </span>
+                    </small>
+                  {% else %}
+                    <small class="text-error font-medium flex items-center mt-1.5 ml-1 text-xs [&_a]:underline">
+                      {% render '_icon', icon: 'warning-triangle', class: 'w-5 h-5 mr-2 opacity-70' %}
+                      <span>
+                        {{ form.errors.messages['form'] }}.
+                      </span>
+                    </small>
+                  {%- endif -%}
+                {%- endif -%}
+              </small>
+            {% endif %}
+
+            {% if form.posted_successfully? %}
+              <div class="text-lg font-bold col-span-12 grid gap-2 text-success sm:mx-auto sm:text-center">
+                <span>{{ success_message }}</span>
+              </div>
+            {% endif %}
+
+          {% endform %}
+
+        </footer>
+      {%- endif -%}
+    </section>
+    <footer>
+      {%- if blog.previous_article or blog.next_article -%}
+        {%- comment -%}
+          Implementation may look a bit strange here as we're using the "next_article" for the previous button and vice-versa. But we actually found that from
+          a user point of view, it feels "more logical", if you are on the most recent article, to have a button "next article" on the right that goes to the
+          previous article.
+        {%- endcomment -%}
+
+        <div class="flex items-center justify-between w-full pt-16">
+
+          <a class="flex items-center gap-2 text-gray-300 ac:text-gray-800 ac:hf:underline {% if blog.next_article %}active{% endif %}"
+             {%- if blog.next_article -%}href="{{ blog.next_article.url }}"{%- endif -%}
+             rel="prev">
+            {%- render '_icon', icon: 'arrow-left', class: "w-4 h-4" -%}
+            <span>
+              {{ "main_article.previous_article" | t }}
+            </span>
+          </a>
+
+
+          <a class="flex items-center gap-2 text-gray-300 ac:text-gray-800 ac:hf:underline {% if blog.previous_article %}active{% endif %}"
+             {% if blog.previous_article %}href="{{ blog.previous_article.url }}"{% endif %}
+             rel="next">
+            <span>
+              {{ "main_article.next_article" | t }}
+            </span>
+            {%- render '_icon', icon: 'arrow-right', class: "w-4 h-4" -%}
+          </a>
+        </div>
+      {%- endif -%}
+    </footer>
+  </article>
+</div>
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.blog_post.name",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "name": "t:sections.blog_post.blocks.featured_image.name",
+      "type": "featured_image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "image_height",
+          "options": [
+            {
+              "value": "adapt",
+              "label": "t:sections.blog_post.blocks.featured_image.settings.image_height.options__1.label"
+            },
+            {
+              "value": "small",
+              "label": "t:sections.blog_post.blocks.featured_image.settings.image_height.options__2.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.blog_post.blocks.featured_image.settings.image_height.options__3.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sections.blog_post.blocks.featured_image.settings.image_height.options__4.label"
+            }
+          ],
+          "default": "adapt",
+          "label": "t:sections.blog_post.blocks.featured_image.settings.image_height.label",
+          "info": "t:sections.blog_post.blocks.featured_image.settings.image_height.info"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.blog_post.blocks.title.name",
+      "type": "title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "blog_show_date",
+          "default": true,
+          "label": "t:sections.blog_post.blocks.title.settings.blog_show_date.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "blog_show_author",
+          "default": false,
+          "label": "t:sections.blog_post.blocks.title.settings.blog_show_author.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.blog_post.blocks.content.name",
+      "type": "content",
+      "limit": 1
+    },
+    {
+      "name": "t:sections.blog_post.blocks.share.name",
+      "type": "share",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "share_label",
+          "label": "t:sections.blog_post.blocks.share.settings.share_label.label",
+          "default": "Share"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.blog_post.blocks.share.settings.paragraph__1.content"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.blog_post.blocks.share.settings.paragraph__2.content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

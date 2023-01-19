@@ -1,0 +1,216 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign height = section.settings.height
+  assign highlight = section.settings.highlight
+  assign auto_pause = section.settings.auto_pause
+  assign duration = section.settings.duration
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+
+  if auto_pause
+    assign pauseClasses = 'hfa:animation-pause'
+  endif
+
+  if highlight
+    assign highlightClasses = 'opacity-60 grayscale transition-all hfa:opacity-100 hfa:grayscale-0'
+  endif
+%}
+
+<section class="py-16 bg-theme-bg overflow-hidden {{ color_scheme }}">
+  <div class="container">
+    <div data-animation-slide-width></div>
+  </div>
+  <div class="relative flex overflow-hidden sm:left-1/2 sm:-ml-[50vw] sm:w-screen sm:pl-[max(0.5rem,calc((100vw-var(--layout-page-width))/2+0.5rem))]">
+    <div class="scrollbar-none flex scale-100 whitespace-nowrap transition-all overflow-visible {{ pauseClasses }}"
+         style="animation-duration: {{ duration }}s"
+         data-animation-slide>
+
+      <div class="px-6 grid auto-cols-max grid-flow-col-dense gap-12"
+           data-animation-slide-content>
+        {% for block in section.blocks %}
+          {% liquid
+            assign text = block.settings.text
+            assign image = block.settings.image
+            assign svg = block.settings.svg
+            assign url = block.settings.url | default: false
+
+          %}
+          <a tabindex="-1"
+             {% if url %}href="{{ url }}"{% endif %}
+             class="select-none relative flex w-full items-center justify-center {{ highlightClasses }}">
+            {% case block.type %}
+              {% when 'text' %}
+                <div class="flex items-center justify-center text-center leading-[1.1] font-bold text-lg">{{ text | newline_to_br }}</div>
+              {% when 'image' %}
+                <picture style="height: {{ height }}px;"
+                         class="relative">
+                  {% render '_image', image: image, class: "w-full h-full object-contain" %}
+                </picture>
+              {% when 'svg' %}
+
+                <figure style="height: {{ height }}px;"
+                        class="relative svg:h-full svg:w-full">
+                  {{ svg }}
+                </figure>
+            {% endcase %}
+          </a>
+        {% endfor %}
+      </div>
+
+
+      <div class="px-6 grid auto-cols-max grid-flow-col-dense gap-12 hidden"
+           data-animation-slide-duplicate>
+        {% for block in section.blocks %}
+          {% liquid
+            assign text = block.settings.text
+            assign image = block.settings.image
+            assign svg = block.settings.svg
+            assign url = block.settings.url | default: false
+          %}
+          <a tabindex="-1"
+             {% if url %}href="{{ url }}"{% endif %}
+             class="select-none relative flex w-full items-center justify-center {{ highlightClasses }}">
+            {% case block.type %}
+              {% when 'text' %}
+                <div class="flex items-center justify-center text-center leading-[1.1] font-bold text-lg">{{ text | newline_to_br }}</div>
+              {% when 'image' %}
+                <picture style="height: {{ height }}px;"
+                         class="relative">
+                  {% render '_image', image: image, class: "w-full h-full object-contain" %}
+                </picture>
+              {% when 'svg' %}
+
+                <figure style="height: {{ height }}px;"
+                        class="relative svg:h-full svg:w-full">
+                  {{ svg }}
+                </figure>
+            {% endcase %}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="flex pointer-events-none absolute right-0 top-0 z-10 h-full w-[max(16px,calc((100vw-var(--layout-page-width))/2+16px))] bg-gradient-to-r from-transparent to-theme-bg sm:w-[max(32px,calc((100vw-var(--layout-page-width))/2+32px))] sm:from-transparent sm:via-theme-bg sm:to-theme-bg"></div>
+    <div class="flex pointer-events-none absolute left-0 top-0 z-10 h-full w-[max(16px,calc((100vw-var(--layout-page-width))/2+16px))] bg-gradient-to-l from-transparent sm:w-[max(32px,calc((100vw-var(--layout-page-width))/2+32px))] sm:from-transparent sm:via-theme-bg sm:to-theme-bg"></div>
+  </div>
+</section>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.marquee_bar.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "height",
+      "label": "t:sections.marquee_bar.settings.height.label",
+      "default": 130,
+      "min": 30,
+      "max": 300,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "highlight",
+      "label": "t:sections.marquee_bar.settings.highlight.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_pause",
+      "label": "t:sections.marquee_bar.settings.auto_pause.label"
+    },
+    {
+      "type": "range",
+      "id": "duration",
+      "label": "t:sections.marquee_bar.settings.duration.label",
+      "default": 30,
+      "min": 7,
+      "max": 60,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.marquee_bar.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.marquee_bar.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.marquee_bar.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.marquee_bar.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.marquee_bar.settings.color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.marquee_bar.blocks.text.name",
+      "type": "text",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:sections.marquee_bar.blocks.text.settings.text.label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.marquee_bar.blocks.text.settings.url.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.marquee_bar.blocks.image.name",
+      "type": "image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.marquee_bar.blocks.image.settings.image.label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.marquee_bar.blocks.image.settings.url.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.marquee_bar.blocks.svg.name",
+      "type": "svg",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "svg",
+          "label": "t:sections.marquee_bar.blocks.svg.settings.svg.label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.marquee_bar.blocks.svg.settings.url.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.marquee_bar.presets.marquee_bar.name"
+    }
+  ]
+}
+{% endschema %}

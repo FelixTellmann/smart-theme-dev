@@ -1,0 +1,25 @@
+{%- capture json -%}
+  {
+  "count": {{- predictive_search.resources.products.size | plus: predictive_search.resources.collections.size | plus: predictive_search.resources.articles.size | plus: predictive_search.resources.pages.size | json -}},
+  "products": [
+  {%- for product in predictive_search.resources.products -%}
+    {%- render '_json_product', input: product, select: 'metafields.accelerate,metafields.reviews,title,vendor,price,compare_at_price,variants_size,id,url,images,available,compare_at_price_varies,price_varies' -%}
+    {%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+  ],
+  "collections": {{- predictive_search.resources.collections | json -}},
+  "articles": {{- predictive_search.resources.articles | json -}},
+  "pages": [{%- for page in predictive_search.resources.pages -%}{%- render '_json_page', input: page, select: 'handle,id, title,url,seo_content,published_at' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}],
+  "types":{{- predictive_search.types | json -}},
+  "terms": {{- predictive_search.terms | json -}}
+  }
+{%- endcapture -%}
+<script type="application/json">{{- json | trim | strip_newlines -}}</script>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.predictive_search.name",
+  "settings": []
+}
+{% endschema %}

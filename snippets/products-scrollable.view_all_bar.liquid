@@ -1,0 +1,36 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title = block.settings.title
+  assign title_font = block.settings.title_font
+  assign url = block.settings.url
+  assign margin_bottom = block.settings.margin_bottom
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% assign title = title | default: default_title %}
+
+<header class="container flex justify-between mb-3 relative" {{ block.shopify_attributes }}
+        style="margin-bottom: {{ margin_bottom }}px">
+
+  {% render 'typography', type: title_font, content: title %}
+
+  <a href="{{ url | default: default_url }}"
+     class="hf:underline group flex gap-2 items-center">
+    {{ "products_scrollable.view_all" | t }}
+    <i class="flex h-8 w-8 items-center justify-center rounded-full bg-theme-bg/50 backdrop-blur text-theme-text/80">
+      <svg class="ml-1 h-3 w-3 stroke-2"
+           fill="none"
+           viewBox="0 0 10 10"
+           aria-hidden="true"
+           stroke="currentColor"
+      >
+        <path class="opacity-0 transition group-hover:opacity-100"
+              d="M0 5h7"
+        ></path>
+        <path class="transition group-hover:translate-x-[3px]"
+              d="M1 1l4 4-4 4"
+        ></path>
+      </svg>
+    </i>
+  </a>
+</header>

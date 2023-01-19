@@ -1,0 +1,14 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+  assign height = block.settings.height
+  assign margin_bottom = block.settings.margin_bottom
+  assign responsive_visibility = block.settings.responsive_visibility
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+     class="{{ responsive_visibility }} {{ max_width | default: "max-w-lg" }}"
+     style="height: {{ height }}px; margin-bottom: {{ margin_bottom }}px; max-width: {{ max_width }}px;">
+  {% render '_image', image: image, class: 'grid w-min h-full object-contain', height: height %}
+</div>

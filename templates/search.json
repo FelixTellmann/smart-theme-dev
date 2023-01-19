@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "search-input": {
+      "type": "main-search-input"
+    },
+    "search-filters": {
+      "type": "main-search-filters"
+    },
+    "search-grid": {
+      "type": "main-search-grid"
+    }
+  },
+  "order": [
+    "search-input",
+    "search-filters",
+    "search-grid"
+  ]
+}
+
+

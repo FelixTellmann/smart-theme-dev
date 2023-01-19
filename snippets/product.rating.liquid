@@ -1,0 +1,21 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign grid_span = block.settings.grid_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="rating"
+     class="{{ grid_span }}" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+
+  <figure class="flex items-center mt-2">
+    {% render '_start-rating', rating: reviews.rating.value, class: "h-5", id_prefix: product.id %}
+    <figcaption class="ml-2 text-xs text-theme-text/70">
+      {% if reviews.rating_count %}
+        {{ reviews.rating_count }} review{% if reviews.rating_count > 1 %}s{% endif %}
+      {% else %}
+        {{ "product.no_reviews" | t }}
+      {% endif %}
+    </figcaption>
+  </figure>
+</div>

@@ -1,0 +1,59 @@
+{% liquid
+
+  assign type = section.settings.free_shipping_bar__type
+  assign color_scheme = section.settings.free_shipping_bar__color_scheme
+  assign current = cart[type]
+  assign target = section.settings.free_shipping_bar__target | append: ".0" | to_integer
+  assign difference = target | minus: current | at_least: 0
+  assign percentage = current | divided_by: target | times: 100 | at_most: 100
+
+  assign layoutClasses = "md:flex-row md:space-x-4 space-y-2 md:space-y-0 "
+
+  if mobile
+    assign layoutClasses = "space-y-2"
+  endif
+
+
+%}
+{% if header %}
+  <style>
+    :root {
+      --free-shipping-bar-height: {{ section.settings.free_shipping_bar__height }}px;
+    }
+  </style>
+{% endif %}
+
+<div class="relative border-b border-gray-100 bg-gray-50 {{ class }} {{ color_scheme }}"
+     data-free-shipping-bar-target="{{ target }}"
+     data-free-shipping-bar-type="{{ type }}">
+  <section class="container flex text-center items-center justify-center flex-col h-free-shipping-bar {{ layoutClasses }}">
+    <header>
+      <h3 class="text-sm flex-1 whitespace-nowrap"
+          data-free-shipping-bar-content>
+        {% if percentage == 100 %}
+          YOU'VE GOT FREE SHIPPING!
+        {% endif %}
+        {% if percentage < 100 %}
+          {% case section.settings.free_shipping_bar__type %}
+            {% when 'item_count' %}
+              ADD {{ difference }} ITEMS MORE FOR FREE SHIPPING!
+            {% when 'total_price' %}
+              ADD {{ difference | money_with_currency }} MORE FOR FREE SHIPPING!
+          {% endcase %}
+        {% endif %}
+      </h3>
+    </header>
+    <div class="w-full h-3 flex rounded-full bg-gray-300 max-w-xl overflow-hidden">
+      <div class="h-full bg-primary-bg"
+           style="width: {{ section.settings.free_shipping_bar__starting_percentage | default: 0 }}%">
+      </div>
+      <div class="relative h-full flex-1">
+        <div class="h-full bg-primary-bg transition-all duration-300 ease-out"
+             style="width: {{ percentage }}%"
+             data-free-shipping-bar-percentage>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+

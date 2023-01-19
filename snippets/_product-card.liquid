@@ -1,0 +1,150 @@
+{%- liquid
+  assign image__ratio = settings.image__ratio | default: 'pb-[125%]'
+  assign image__show_secondary = settings.image__show_secondary | default: false
+  assign vendor__show = settings.vendor__show | default: false
+  assign rating__show = settings.rating__show | default: false
+  assign labels__show = settings.labels__show | default: false
+  assign labels__discount = settings.labels__discount | default: "sale"
+  assign image__background = settings.image__background | default: "transparent"
+  assign image__drop_shadow = settings.image__drop_shadow | default: false
+
+  assign compare_at_price = product.compare_at_price
+  assign price = product.price
+
+  if product.available == false
+    assign sold_out = true
+    assign label__sold_out = true
+  endif
+
+  assign imageClasses = 'w-full h-full object-cover inset-0 '
+  if image__drop_shadow
+    assign imageClasses = imageClasses | append: "drop-shadow-product"
+  endif
+  if product.price < product.compare_at_price and product.available
+
+    assign label__discount_percentage = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price
+    assign label__discount_value = compare_at_price | minus: price | money_without_trailing_zeros
+
+    case labels__discount
+      when 'sale'
+        assign label__discount = 'On Sale'
+      when 'percentage'
+        assign label__discount = label__discount_percentage | round | append: "% off"
+      when 'value'
+        assign label__discount = "Save " | append: label__discount_value
+      else
+        assign label__discount = 'On Sale'
+    endcase
+  endif
+-%}
+
+
+<article class="flex flex-col space-y-1 relative items-stretch {{ class }}" {{ html_attributes }}
+         data-card
+         data-drawer-product="{{ product.id }}"
+         data-drawer-product-url="{{ product.url | split: '?' | first }}">
+
+  {% comment %} IMAGE {% endcomment %}
+  <a class="grid relative outline-none hf:outline-none h-0 w-full {{ image__ratio }}"
+     href="{% if is_collection %}{{ collection.url | split: '?' | first }}{% endif %}{{ product.url }}"
+     data-card-image-link>
+    <div class="w-full h-full inset-0 absolute overflow-hidden"
+         style="background: {{ image__background }};"
+         data-card-image>
+      {% render '_image', image: product.featured_image, width: 500, class: imageClasses, placeholder: 'product-1' %}
+    </div>
+    {% if image__show_secondary %}
+      <div class="w-full h-full inset-0 absolute opacity-0 hf:opacity-100 transition-all duration-75 overflow-hidden {% unless product.images[1].src %}hidden{% endunless %}"
+           data-card-secondary-image>
+        {% render '_image', image: product.images[1], width: 500, class: imageClasses, placeholder: 'product-2' %}
+      </div>
+    {% endif %}
+
+    {% comment %} VARIANT COUNT {% endcomment %}
+    <div class="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-6 text-xs text-theme-bg tracking-wide drop-shadow text-center {% if product.variants.size <= 1 %}hidden{% endif %}"
+         data-card-variant-count>
+      Available in {{ product.variants.size }} variations
+    </div>
+
+
+    {% comment %} LABELS {% endcomment %}
+    {% if labels__show %}
+      <div class="absolute top-3 right-3 max-w-[65%] flex flex-wrap -m-0.5 justify-end"
+           data-card-label-container>
+        {% for label in product.metafields.accelerate.product_labels.value %}
+          <div class="label m-0.5">{{ label }}</div>
+        {% endfor %}
+        <div class="label m-0.5 hidden"
+             data-card-label-placeholder>{{ label }}</div>
+        <div class="label-primary m-0.5 {% unless label__discount %}hidden{% endunless %}"
+             data-card-label-discount>{{ label__discount }}</div>
+        <div class="label-theme-inverted m-0.5 {% unless label__sold_out %}hidden{% endunless %}"
+             data-card-label-sold-out>Sold out
+        </div>
+      </div>
+    {% endif %}
+
+  </a>
+
+  {% comment %} TITLE {% endcomment %}
+  <h1 class=" inline-flex pt-2 font-semibold tracking-tight text-base">
+    <a class="outline-none hf:outline-none hf:underline"
+       data-card-title
+       href="{% if is_collection %}{{ collection.url | split: '?' | first }}{% endif %}{{ product.url }}">{{ product.title }}</a>
+  </h1>
+
+  {% comment %}  PRICE {% endcomment %}
+  <div class="text-xl"
+       data-card-price>
+    {% render '_price', product_or_variant: product %}
+  </div>
+
+  {% comment %} REVIEW STARS {% endcomment %}
+  {%- if rating__show -%}
+    <div class="flex items-center mt-2 {% unless product.metafields.reviews.rating.value != blank %}hidden{% endunless %}"
+         data-card-reviews>
+      {% render '_start-rating', rating: product.metafields.reviews.rating.value, class: "h-5", id_prefix: product.id %}
+      <div class="ml-2 text-xs text-theme-text/70"
+           data-card-reviews-text>
+        {{ product.metafields.reviews.rating_count }} review{% if product.metafields.reviews.rating_count > 1 %}s{% endif %}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {% comment %} VENDOR {% endcomment %}
+  {% if vendor__show %}
+    <h2 class="inline-flex text-sm text-theme-text/60">
+      <a href="{{ routes.collections_url }}/vendors?q={{ product.vendor | url_escape }}"
+         class="hf:underline"
+         title="{{ product.vendor }}"
+         data-card-vendor>
+        {{ product.vendor }}
+      </a>
+    </h2>
+  {% endif %}
+
+  {% comment %} ADD TO CART - PRE OPEN SCREEN {% endcomment %}
+  <div class="self-end mt-auto w-full flex-1 flex flex-col justify-end mt-4 text-center">
+
+    <a class="mt-2 w-full button-primary"
+       style="display: var(--product-drawer-off-display)"
+       {% if sold_out %}aria-disabled="true"
+       {% else %}href="{{ product.url }}"{% endif %}
+       data-card-cta-link>
+      <span class="whitespace-nowrap {% if sold_out %}hidden{% endif %}"
+            data-card-cta-content>View Product</span>
+      <span class="{% if product.available %}hidden{% endif %}"
+            data-card-cta-sold-out>Sold Out</span>
+    </a>
+    <button data-product-drawer-add-button="{{ product.id }}"
+            data-card-cta-button
+            style="display: var(--product-drawer-on-display)"
+            class="no-js-hidden mt-2 w-full button-primary"
+            {% if sold_out %}disabled="disabled"{% endif %}>
+      <span class="whitespace-nowrap {% if sold_out %}hidden{% endif %}"
+            data-card-cta-content>Choose an option</span>
+      <span class="{% if product.available %}hidden{% endif %}"
+            data-card-cta-sold-out>Sold Out</span>
+    </button>
+  </div>
+</article>

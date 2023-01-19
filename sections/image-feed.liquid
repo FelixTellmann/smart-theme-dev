@@ -1,0 +1,269 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image__aspect_ratio = section.settings.image__aspect_ratio
+  assign min_width = section.settings.min_width
+  assign section_layout = section.settings.section_layout
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="{{ section_layout }} {{ color_scheme }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}"
+     data-scroll-slider>
+  <div class="grid grid-flow-col-dense overflow-x-auto scrollbar-none relative snap-mandatory snap-x scroll-smooth auto-cols-[minmax(var(--grid-width-mobile),1fr)] scroll-pl-0"
+       style="--grid-width-mobile: {{ min_width }}px;"
+       data-scroll-container>
+    {% for block in section.blocks %}
+      {% render 'image-feed.image', block: block %}
+    {% endfor %}
+  </div>
+</div>
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.image_feed.name",
+  "settings": [
+    {
+      "id": "image__aspect_ratio",
+      "type": "select",
+      "default": "pb-[100%]",
+      "options": [
+        {
+          "value": "pb-[75%]",
+          "label": "t:sections.image_feed.settings.image__aspect_ratio.options__1.label"
+        },
+        {
+          "value": "pb-[100%]",
+          "label": "t:sections.image_feed.settings.image__aspect_ratio.options__2.label"
+        },
+        {
+          "value": "pb-[125%]",
+          "label": "t:sections.image_feed.settings.image__aspect_ratio.options__3.label"
+        }
+      ],
+      "label": "t:sections.image_feed.settings.image__aspect_ratio.label"
+    },
+    {
+      "type": "range",
+      "id": "min_width",
+      "label": "t:sections.image_feed.settings.min_width.label",
+      "default": 360,
+      "min": 200,
+      "max": 640,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image_feed.settings.header__1.content"
+    },
+    {
+      "type": "radio",
+      "id": "section_layout",
+      "label": "t:sections.image_feed.settings.section_layout.label",
+      "default": "container-bg-full",
+      "options": [
+        {
+          "value": "container-bg-full",
+          "label": "t:sections.image_feed.settings.section_layout.options__1.label"
+        },
+        {
+          "value": "fullwidth",
+          "label": "t:sections.image_feed.settings.section_layout.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.image_feed.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.image_feed.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.image_feed.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.image_feed.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.image_feed.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.image_feed.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.image_feed.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.image_feed.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.image_feed.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.image_feed.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.image_feed.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.image_feed.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.image_feed.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.image_feed.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.image_feed.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.image_feed.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.image_feed.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.image_feed.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.image_feed.settings.color_scheme.label"
+    }
+  ],
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "name": "t:sections.image_feed.blocks.image.name",
+      "type": "image",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.image_feed.blocks.image.settings.header__1.content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.image_feed.blocks.image.settings.image.label"
+        },
+        {
+          "type": "color_background",
+          "id": "image__overlay",
+          "label": "t:sections.image_feed.blocks.image.settings.image__overlay.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.image_feed.blocks.image.settings.header__2.content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.image_feed.blocks.image.settings.title.label"
+        },
+        {
+          "type": "range",
+          "id": "title_font",
+          "label": "t:sections.image_feed.blocks.image.settings.title_font.label",
+          "default": 1,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.image_feed.blocks.image.settings.title_font.info"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "t:sections.image_feed.blocks.image.settings.subtitle.label"
+        },
+        {
+          "type": "range",
+          "id": "subtitle_font",
+          "label": "t:sections.image_feed.blocks.image.settings.subtitle_font.label",
+          "default": 2,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.image_feed.blocks.image.settings.subtitle_font.info"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.image_feed.blocks.image.settings.header__3.content"
+        },
+        {
+          "type": "radio",
+          "id": "responsive_visibility",
+          "label": "t:sections.image_feed.blocks.image.settings.responsive_visibility.label",
+          "default": "responsive",
+          "options": [
+            {
+              "value": "responsive",
+              "label": "t:sections.image_feed.blocks.image.settings.responsive_visibility.options__1.label"
+            },
+            {
+              "value": "md:hidden",
+              "label": "t:sections.image_feed.blocks.image.settings.responsive_visibility.options__2.label"
+            },
+            {
+              "value": "max-md:hidden",
+              "label": "t:sections.image_feed.blocks.image.settings.responsive_visibility.options__3.label"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_feed.presets.image_feed.name",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

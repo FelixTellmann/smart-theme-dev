@@ -1,0 +1,27 @@
+{% capture json %}
+  {
+  {%- for key in input -%}
+    {%- assign metafield = input[key[0]] -%}
+    ,{{- key[0] | json -}}:
+    {%- if metafield.type == "list.page_reference" -%}
+      {{- metafield -}}
+    {%- elsif metafield.type == "dimension" or metafield.type == "weight" or metafield.type == "volume" -%}
+      {
+      "type": {{- metafield.value.type | json -}},
+      "unit": {{- metafield.value.unit | json -}},
+      "value": {{- metafield.value.value | json -}}
+      }
+    {%- elsif metafield.type == "rating" -%}
+      {
+      "rating": {{- metafield.value.rating | json -}},
+      "scale_max": {{- metafield.value.scale_max | json -}},
+      "scale_min": {{- metafield.value.scale_min | json -}}
+      }
+    {%- else -%}
+      {{- metafield.value | json -}}
+    {%- endif -%}
+  {%- endfor -%}
+  }
+{% endcapture %}
+
+{{- json | remove_first: ',' | trim | strip_newlines -}}

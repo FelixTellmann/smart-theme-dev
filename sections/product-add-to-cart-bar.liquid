@@ -1,0 +1,135 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign upsell_product = section.settings.upsell_product
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign variant = product.selected_or_first_available_variant
+%}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    position: sticky;
+    z-index: 43;
+    top: 0;
+  }
+
+  #shopify-section-{{ section.id }} ~ .shopify-section {
+    position: relative;
+    z-index: 42;
+  }
+</style>
+
+
+<div class="container-bg-full {{ color_scheme }} {{ responsive_visibility }} border-y border-y-theme-text/20">
+  <section class=" flex items-center justify-between min-h-[64px]">
+    <nav class="flex-1 md:grid auto-cols-min self-stretch gap-4 lg:gap-8 grid-flow-col-dense hidden">
+      {% for block in section.blocks %}
+        {% render 'product-add-to-cart-bar.link', block: block %}
+      {% endfor %}
+    </nav>
+    <main class="grid auto-cols-min grid-flow-col-dense gap-2 md:gap-6 py-2 items-center justify-between sm:justify-center w-full md:w-auto whitespace-nowrap"
+          data-product-add-to-cart-bar
+          data-product-add-to-cart-bar-upsell-product="{{ upsell_product.id }}"
+          data-drawer-product="{{ upsell_product.id }}"
+          data-drawer-product-url="{{ upsell_product.url | split: '?' | first }}">
+
+      <picture class="h-full aspect-1 rounded-theme-sm relative overflow-hidden block border border-theme-text/60">
+        {% render '_image', image: variant.featured_image, width: 80, class: "block inset-0 w-full h-full object-cover object-center" %}
+      </picture>
+      <div class="truncate sm:max-w-[180px] max-w-[100px] flex flex-col justify-center flex">
+        <span class="font-semibold text-sm tracking-tight truncate sm:max-w-[180px] max-w-[100px]">{{ product.title }}</span>
+        <span class="text-xs tracking-tight truncate sm:max-w-[180px] max-w-[100px]">{{ variant.title }}</span>
+      </div>
+      <button class="button-primary whitespace-nowrap self-end justify-self-end ml-auto flex"
+              type="button">
+        {{ "product_add_to_cart_bar.add_to" | t }}
+      </button>
+    </main>
+  </section>
+</div>
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.add_to_cart_bar.name",
+  "settings": [
+    {
+      "type": "product",
+      "id": "upsell_product",
+      "label": "t:sections.add_to_cart_bar.settings.upsell_product.label",
+      "info": "t:sections.add_to_cart_bar.settings.upsell_product.info"
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.add_to_cart_bar.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.add_to_cart_bar.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.add_to_cart_bar.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.add_to_cart_bar.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.add_to_cart_bar.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.add_to_cart_bar.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.add_to_cart_bar.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.add_to_cart_bar.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.add_to_cart_bar.settings.color_scheme.label"
+    }
+  ],
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "name": "t:sections.add_to_cart_bar.blocks.link.name",
+      "type": "link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.add_to_cart_bar.blocks.link.settings.title.label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.add_to_cart_bar.blocks.link.settings.url.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.add_to_cart_bar.presets.product_add_to_cart_bar.name"
+    }
+  ]
+}
+{% endschema %}

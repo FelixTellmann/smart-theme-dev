@@ -1,0 +1,11 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign grid_span = block.settings.grid_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="price"
+     class="{{ grid_span }}" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  {% render '_price', product_or_variant: variant %}
+</div>

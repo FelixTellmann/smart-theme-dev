@@ -1,0 +1,18 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign heading = block.settings.heading
+  assign icon = block.settings.icon
+  assign content = block.settings.content
+  assign _page = block.settings.page
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="collapsible_tab"
+     class="col-span-12" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <div class="grid border-b border-b-theme-text/50">
+    {% assign title = heading | default: _page.title %}
+    {% assign content = content | append: _page.content %}
+    {% render '_collapsible', title: title, content: content %}
+  </div>
+</div>

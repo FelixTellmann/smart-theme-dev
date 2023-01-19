@@ -1,0 +1,233 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign color_scheme = section.settings.color_scheme
+%}
+
+<div class="bg-theme-bg text-theme-text scroll-mt-top-bar-spacing {{ color_scheme }}">
+  <div class="container py-6">{% render '_breadcrumbs' %}</div>
+  <section class="container pb-16 grid lg:grid-cols-[240px_1fr] gap-8">
+    <aside class="lg:sticky lg:top-top-bar-spacing grid gap-6 h-min">
+      <div class="bg-gray-50/30 md:shadow-lg md:shadow-gray-300/20 md:rounded-theme-md border-y md:border-x border-gray-200 -mx-4 md:mx-0 py-4 px-6">
+        <h1 class="h4 font-bold mb-3">
+          {{ "main_order.account" | t }}
+        </h1>
+        <nav class="grid gap-1 text-theme-text/70 text-sm">
+          <a class="hf:underline hf:text-theme-text {% if routes.account_url == request.path %}text-theme-text/90 font-semibold{% endif %}"
+             href="{{ routes.account_url }}">
+            {{ "main_order.order_history" | t }}
+          </a>
+          <a class="hf:underline hf:text-theme-text {% if routes.account_addresses_url == request.path %}text-theme-text/90 font-semibold{% endif %}"
+             href="{{ routes.account_addresses_url }}">
+            {{ "main_order.addresses" | t }}
+          </a>
+          <a class="hf:underline hf:text-theme-text "
+             href="{{ routes.account_logout_url }}">
+            {{ "main_order.log_out" | t }}
+          </a>
+        </nav>
+      </div>
+    </aside>
+    <section>
+      <header class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <div class="flex justify-between">
+            <h1 class="text-xl font-semibold text-gray-900">
+              {{ "main_order.order" | t }} {{ order.name }}</h1>
+            <span class="hidden sm:block text-sm text-gray-600">{{ order.created_at | time_tag: format: 'date' }}</span>
+            <span class="sm:hidden text-sm text-gray-600">{{ order.created_at | time_tag: format: 'abbreviated_date' }}</span>
+          </div>
+          <p class="mt-2 text-sm text-gray-700">
+            <a href="{{ routes.account_url }}"
+               class="inline-flex items-center text-xs tracking-wide uppercase text-gray-400 hf:underline hf:text-gray-600">
+              {% render '_icon', icon: 'chevron-left', class: "w-2 h-2 mr-2" %}
+              <span>
+                {{ "main_order.back_to" | t }}
+              </span>
+            </a>
+          </p>
+        </div>
+      </header>
+      <main class="mt-8 grid">
+        <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 max-w-[calc(100%+2rem)] sm:max-w-[calc(100%+3rem)] lg:max-w-[calc(100%+4rem)]">
+          <div class="inline-block min-w-full pt-2 pb-4 align-middle md:px-6 lg:px-8">
+            <div class="overflow-hidden shadow-lg shadow-gray-300/20 ring-1 ring-black ring-opacity-5 md:rounded-theme-md">
+              <table class="min-w-full divide-y divide-gray-300">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col"
+                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-full">
+                      {{ "main_order.product" | t }}
+                    </th>
+                    <th scope="col"
+                        class="px-4 sm:px-6 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      {{ "main_order.sku" | t }}
+                    </th>
+                    <th scope="col"
+                        class="px-4 sm:px-6 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                      {{ "main_order.quantity" | t }}
+                    </th>
+                    <th scope="col"
+                        class="px-4 sm:px-6 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                      {{ "main_order.total" | t }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                  {% for line_item in order.line_items %}
+                    <tr class="group hf:bg-gray-50 cursor-pointer"
+                        data-order-link="{{ line_item.url }}">
+                      <td class="pl-4 pr-3 text-sm sm:pl-6 py-4">
+                        <div class="grid grid-cols-[100px_1fr] items-center w-full gap-4">
+                          {% render '_image', image: line_item.image, width: 100, height: 100, placeholder: 'product-1', class: 'w-[100px]' %}
+                          <div class="flex-1">
+                            <h3 class="font-semibold group-hf:underline">{{ line_item.product.title }}</h3>
+                            <h4 class="text-xs uppercase tracking-wide text-gray-500">{{ line_item.title | replace: line_item.product.title, "" | replace_first: "-", "" | strip }}</h4>
+                            <div class="text-primary-outline mt-1">
+                              {{ line_item.final_price | money }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="whitespace-nowrap px-4 sm:px-6 py-2 text-sm text-gray-500">
+                        {{ line_item.sku }}
+                      </td>
+                      <td class="whitespace-nowrap px-4 sm:px-6 py-2 text-sm text-gray-500 text-right">
+                        {{ line_item.quantity }}
+                      </td>
+                      <td class="whitespace-nowrap px-4 sm:px-6 py-2 text-sm text-gray-500 text-right">
+                        {{ line_item.final_line_price | money }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="grid md:grid-cols-2 border-t border-t-gray-200 text-sm divide-y divide-y-gray-200">
+                <div class="md:col-end-3 px-6 flex items-center justify-between py-5">
+                  <span class="">
+                    {{ "main_order.subtotal" | t }}
+                  </span>
+                  <span class="text-gray-700">{{ order.subtotal_price | money }}</span>
+                </div>
+
+                {%- for discount_application in order.cart_level_discount_applications -%}
+                  <div class="md:col-end-3 px-6 flex items-center justify-between py-5">
+                    <span class="">
+                      {{ "main_order.discount" | t }}
+                      ({{ discount_application.title }})</span>
+                    <span class="text-gray-700">{{ discount_application.total_allocated_amount | times: -1.0 | money }}</span>
+                  </div>
+                {%- endfor -%}
+
+                {%- for shipping_method in order.shipping_methods -%}
+                  <div class="md:col-end-3 px-6 flex items-center justify-between py-5">
+                    <span class="">
+                      {{ "main_order.shipping" | t }}
+                      ({{ shipping_method.title }})</span>
+                    <span class="text-gray-700">{{ shipping_method.price | money }}</span>
+                  </div>
+                {%- endfor -%}
+
+                {%- for tax_line in order.tax_lines -%}
+                  <div class="md:col-end-3 px-6 flex items-center justify-between py-5">
+                    {%- if cart.taxes_included -%}
+                      <span class="">
+                        {{ "main_order.tax_included" | t }}
+                        ({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</span>
+                    {%- else -%}
+                      <span class="">
+                        {{ "main_order.tax_excluded" | t }}
+                        ({{ tax_line.title }} {{ tax_line.rate_percentage }}%)</span>
+                    {%- endif -%}
+                    <span class="text-gray-700">{{ tax_line.price | money }}</span>
+                  </div>
+                {%- endfor -%}
+
+                {%- if order.total_refunded_amount > 0 -%}
+                  <div class="md:col-end-3 px-6 flex items-center justify-between py-5">
+                    <span class="">
+                      {{ "main_order.refunded_amount" | t }}
+                    </span>
+                    <span class="text-gray-700">{{ order.total_refunded_amount | money }}</span>
+                  </div>
+                {%- endif -%}
+
+                <div class="md:col-end-3 px-6 flex items-center justify-between py-5">
+                  <span class="font-medium">
+                    Total
+                  </span>
+                  <span class="text-gray-900 font-medium">{{ order.total_net_amount | money }}</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="mt-3 grid sm:grid-cols-2 gap-6 -mx-4 sm:mx-0">
+        <div class="bg-white border-y border-gray-200 sm:border-x md:shadow-lg md:shadow-gray-300/20 sm:rounded-theme-md py-4 px-6 text-sm leading-[1.7]">
+          <p class="font-medium uppercase tracking-wide mb-2">
+            {{ "main_order.billing_address" | t }}
+          </p>
+          {%- if order.billing_address -%}
+            {{- order.billing_address | format_address -}}
+          {%- else -%}
+            <p>
+              {{ "main_order.no_billing" | t }}
+            </p>
+          {%- endif -%}
+        </div>
+        <div class="bg-white border-y border-gray-200 sm:border-x md:shadow-lg md:shadow-gray-300/20 sm:rounded-theme-md py-4 px-6 text-sm leading-[1.7]">
+          <p class="font-medium uppercase tracking-wide mb-2">
+            {{ "main_order.shipping_address" | t }}
+          </p>
+          {%- if order.shipping_address -%}
+            {{- order.shipping_address | format_address -}}
+          {%- else -%}
+            <p>
+              {{ "main_order.no_shipping" | t }}
+            </p>
+          {%- endif -%}
+        </div>
+      </footer>
+    </section>
+  </section>
+</div>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.order.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.order.settings.header__1.content"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.order.settings.padding_top.label",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.order.settings.padding_bottom.label",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

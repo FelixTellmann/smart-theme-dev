@@ -1,0 +1,14 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign grid_span = block.settings.grid_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="sku"
+     class="{{ grid_span }} empty:hidden" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <div role="status"
+       class="text-sm text-theme-text/80 flex"
+       data-product-sku
+       title="SKU">{{ variant.sku | escape }}</div>
+</div>

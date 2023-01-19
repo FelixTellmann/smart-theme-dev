@@ -1,0 +1,189 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign pagination_size = section.settings.pagination_size
+  assign columns__desktop = section.settings.columns__desktop
+  assign columns__mobile = section.settings.columns__mobile
+  assign section_layout = section.settings.section_layout
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<section class="{{ color_scheme }} {{ section_layout }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+  <main class="pt-8 pb-8">
+    {% paginate collections by pagination_size -%}
+
+      {%- if collections.size == 0 -%}
+        <div class="prose prose-theme py-16 text-center mx-auto">
+          <h2 class="">
+            {{ "main_collections_list.no_collections" | t }}
+          </h2>
+        </div>
+      {%- endif -%}
+
+      <div class="grid gap-x-6 gap-y-10 {{ columns__mobile }} {{ columns__desktop }}">
+        {% for collection in collections -%}
+          {% render '_collection-card', collection: collection, settings: section.settings %}
+        {%- endfor %}
+      </div>
+      <div class="flex justify-center mt-10">
+        {% render '_pagination', paginate: paginate %}
+      </div>
+    {%- endpaginate %}
+  </main>
+</section>
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.main_collections_list.name",
+  "settings": [
+    {
+      "id": "pagination_size",
+      "type": "range",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "t:sections.main_collections_list.settings.pagination_size.label"
+    },
+    {
+      "type": "select",
+      "id": "columns__desktop",
+      "default": "lg:grid-cols-4",
+      "label": "t:sections.main_collections_list.settings.columns__desktop.label",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "t:sections.main_collections_list.settings.columns__desktop.options__1.label"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "t:sections.main_collections_list.settings.columns__desktop.options__2.label"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "t:sections.main_collections_list.settings.columns__desktop.options__3.label"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "t:sections.main_collections_list.settings.columns__desktop.options__4.label"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "t:sections.main_collections_list.settings.columns__desktop.options__5.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "columns__mobile",
+      "default": "grid-cols-2",
+      "label": "t:sections.main_collections_list.settings.columns__mobile.label",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "t:sections.main_collections_list.settings.columns__mobile.options__1.label"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "t:sections.main_collections_list.settings.columns__mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "section_layout",
+      "label": "t:sections.main_collections_list.settings.section_layout.label",
+      "default": "container-bg-full",
+      "options": [
+        {
+          "value": "container-bg-full",
+          "label": "t:sections.main_collections_list.settings.section_layout.options__1.label"
+        },
+        {
+          "value": "fullwidth",
+          "label": "t:sections.main_collections_list.settings.section_layout.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.main_collections_list.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.main_collections_list.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.main_collections_list.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.main_collections_list.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.main_collections_list.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.main_collections_list.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.main_collections_list.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.main_collections_list.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.main_collections_list.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.main_collections_list.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.main_collections_list.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.main_collections_list.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.main_collections_list.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.main_collections_list.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.main_collections_list.settings.color_scheme.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main_collections_list.presets.main_collections_list.name"
+    }
+  ]
+}
+{% endschema %}

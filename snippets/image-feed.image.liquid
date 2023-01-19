@@ -1,0 +1,26 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+  assign image__overlay = block.settings.image__overlay
+  assign title = block.settings.title
+  assign title_font = block.settings.title_font
+  assign subtitle = block.settings.subtitle
+  assign subtitle_font = block.settings.subtitle_font
+  assign responsive_visibility = block.settings.responsive_visibility
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<figure id="block--{{ block.id }}" {{ block.shopify_attributes }}
+        class="relative w-full {{ section.settings.image__aspect_ratio }} overflow-hidden {{ responsive_visibility }}"
+        data-scroll-item>
+
+  {% render '_image', image: image, class: "absolute inset-0 w-full h-full object-cover", placeholder: 'lifestyle-1' %}
+
+  <figcaption class="absolute z-10 inset-0 w-full h-full flex flex-col items-center justify-center text-center container"
+              style="background-image: {{ image__overlay }};">
+    <div class="max-w-lg grid gap-3">
+      {% render 'typography', type: title_font, content: title, class: "text-theme-overlay-text" %}
+      {% render 'typography', type: subtitle_font, content: subtitle, class: "text-theme-overlay-text" %}
+    </div>
+  </figcaption>
+</figure>

@@ -1,0 +1,231 @@
+{% liquid
+
+
+  assign background_color = settings.product_card__background_color
+
+  assign image__ratio = settings.product_card__image__ratio
+  assign image__background = settings.product_card__image__background
+  assign image__drop_shadow = settings.product_card__image__drop_shadow
+  assign image__margin_bottom = settings.product_card__image__margin_bottom
+  assign image__show_secondary = settings.product_card__image__show_secondary
+
+  assign labels__discount = settings.product_card__labels__discount
+  assign labels__responsive_visibility = settings.product_card__labels__responsive_visibility
+  assign labels__show = settings.product_card__labels__show
+
+  assign variant_count__responsive_visibility = settings.product_card__variant_count__responsive_visibility
+  assign variant_count__show = settings.product_card__variant_count__show
+
+
+  assign title__margin_bottom = settings.product_card__title__margin_bottom
+  assign title__type = settings.product_card__title__type
+
+  assign rating__margin_bottom = settings.product_card__rating__margin_bottom
+  assign rating__responsive_visibility = settings.product_card__rating__responsive_visibility
+  assign rating__show = settings.product_card__rating__show
+
+  assign vendor__margin_bottom = settings.product_card__vendor__margin_bottom
+  assign vendor__responsive_visibility = settings.product_card__vendor__responsive_visibility
+  assign vendor__show = settings.product_card__vendor__show
+
+  assign price__margin_bottom = settings.product_card__price__margin_bottom
+  assign price__responsive_visibility = settings.product_card__price__responsive_visibility
+  assign price__show = settings.product_card__price__show
+
+  assign variant_selector__show = settings.product_card__variant_selector__show
+  assign variant_selector__color_list = settings.product_card__variant_selector__color_list
+
+  assign button__style = settings.product_card__button__style
+
+%}
+
+{% liquid
+  assign compare_at_price = product.compare_at_price
+  assign price = product.price
+
+  if product.available == false
+    assign sold_out = true
+    assign label__sold_out = true
+  endif
+
+  assign imageClasses = 'w-full h-full object-cover inset-0 '
+  if image__drop_shadow
+    assign imageClasses = imageClasses | append: "drop-shadow-product"
+  endif
+  if product.price < product.compare_at_price and product.available
+
+    assign label__discount_percentage = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price
+    assign label__discount_value = compare_at_price | minus: price | money_without_trailing_zeros
+
+    case labels__discount
+      when 'sale'
+        assign label__discount = 'On Sale'
+      when 'percentage'
+        assign label__discount = label__discount_percentage | round | append: "% off"
+      when 'value'
+        assign label__discount = "Save " | append: label__discount_value
+    endcase
+  endif
+%}
+
+<article class="p-3 flex flex-col space-y-1 relative items-stretch {{ class }}" {{ html_attributes }}
+         style="background: {{ background_color }};"
+         data-product-card
+         data-product-card-collection-url="{{ collection.url }}"
+         data-drawer-product="{{ product.id }}"
+         data-drawer-product-url="{{ product.url | split: '?' | first }}">
+
+  {% comment %} IMAGE / LABEL / VARIANT COUNT CONTAINER {% endcomment %}
+  <a class="-mt-3 -mx-3 grid relative outline-none hf:outline-none h-0 {{ image__ratio }}"
+     href="{% if is_collection %}{{ collection.url | split: '?' | first }}{% endif %}{{ product.url }}"
+     style="margin-bottom: {{ image__margin_bottom }}px">
+    <div class="w-full h-full inset-0 absolute overflow-hidden"
+         style="background: {{ image__background }};">
+      {% render '_image', image: product.featured_image, width: 500, class: imageClasses, placeholder: 'product-1' %}
+    </div>
+    {% comment %} SECONDARY IMAGE {% endcomment %}
+    {% if image__show_secondary and product.images[1].src %}
+      <div class="w-full h-full inset-0 absolute opacity-0 hf:opacity-100 transition-all duration-75 overflow-hidden">
+        {% render '_image', image: product.images[1], width: 500, class: imageClasses, placeholder: 'product-2' %}
+      </div>
+    {% endif %}
+
+    {% comment %} VARIANT COUNT {% endcomment %}
+    {% if variant_count__show and product.variants.size > 1 %}
+      <div class="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-6 text-xs text-theme-bg tracking-wide drop-shadow text-center {{ variant_count__responsive_visibility }}">
+        Available in {{ product.variants.size }} variations
+      </div>
+    {% endif %}
+
+
+    {% comment %} LABELS {% endcomment %}
+    {% if labels__show %}
+      <div class="absolute top-3 right-3 max-w-[65%] flex flex-wrap -m-0.5 justify-end {{ labels__responsive_visibility }}">
+        {% for label in product.metafields.accelerate.product_labels.value %}
+          <div class="label m-0.5">
+            {{ label }}
+          </div>
+        {% endfor %}
+        {% if label__discount %}
+          <div class="label-primary m-0.5">
+            {{ label__discount }}
+          </div>
+        {% endif %}
+
+        {% if sold_out %}
+          <div class="label-theme-inverted m-0.5">
+            {{ "product_card.sold_out" | t }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  </a>
+
+  {% comment %} TITLE {% endcomment %}
+
+  <div style="margin-bottom: {{ title__margin_bottom }}px">
+    {% capture titleHtml %}
+      <a class="outline-none hf:outline-none hf:underline"
+         href="{% if is_collection %}{{ collection.url | split: '?' | first }}{% endif %}{{ product.url }}">
+        {{ product.title }}
+      </a>
+    {% endcapture %}
+    {% render "typography", type: title__type, content: titleHtml %}
+  </div>
+
+
+  {% comment %} REVIEW STARS {% endcomment %}
+  {%- if rating__show and product.metafields.reviews.rating.value != blank -%}
+    <div class="flex items-center mt-2 {{ rating__responsive_visibility }}"
+         style="margin-bottom: {{ rating__margin_bottom }}px">
+      {% render '_start-rating', rating: product.metafields.reviews.rating.value, class: "h-5", id_prefix: product.id %}
+      <div class="ml-2 text-xs text-theme-text/70"
+           data-card-reviews-text>
+        {{ product.metafields.reviews.rating_count }} review{% if product.metafields.reviews.rating_count > 1 %}s{% endif %}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {% comment %} VENDOR {% endcomment %}
+  {% if vendor__show %}
+    <h2 class="inline-flex text-sm text-theme-text/60 {{ vendor__responsive_visibility }}"
+        style="margin-bottom: {{ vendor__margin_bottom }}px">
+      <a href="{{ routes.collections_url }}/vendors?q={{ product.vendor | url_escape }}"
+         class="hf:underline"
+         title="{{ product.vendor }}">
+        {{ product.vendor }}
+      </a>
+    </h2>
+  {% endif %}
+
+  {% comment %} PRICE {% endcomment %}
+  {% if price__show %}
+    <div class="text-xl {{ price__responsive_visibility }}"
+         style="margin-bottom: {{ price__margin_bottom }}px">
+      {% render '_price', product_or_variant: product %}
+    </div>
+  {% endif %}
+
+  {% comment %} VARIANT SELECTOR - COLORS {% endcomment %}
+  {% if variant_selector__show and product.variants.size > 1 %}
+    {% assign colors = variant_selector__color_list | strip_newlines | split: ',' %}
+    {% capture colors %}{% for color in colors %}{{ color | strip | downcase }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
+    {% assign color_labels = colors | split: "," %}
+    {% for option in product.options_with_values %}
+      {% assign downcaseOptionName = option.name | downcase %}
+      {% if color_labels contains downcaseOptionName and option.values.size > 1 %}
+        <div class="relative"
+             data-product-card-variant-selector>
+          <fieldset class="group mt-2 flex flex-wrap gap-2">
+            {% for value in option.values %}
+              {% comment %}{% assign optionKey = 'option' | append: option.position %}
+              {% assign availabeVariants = product.variants | where: optionKey, value %}
+              {% assign availabeVariants = availabeVariants | where: 'available' %}{% endcomment %}
+              <label class="cursor-pointer rounded-full border border-theme-text/50"
+                     title="{{ value }}">
+                <input type="radio"
+                       name="product-{{ product.id }}-vs-color-selector"
+                       class="peer absolute appearance-none outline-none hfa:outline-none"
+                       value="{{ value }}"
+                    {% comment %} {% unless availabeVariants.size > 0 %}disabled="disabled"{% endunless %}{% endcomment %}
+                  {% if forloop.first %}checked="checked"{% endif %}>
+                <span class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full ring-2 ring-transparent ring-offset-1 peer-checked:ring-theme-text peer-disabled:cursor-not-allowed peer-disabled:opacity-60 svg:opacity-0 peer-checked:svg:opacity-100 hf:ring-primary-outline peer-disabled:hf:opacity-70"
+                      style="background: var(--color-swatch--{{ value | downcase | handleize }}, {{ value | downcase }})"></span>
+              </label>
+            {% endfor %}
+          </fieldset>
+        </div>
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% comment %} ADD TO CART - PRE OPEN SCREEN {% endcomment %}
+  <div class="self-end mt-auto w-full flex-1 flex flex-col justify-end mt-4 text-center">
+    {% if product.available %}
+      <a class="{{ button__style }} w-full"
+         style="display: var(--product-drawer-off-display, flex)"
+         href="{{ product.url }}">
+        {{ "product_card.view_product" | t }}
+      </a>
+      <button class="no-js-hidden mt-2 w-full {{ button__style }}"
+              data-product-drawer-add-button="{{ product.id }}"
+              style="display: var(--product-drawer-on-display, flex)">
+        <span class="max-md:hidden">
+          {{ "product_card.choose_an" | t }}
+        </span>
+        <span class="md:hidden whitespace-nowrap">
+          {{ "product_card.view_more" | t }}
+        </span>
+      </button>
+    {% endif %}
+
+    {% if sold_out %}
+      <a class="{{ button__style }} w-full"
+         aria-disabled="true">
+        {{ "product_card.sold_out_2" | t }}
+      </a>
+    {% endif %}
+  </div>
+</article>

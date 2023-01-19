@@ -1,0 +1,58 @@
+{% comment %}
+    Renders a list of product's price (regular, sale)
+
+    Accepts:
+    - product_or_variant: {Object} Product Liquid object (optional) / Variant
+    - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+    - class: {String} Adds a price class to the price element (optional)
+
+    Usage:
+    {% render 'price', product_or_variant: product %}
+    {% render 'price', product_or_variant: variant %}
+{% endcomment %}
+
+
+{% assign price = product_or_variant.price | default: 1999 %}
+{% assign compare_at_price = product_or_variant.compare_at_price %}
+{% assign min_price = product_or_variant.price_min | default: product_or_variant.price %}
+{% assign max_price = product_or_variant.price_max | default: product_or_variant.price %}
+{% assign available = product_or_variant.available | default: false %}
+{% assign product_id = product_or_variant.product.id | default: product_or_variant.id %}
+
+
+{% if compare_at_price > price %}
+  {% assign fromRegularClasses = "hidden" %}
+  {% assign regularClasses = "" %}
+  {% assign compareClasses = "" %}
+{% endif %}
+
+{% if compare_at_price <= price or compare_at_price == blank %}
+  {% assign fromCompareClasses = "hidden" %}
+  {% assign regularClasses = "" %}
+  {% assign compareClasses = "hidden" %}
+{% endif %}
+
+{% if min_price == max_price %}
+  {% assign fromRegularClasses = "hidden" %}
+  {% assign fromCompareClasses = "hidden" %}
+{% endif %}
+
+<div class="{{ class }} grid auto-cols-min grid-flow-col-dense gap-2 items-baseline text-sm font-semibold whitespace-nowrap">
+
+  <span data-product-price-from-regular
+        class="text-xs font-normal {{ fromRegularClasses }}">From:</span>
+
+  <span data-product-price-from-compare
+        class="text-xs font-normal {{ fromCompareClasses }}">On Sale from:</span>
+
+  <span data-product-price-regular
+        class="{{ regularClasses }}">
+    {{ price | money }}
+  </span>
+
+  <span data-product-price-compare
+        class="text-theme-text/50 line-through text-xs {{ compareClasses }}">
+    {{ compare_at_price | money }}
+  </span>
+
+</div>

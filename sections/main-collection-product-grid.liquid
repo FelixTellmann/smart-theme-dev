@@ -1,0 +1,128 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign pagination_size = section.settings.pagination_size
+  assign columns__desktop = section.settings.columns__desktop
+  assign columns__mobile = section.settings.columns__mobile
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<section class="text-theme-text bg-theme-bg {{ color_scheme }}">
+  <main class="container pt-8 pb-8">
+    {% paginate collection.products by pagination_size -%}
+
+      {%- if collection.products.size == 0 -%}
+        <div class="prose prose-theme py-16 text-center mx-auto">
+          <h2 class="">
+            {{ "main_collection_product_grid.no_products" | t }}
+            <br>
+            <a href="{{ collection.url }}"
+               class="underline">
+              {{ "main_collection_product_grid.use_fewer" | t }}
+            </a>
+          </h2>
+        </div>
+      {%- endif -%}
+
+      <div class="grid gap-x-6 gap-y-10 {{ columns__mobile }} {{ columns__desktop }}">
+        {% for product in collection.products -%}
+          {% render 'product-card', product: product, is_collection: true %}
+        {%- endfor %}
+      </div>
+      <div class="flex justify-center mt-10">
+        {% render '_pagination', paginate: paginate %}
+      </div>
+    {%- endpaginate %}
+  </main>
+</section>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.product_grid.name",
+  "class": "section",
+  "settings": [
+    {
+      "content": "t:sections.product_grid.settings.header__1.content",
+      "type": "header"
+    },
+    {
+      "id": "pagination_size",
+      "type": "range",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "t:sections.product_grid.settings.pagination_size.label"
+    },
+    {
+      "type": "select",
+      "id": "columns__desktop",
+      "default": "lg:grid-cols-4",
+      "label": "t:sections.product_grid.settings.columns__desktop.label",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "t:sections.product_grid.settings.columns__desktop.options__1.label"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "t:sections.product_grid.settings.columns__desktop.options__2.label"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "t:sections.product_grid.settings.columns__desktop.options__3.label"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "t:sections.product_grid.settings.columns__desktop.options__4.label"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "t:sections.product_grid.settings.columns__desktop.options__5.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "columns__mobile",
+      "default": "grid-cols-2",
+      "label": "t:sections.product_grid.settings.columns__mobile.label",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "t:sections.product_grid.settings.columns__mobile.options__1.label"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "t:sections.product_grid.settings.columns__mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.product_grid.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.product_grid.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.product_grid.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.product_grid.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.product_grid.settings.color_scheme.label"
+    }
+  ]
+}
+{% endschema %}

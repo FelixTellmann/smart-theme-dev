@@ -1,0 +1,42 @@
+{% comment %}
+
+  Accepts:
+  - product_form_id: {String} The form Id it should attach to
+  - class: {String} Adds a price class to the price element (optional)
+
+{% endcomment %}
+
+<label class="no-js-hidden input-primary flex text-[13px] font-semibold select-none">
+  <span class="flex-1">Quantity:</span>
+  <button type="button"
+          data-product-quantity-decrease
+          class="p-1.5 flex justify-center items-center text-gray-600 hf:text-gray-900">
+    <span class="sr-only">Decrease quantity by 1</span>
+    {% render "_icon", icon: 'minus', class: "w-2 h-2 stroke-2" %}
+  </button>
+  <input class="w-8 appearance-none outline-none text-center"
+         type="number"
+         name="quantity"
+         data-product-quantity-input
+         min="1"
+         value="1"
+         form="{{ product_form_id }}">
+  <button type="button"
+          data-product-quantity-increase
+          class="p-1.5 flex justify-center items-center text-gray-600 hf:text-gray-900">
+    <span class="sr-only">Increase quantity by 1</span>
+    {% render "_icon", icon: 'plus', class: "w-2 h-2 stroke-2" %}
+  </button>
+</label>
+
+<noscript>
+  <label class="input-primary flex text-[13px] font-semibold select-none no-js-hidden">
+    <span class="flex-1">Quantity:</span>
+    <input class="w-16 outline-none text-right"
+           type="number"
+           name="quantity"
+           min="1"
+           value="1"
+           form="{{ product_form_id }}">
+  </label>
+</noscript>

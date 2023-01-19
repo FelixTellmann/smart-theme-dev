@@ -1,0 +1,52 @@
+{
+  "type": "header",
+  "name": "Footer Sections",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "fe489251-cd83-4a1c-8f26-40fb52324562": {
+          "type": "menu",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "collection-categories"
+          }
+        },
+        "e634ccd4-dd26-41c4-a1f5-a0be20f83de2": {
+          "type": "menu",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "collection-categories"
+          }
+        },
+        "c4c877c5-b2ac-40d5-9f48-245fc60a6c4a": {
+          "type": "menu",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "collection-categories"
+          }
+        }
+      },
+      "block_order": [
+        "fe489251-cd83-4a1c-8f26-40fb52324562",
+        "e634ccd4-dd26-41c4-a1f5-a0be20f83de2",
+        "c4c877c5-b2ac-40d5-9f48-245fc60a6c4a"
+      ],
+      "settings": {
+        "logo": "branding_logo_light_on_dark",
+        "logo_height": 90,
+        "newsletter_show": true,
+        "newsletter_heading": "Sign Up!",
+        "social_icons_show": true,
+        "country_selector_show": true,
+        "language_selector_show": true,
+        "policy_links_show": true,
+        "payment_types_show": true,
+        "color_scheme": "bg-theme-bg text-theme-text color-group-3"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

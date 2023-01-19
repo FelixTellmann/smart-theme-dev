@@ -1,0 +1,30 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title = block.settings.title
+  assign style = block.settings.style
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign trimmedContent = title | replace: '<p>', '<br />' | replace: '</p>', '' | replace: '<ul>', '<br />' | replace: '</ul>', '' | replace: '<ol>', '' | replace: '</ol>', '<br />' | replace: '<li>', '<br />' | replace: '</li>', '' | replace_first: '<br />', '' | replace_first: '<br>', '' | strip_newlines
+%}
+
+<div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+     class="max-w-lg">
+  {% case style %}
+    {% when 'h1' %}
+      <h1 class="h1">{{ trimmedContent }}</h1>
+    {% when 'h2' %}
+      <h2 class="h2">{{ trimmedContent }}</h2>
+    {% when 'h3' %}
+      <h3 class="h3">{{ trimmedContent }}</h3>
+    {% when 'h4' %}
+      <h4 class="h4">{{ trimmedContent }}</h4>
+    {% when 'preheading' %}
+      <p class="pre-heading">{{ trimmedContent }}</p>
+    {% when 'richtext' %}
+      <div class="prose prose-theme">
+        {{ title }}
+      </div>
+  {% endcase %}
+</div>

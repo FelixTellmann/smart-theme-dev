@@ -1,0 +1,57 @@
+{% if placeholder %}
+  {% assign placeholder_image = "product-1" %}
+  {% assign placeholder_classes = "placeholder opacity-0 pointer-events-none overflow-hidden hidden" %}
+{% endif %}
+
+<article class="flex sm:mx-4 py-6 border-b border-gray-200 space-x-5 items-start {{ placeholder_classes }} "
+         {% if placeholder %}data-cart-promotion-product-placeholder{% endif %}
+         data-cart-promotion-product-key="{{ product.key | default: "placeholder" }}">
+
+  {% unless product.featured_image %}
+    {% assign image_classes = "opacity-0 pointer-events-none overflow-hidden hidden" %}
+  {% endunless %}
+  <a data-cart-promotion-product-url
+     data-cart-promotion-product-image-parent
+     class="w-24 h-24 relative block rounded-theme-sm {{ image_classes }}"
+     href="{{ product.url }}">
+    {% render "_image", image: product.featured_image, class: 'object-cover w-full h-full', width: 100, height: 100, placeholder: placeholder_image %}
+  </a>
+
+
+  <main class="flex flex-col flex-1">
+
+    <a data-cart-promotion-product-url
+       class="hf:underline"
+       href="{{ product.url }}">
+
+      <h3 data-cart-promotion-product-title
+          class="text-sm font-medium text-gray-900">{{ product.title }}</h3>
+    </a>
+
+    {% if product.has_only_default_variant == true %}
+      {% assign variant_classes = "opacity-0 pointer-events-none overflow-hidden hidden" %}
+    {% endif %}
+    <h4 data-cart-promotion-product-variant-title
+        class="text-xs text-gray-500 {{ variant_classes }}">
+      {{ product.variant.title }}
+    </h4>
+
+
+    <div class="text-sm font-medium mt-1">
+      {% if product.compare_at_price == product.price %}
+        {% assign discount_price_classes = "opacity-0 pointer-events-none hidden overflow-hidden" %}
+      {% endif %}
+      <span class="text-gray-500 line-through {{ discount_price_classes }}"
+            data-cart-promotion-product-original-price>
+        {{ product.compare_at_price | money }}
+      </span>
+      <span data-cart-promotion-product-price
+            class="text-gray-900">
+        {{ product.price | money }}
+      </span>
+    </div>
+    <button class="button-primary--outline w-full mt-2 text-sm py-1.5"
+            data-cart-promotion-product-add-to-cart>Add to cart / Variant selectors
+    </button>
+  </main>
+</article>

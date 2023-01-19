@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main-collections-list": {
+      "type": "main-collections-list",
+      "settings": {
+        "pagination_size": 16,
+        "columns__desktop": "lg:grid-cols-4",
+        "columns__mobile": "grid-cols-2",
+        "section_layout": "container-bg-full",
+        "padding_top": "pt-md",
+        "padding_bottom": "pb-md",
+        "color_scheme": "bg-theme-bg text-theme-text color-inherit"
+      }
+    }
+  },
+  "order": [
+    "main-collections-list"
+  ]
+}

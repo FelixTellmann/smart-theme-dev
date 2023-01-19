@@ -1,0 +1,169 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="bg-theme-bg text-theme-text scroll-mt-top-bar-spacing {{ color_scheme }}">
+  <div class="container py-6">{% render '_breadcrumbs' %}</div>
+  <section class="container pb-16 grid lg:grid-cols-[240px_1fr] gap-8">
+    <aside class="lg:sticky lg:top-top-bar-spacing grid gap-6 h-min">
+      <div class="bg-gray-50/30 md:shadow-lg md:shadow-gray-300/20 md:rounded-theme-md border-y md:border-x border-gray-200 -mx-4 md:mx-0 py-4 px-6">
+        <h1 class="h4 font-bold mb-3">Account</h1>
+        <nav class="grid gap-1 text-theme-text/70 text-sm">
+          <a class="hf:underline hf:text-theme-text {% if routes.account_url == request.path %}text-theme-text/90 font-semibold{% endif %}"
+             href="{{ routes.account_url }}">
+            Order History
+          </a>
+          <a class="hf:underline hf:text-theme-text {% if routes.account_addresses_url == request.path %}text-theme-text/90 font-semibold{% endif %}"
+             href="{{ routes.account_addresses_url }}">
+            Addresses
+          </a>
+         <a class="hf:underline hf:text-theme-text"
+             href="{{ routes.account_logout_url }}">
+            Log Out
+          </a>
+        </nav>
+      </div>
+      <div class="hidden lg:block bg-gray-50/30 shadow-lg shadow-gray-300/20 rounded-theme-md border border-gray-200 py-4 px-6">
+        <h2 class="mb-3 flex justify-between items-baseline">
+          <span class="text-lg font-semibold">Default Address</span>
+          <button data-drawer-open="edit-address-{{ customer.default_address.id }}"
+                  class="hf:underline text-sm text-theme-text/60 hf:text-theme-text">
+            Edit
+          </button>
+        </h2>
+        <div class="text-sm text-theme-text/70">
+          {{ customer.default_address | format_address }}
+        </div>
+      </div>
+    </aside>
+
+    {% paginate customer.orders by 20 %}
+      <section>
+        <header class="sm:flex sm:items-center">
+          <div class="sm:flex-auto">
+            <h1 class="text-xl font-semibold text-gray-900">Orders ({{ customer.orders_count }})</h1>
+            <p class="mt-2 text-sm text-gray-700">View all your past orders.</p>
+          </div>
+        </header>
+        <main class="mt-8 grid">
+          <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 max-w-[calc(100%+2rem)] sm:max-w-[calc(100%+3rem)] lg:max-w-[calc(100%+4rem)]">
+            <div class="inline-block min-w-full pt-2 pb-4 align-middle md:px-6 lg:px-8">
+              <div class="overflow-hidden shadow-lg shadow-gray-300/20 ring-1 ring-black ring-opacity-5 md:rounded-theme-md">
+                <table class="min-w-full divide-y divide-gray-300">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th scope="col"
+                          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Order ID
+                      </th>
+                      <th scope="col"
+                          class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Date
+                      </th>
+                      <th scope="col"
+                          class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Payment status
+                      </th>
+                      <th scope="col"
+                          class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Fulfillment status
+                      </th>
+                      <th scope="col"
+                          class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">Total
+                      </th>
+                      <th scope="col"
+                          class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                        <span class="sr-only">Reorder</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 bg-white">
+                    {% for order in customer.orders %}
+                      <tr class="group hf:bg-gray-50 cursor-pointer"
+                          data-order-link="{{ order.customer_url }}">
+                        <td class="py-2 pl-4 pr-3 text-sm sm:pl-6">
+                          <a href="{{ order.customer_url }}"
+                             class="group-hf:underline">
+                            {{ order.name }}
+                          </a>
+                        </td>
+                        <td class="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                          <span class="hidden md:block">{{ order.created_at | time_tag: format: 'date' }}</span>
+                          <span class="md:hidden">{{ order.created_at | time_tag: format: 'abbreviated_date' }}</span>
+                        </td>
+                        <td class="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                          {{ order.financial_status_label }}
+                        </td>
+                        <td class="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                          <a href="{{ order.order_status_url }}"
+                             onclick="(e)=>{e.stopPropagation()}"
+                             class="text-gray-600 hf:underline">
+                            {{ order.fulfillment_status_label }}
+                          </a>
+                        </td>
+                        <td class="whitespace-nowrap px-2 py-2 text-sm text-gray-500 text-right">
+                          {{ order.total_price | money_with_currency }}
+                        </td>
+                        <td class="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-6">
+                          <button type="button"
+                                  class="text-gray-400 hf:text-gray-700 hf:underline relative group isolate"
+                                  data-order-reorder="{{ order.id }}">
+                            <span>Reorder</span>
+                            {%- capture line_items -%}
+                              [{% for line_item in order.line_items %}{"id":{{ line_item.variant_id | json }},"quantity":{{ line_item.quantity | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}]
+                            {%- endcapture -%}
+                            <script type="application/json">{{ line_items }}</script>
+                            {% render '_loading-spinner', class: "inset-0 bg-white group-ac:opacity-100" %}
+                          </button>
+
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </main>
+        <footer class="py-4 flex justify-center">
+          {% render '_pagination', paginate: paginate %}
+        </footer>
+      </section>
+
+    {% endpaginate %}
+  </section>
+</div>
+
+
+{% render 'main-addresses.form', address: customer.default_address, title: "Edit your Default Address" %}
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.account.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.account.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.account.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.account.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.account.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.account.settings.color_scheme.label"
+    }
+  ]
+}
+{% endschema %}

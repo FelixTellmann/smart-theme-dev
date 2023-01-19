@@ -1,0 +1,220 @@
+{
+  "sections": {
+    "product": {
+      "type": "product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "font_scale": 100,
+            "grid_span": "col-span-12"
+          }
+        },
+        "5b4d0e92-c9ef-4391-acc8-a88c445f9c2e": {
+          "type": "pre_order",
+          "settings": {
+            "preorder_date": "estimate"
+          }
+        },
+        "4538e627-1e84-445f-8e26-975a97550201": {
+          "type": "rating",
+          "settings": {
+            "grid_span": "col-span-12"
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "grid_span": "col-span-12"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "grid_span": "col-span-12"
+          }
+        },
+        "32b952ba-c791-40c9-a7d7-34a93c648ca4": {
+          "type": "sku",
+          "settings": {
+            "grid_span": "col-span-4"
+          }
+        },
+        "4f496452-8570-40b1-b4d8-675f94b60b14": {
+          "type": "vendor",
+          "settings": {
+            "grid_span": "col-span-8"
+          }
+        },
+        "662ee4ef-1f38-4ac6-a6af-5cc95110f867": {
+          "type": "product_sibling",
+          "settings": {
+            "selector": "image"
+          }
+        },
+        "6d9e4d3c-db73-44e5-9494-8aed9804461b": {
+          "type": "variant_selector",
+          "settings": {
+            "disable_unavailable": true,
+            "image_selector": true,
+            "color_selector": true,
+            "color_list": "color,colour,couleur,cor,colore,farbe,색,色,カラー,färg,farve,szín,barva",
+            "default_type": "radio"
+          }
+        },
+        "b8e805e1-3260-49cc-931a-b89b2d1e576b": {
+          "type": "inventory",
+          "settings": {
+            "threshold": 19
+          }
+        },
+        "601e50bf-1ed0-424c-945e-f7489a137200": {
+          "type": "complementary",
+          "settings": {
+            "title": "Complementary products",
+            "image__show_secondary": false,
+            "products": [
+              "black-night",
+              "empty-pond",
+              "product-8",
+              "iphone-13-case-single-color-variant",
+              "kettle-sandbox-store-home-goods"
+            ]
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "grid_span": "col-span-12"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "grid_span": "col-span-8"
+          }
+        },
+        "16eae1aa-2b18-4ddb-b435-b481ac775019": {
+          "type": "dynamic_buy_buttons",
+          "settings": {
+            "grid_span": "col-span-4"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "accordion_style": true
+          }
+        },
+        "collapsible-row-0": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Materials",
+            "icon": "leather",
+            "content": "",
+            "page": "test-page"
+          }
+        },
+        "collapsible-row-1": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible-row-2": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Dimensions",
+            "icon": "ruler",
+            "content": "<p>    class=\"share-button quick-add-hidden\"&gt;  &lt;button class=\"share-button__button hidden\"&gt;    &lcub;% render 'icon-share'    &lt;summary class=\"share-button__button\"&gt;      &lcub;% render 'icon-share' %&rcub;      &lcub;&lcub; block.settings.share_label | esc<\/p>",
+            "page": ""
+          }
+        },
+        "collapsible-row-3": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Care Instructions",
+            "icon": "heart",
+            "content": "<p>Lorem ipsum long<\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "5b4d0e92-c9ef-4391-acc8-a88c445f9c2e",
+        "4538e627-1e84-445f-8e26-975a97550201",
+        "share",
+        "price",
+        "32b952ba-c791-40c9-a7d7-34a93c648ca4",
+        "4f496452-8570-40b1-b4d8-675f94b60b14",
+        "662ee4ef-1f38-4ac6-a6af-5cc95110f867",
+        "6d9e4d3c-db73-44e5-9494-8aed9804461b",
+        "b8e805e1-3260-49cc-931a-b89b2d1e576b",
+        "601e50bf-1ed0-424c-945e-f7489a137200",
+        "quantity_selector",
+        "buy_buttons",
+        "16eae1aa-2b18-4ddb-b435-b481ac775019",
+        "description",
+        "collapsible-row-0",
+        "collapsible-row-1",
+        "collapsible-row-2",
+        "collapsible-row-3"
+      ],
+      "settings": {
+        "sticky": true,
+        "breadcrumbs__show": true,
+        "gallery__layout": "grid",
+        "gallery__show_thumbnails": true,
+        "gallery__size": "large",
+        "gallery__loop_videos": false
+      }
+    },
+    "product-siblings": {
+      "type": "product-siblings",
+      "blocks": {
+        "4c9ebd16-935a-4ce7-b1e3-54f45a9daf08": {
+          "type": "siblings",
+          "settings": {
+            "title": "Iphone Cases",
+            "products": [
+              "product-8",
+              "iphone-13-case-single-color-variant",
+              "product-1",
+              "jersey-shorts-sandbox-store-apparel",
+              "kettle-sandbox-store-home-goods"
+            ],
+            "options": "purple, pink  ,yellow , Xtra Large, glitter"
+          }
+        }
+      },
+      "block_order": [
+        "4c9ebd16-935a-4ce7-b1e3-54f45a9daf08"
+      ],
+      "settings": {
+      }
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "settings": {
+        "image__aspect_ratio": "pb-[100%]",
+        "image__order": "-order-1",
+        "title": "",
+        "content": "",
+        "button_primary__text": "",
+        "button_primary__url": "",
+        "button_secondary__text": "",
+        "button_secondary__url": "",
+        "color_scheme": "background-2"
+      }
+    }
+  },
+  "order": [
+    "product",
+    "product-siblings",
+    "image-with-text"
+  ]
+}

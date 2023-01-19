@@ -1,0 +1,131 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+  assign image__overlay = block.settings.image__overlay
+  assign url = block.settings.url
+  assign title = block.settings.title
+  assign button_primary__text = block.settings.button_primary__text
+  assign button_primary__url = block.settings.button_primary__url
+  assign button_primary__style = block.settings.button_primary__style
+  assign button_secondary__text = block.settings.button_secondary__text
+  assign button_secondary__url = block.settings.button_secondary__url
+  assign button_secondary__style = block.settings.button_secondary__style
+  assign responsive_visibility = block.settings.responsive_visibility
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign object = url.object
+  assign image = image | default: object.image | default: object.featured_image
+  assign title = title | default: object.title
+
+  case url.type
+    when "product_link"
+      assign button_secondary__text = button_secondary__text | default: 'Learn More'
+      assign button_secondary__url = button_secondary__url | default: object.url
+    when "collection_link"
+      assign button_primary__text = button_primary__text | default: 'View Collection'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "article_link"
+      assign button_primary__text = button_primary__text | default: 'View Article'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "blog_link"
+      assign button_primary__text = button_primary__text | default: 'View Blog'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "page_link"
+      assign button_primary__text = button_primary__text | default: 'View Page'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "policy_link"
+      assign button_primary__text = button_primary__text | default: 'View Policy'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "http_link"
+      assign button_primary__text = button_primary__text | default: 'View More'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "frontpage_link"
+      assign button_primary__text = button_primary__text | default: 'Home'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "collections_link"
+      assign button_primary__text = button_primary__text | default: 'View Collections'
+      assign button_primary__url = button_primary__url | default: object.url
+    when "catalog_link"
+      assign button_primary__text = button_primary__text | default: 'View All Products'
+      assign button_primary__url = button_primary__url | default: object.url
+  endcase
+
+  if button_primary__text and button_primary__url
+    assign button_primary__show = true
+  endif
+
+  if button_secondary__text and button_secondary__url
+    assign button_secondary__show = true
+  endif
+%}
+
+
+<figure id="block--{{ block.id }}" {{ block.shopify_attributes }}
+        class="relative grid w-full rounded-theme-md overflow-hidden {{ responsive_visibility }}">
+  <picture class="pb-[100%]">
+    {% render '_image', image: image, class: 'absolute inset-0 w-full h-full object-cover z-0', placeholder: 'collection-1' %}
+  </picture>
+  <figcaption class="absolute inset-0 z-10 w-full h-full sm:p-10 p-4 lg:p-6 flex flex-col justify-between"
+              style="background-image: {{ image__overlay }};">
+    {% render 'typography', type: section.settings.title_type, content: title, class: "text-theme-overlay-text" %}
+
+    {% if url.type == 'product_link' and object %}
+      <div class="max-w-lg flex gap-2"
+           data-drawer-product="{{ object.id }}"
+           data-drawer-product-url="{{ object.url | split: '?' | first }}">
+        {% if button_secondary__show %}
+          <a href="{{ button_secondary__url }}"
+             class="{{ button_secondary__style }}">
+            {{ button_secondary__text }}
+          </a>
+        {% endif %}
+        {% if button_primary__show %}
+          <a href="{{ button_primary__url }}"
+             class="{{ button_primary__style }}">
+            {{ button_primary__text }}
+          </a>
+        {% else %}
+          <a class="{{ button_primary__style }}"
+             style="display: var(--product-drawer-off-display)"
+             {% if object.available != true %}aria-disabled="true"
+             {% else %}href="{{ object.url }}"{% endif %}>
+            <span class="whitespace-nowrap {% if sold_out %}hidden{% endif %}">
+              {{ "object_over_image.view_product" | t }}
+            </span>
+            <span class="{% if object.available %}hidden{% endif %}">
+              {{ "object_over_image.sold_out" | t }}
+            </span>
+          </a>
+          <button data-product-drawer-add-button="{{ object.id }}"
+                  style="display: var(--product-drawer-on-display)"
+                  class="no-js-hidden {{ button_primary__style }}"
+                  {% if object.available != true %}disabled="disabled"{% endif %}>
+            <span class="whitespace-nowrap {% if object.available != true %}hidden{% endif %}">
+              {{ "object_over_image.shop_now" | t }}
+            </span>
+            <span class="{% if object.available %}hidden{% endif %}">
+              Sold Out
+            </span>
+          </button>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="max-w-lg flex gap-2">
+        {% if button_secondary__show %}
+          <a href="{{ button_secondary__url }}"
+             class="{{ button_secondary__style }} m-2">
+            {{ button_secondary__text }}
+          </a>
+        {% endif %}
+        {% if button_primary__show %}
+          <a href="{{ button_primary__url }}"
+             class="{{ button_primary__style }} m-2">
+            {{ button_primary__text }}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </figcaption>
+</figure>

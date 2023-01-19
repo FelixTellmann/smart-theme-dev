@@ -1,0 +1,48 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign grid_span = block.settings.grid_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="share"
+     class="{{ grid_span }}" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  {%- assign share_url = shop.url | append: product.url | url_param_escape -%}
+  {%- assign twitter_text = product.title | url_param_escape -%}
+  {%- assign pinterest_description = product.description | strip_html | truncatewords: 15 | url_param_escape -%}
+  {%- assign pinterest_image = product.featured_media | img_url: '1024x' | prepend: 'https:' -%}
+  <div class="grid grid-flow-col-dense auto-cols-min gap-2"
+       role="list">
+    <a data-share="facebook"
+       class="text-theme-text/70 hf:text-theme-text"
+       title="Share on Facebook"
+       href="https://www.facebook.com/sharer.php?u={{ share_url }}"
+       target="_blank"
+       rel="noopener">
+      {%- render '_icon', icon: 'facebook', class: "w-4 h-4" -%}
+    </a>
+    <a data-share="pinterest"
+       class="text-theme-text/70 hf:text-theme-text"
+       title="Share on Pinterest"
+       href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}"
+       target="_blank"
+       rel="noopener">
+      {%- render '_icon', icon: 'pinterest', class: "w-4 h-4" -%}
+    </a>
+    <a data-share="twitter"
+       class="text-theme-text/70 hf:text-theme-text"
+       title="Share on Twitter"
+       href="https://twitter.com/share?{% if twitter_text != blank %}text={{ twitter_text }}&{% endif %}url={{ share_url }}"
+       target="_blank"
+       rel="noopener">
+      {%- render '_icon', icon: 'twitter', class: "w-4 h-4" -%}
+    </a>
+    <a data-share="email"
+       class="text-theme-text/70 hf:text-theme-text"
+       title="Share via Email"
+       href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}">
+      {% render '_icon', icon: 'email', class: "w-4 h-4" %}
+    </a>
+  </div>
+
+</div>

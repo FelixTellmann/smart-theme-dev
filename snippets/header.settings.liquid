@@ -1,0 +1,121 @@
+{% case section.settings.center_logo %}
+  {% when true %}
+    {% assign positionClasses = "basis-0 flex-grow flex-1 " %}
+  {% when false %}
+    {% assign positionClasses = "lg:basis-0 lg:flex-grow lg:flex-1 t" %}
+{% endcase %}
+
+<div class="absolute inset-0 w-full h-full bg-theme-bg z-50 ac:opacity-100 ac:pointer-events-auto opacity-0 pointer-events-none transition-all duration-75"
+     data-header-search-bar>
+  <div class="container h-full flex items-center justify-end">
+    {% render "header.hamburger-menu" %}
+    {% comment %}{% render "header.logo", class: "!hidden md:!flex" %}{% endcomment %}
+    <form action="{{ routes.search_url }}"
+          data-header-search-form
+          method="get"
+          class="flex w-full md:w-auto"
+          role="search">
+      <label class="w-full md:w-[1000px] md:max-w-sm grid relative ">
+        <input type="text"
+               name="q"
+               value="{{ search.terms | escape }}"
+               data-header-search-input
+               placeholder="Search"
+               class="appearance-none input-primary hf:outline-none outline-none pr-8 text-sm placeholder:text-theme-text/50">
+        <span class="sr-only">
+          {{ "header.search" | t }}
+        </span>
+        <button type="submit"
+                class="flex appearance-none absolute right-3 top-1/2 -translate-y-1/2">{% render "_icon", icon: 'search', class: "w-4 h-4 stroke-1" %}</button>
+      </label>
+      <button type="button"
+              class="ml-2 relative text-theme-text/75 hover:text-theme-text md:hidden">
+        <span class="sr-only">
+          {{ "header.close" | t }}
+        </span>
+        {% render "_icon", icon: 'x-mark', class: "w-3 h-3 stroke-1" %}
+      </button>
+    </form>
+    <div class="hidden md:flex justify-end space-x-4 pl-4 {{ positionClasses }}">
+      <button type="button"
+              data-header-search-button
+              class="relative text-primary-outline/75 hover:text-primary-outline">
+        <span class="sr-only">
+          Search
+        </span>
+        {% render "_icon", icon: 'search', class: "w-6 h-6 stroke-[1.5px]" %}
+      </button>
+      {% if customer %}
+        <a href="{{ routes.account_url }}"
+           class="hidden md:inline-flex relative text-primary-outline/75 hover:text-primary-outline">
+          <span class="sr-only">
+            Account
+          </span>
+          {% render "_icon", icon: 'user', class: 'w-6 h-6 stroke-[1.5px]' %}
+        </a>
+      {% endif %}
+      {% if customer == null %}
+        <a href="{{ routes.account_login_url }}"
+           class="hidden md:inline-flex relative text-primary-outline/75 hover:text-primary-outline">
+          <span class="sr-only">
+            Login
+          </span>
+          {% render "_icon", icon: 'user', class: 'w-6 h-6 stroke-[1.5px]' %}
+        </a>
+      {% endif %}
+      <button type="button"
+              data-drawer-open="cart"
+              class="hidden md:inline-flex relative text-primary-outline/75 hover:text-primary-outline">
+        <span class="sr-only">
+          Search
+        </span>
+        {% render "_icon", icon: 'cart', class: "w-6 h-6 stroke-[1.5px]" %}
+        <span class="absolute flex items-center justify-center bg-theme-text text-theme-bg rounded-full -right-1.5 -top-1 h-4 w-4 text-[10px] font-medium tracking-tight leading-none">
+          <span data-cart-item-count>{{ cart.item_count }}</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="flex justify-end space-x-4 pl-4 {{ positionClasses }}">
+  <button type="button"
+          data-header-search-button
+          class="relative text-primary-outline/75 hover:text-primary-outline">
+    <span class="sr-only">
+      Search
+    </span>
+    {% render "_icon", icon: 'search', class: "w-6 h-6 stroke-[1.5px]" %}
+  </button>
+
+  {% if customer %}
+    <a href="{{ routes.account_url }}"
+       class="hidden md:inline-flex relative text-primary-outline/75 hover:text-primary-outline">
+      <span class="sr-only">
+        Account
+      </span>
+      {% render "_icon", icon: 'user', class: 'w-6 h-6 stroke-[1.5px]' %}
+    </a>
+  {% endif %}
+  {% if customer == null %}
+    <a href="{{ routes.account_login_url }}"
+       class="hidden md:inline-flex relative text-primary-outline/75 hover:text-primary-outline">
+      <span class="sr-only">
+        Login
+      </span>
+      {% render "_icon", icon: 'user', class: 'w-6 h-6 stroke-[1.5px]' %}
+    </a>
+  {% endif %}
+  <button type="button"
+          data-drawer-open="cart"
+          class="relative text-primary-outline/75 hover:text-primary-outline">
+    <span class="sr-only">
+      Search
+    </span>
+    {% render "_icon", icon: 'cart', class: "w-6 h-6 stroke-[1.5px]" %}
+    <span class="absolute flex items-center justify-center bg-theme-text text-theme-bg rounded-full -right-1.5 -top-1 h-4 w-4 text-[10px] font-medium tracking-tight leading-none">
+      <span data-cart-item-count>{{ cart.item_count }}</span>
+    </span>
+  </button>
+</div>
+

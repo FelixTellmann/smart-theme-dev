@@ -1,0 +1,18 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title_type = block.settings.title_type
+  assign margin_bottom = block.settings.margin_bottom
+  assign responsive_visibility = block.settings.responsive_visibility
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+     class="prose prose-theme {{ max_width | default: "max-w-full" }} {{ responsive_visibility }}"
+     style="margin-bottom: {{ margin_bottom }}px; max-width: {{ max_width }}px;">
+  {% capture count %}
+    {{ "main_collection_banner.products" | t }}
+    ({{ collection.products_count }})
+  {% endcapture %}
+  {% render 'typography', type: title_type, content: count %}
+</div>
+

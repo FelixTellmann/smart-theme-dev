@@ -1,0 +1,222 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign show = section.settings.show
+  assign vendor__show = section.settings.vendor__show
+  assign rating__show = section.settings.rating__show
+  assign labels__show = section.settings.labels__show
+  assign labels__discount = section.settings.labels__discount
+  assign image__ratio = section.settings.image__ratio
+  assign image__show_secondary = section.settings.image__show_secondary
+  assign image__background = section.settings.image__background
+  assign image__drop_shadow = section.settings.image__drop_shadow
+  assign search_count = section.settings.search_count
+  assign columns__desktop = section.settings.columns__desktop
+  assign columns__mobile = section.settings.columns__mobile
+  assign article_show_date = section.settings.article_show_date
+  assign article_show_author = section.settings.article_show_author
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="absolute top-full w-full left-0 py-20 z-50 border-y border-theme-text/10 shadow-xl text-theme-text bg-theme-bg max-h-[calc(100vh-var(--top-bar-spacing))] scrollbar-none overflow-y-auto hidden {{ section.settings.color_scheme }}"
+     data-search-display>
+  <script data-search-display-settings
+          type="application/json">{{ section.settings | json }}</script>
+  <div class="container">
+    <div class="py-8 hidden"
+         data-search-display-loading>
+      <h2 class="h3 font-bold">
+        {{ "search.loading" | t }}
+      </h2>
+    </div>
+    <div class="py-8 hidden"
+         data-search-display-empty>
+      <h2 class="h3 font-bold">
+        {{ "search.no_results" | t }}
+      </h2>
+    </div>
+
+    <div class="grid gap-x-6 gap-y-10 lg:[&_article:nth-of-type(n+6)]:hidden grid-cols-2 lg:grid-cols-5"
+         data-search-display-grid>
+      {% render '_product-card', settings: section.settings, html_attributes: "data-search-display-product" %}
+      {% render '_content-card', settings: section.settings, html_attributes: "data-search-display-content" %}
+    </div>
+  </div>
+</div>
+
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.search.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show",
+      "label": "t:sections.search.settings.show.label",
+      "default": true
+    },
+    {
+      "content": "t:sections.search.settings.header__1.content",
+      "type": "header"
+    },
+    {
+      "id": "vendor__show",
+      "type": "checkbox",
+      "default": false,
+      "label": "t:sections.search.settings.vendor__show.label"
+    },
+    {
+      "id": "rating__show",
+      "type": "checkbox",
+      "default": false,
+      "label": "t:sections.search.settings.rating__show.label",
+      "info": "t:sections.search.settings.rating__show.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels__show",
+      "label": "t:sections.search.settings.labels__show.label",
+      "default": true
+    },
+    {
+      "content": "t:sections.search.settings.paragraph__1.content",
+      "type": "paragraph"
+    },
+    {
+      "type": "radio",
+      "id": "labels__discount",
+      "label": "t:sections.search.settings.labels__discount.label",
+      "info": "t:sections.search.settings.labels__discount.info",
+      "default": "sale",
+      "options": [
+        {
+          "value": "sale",
+          "label": "t:sections.search.settings.labels__discount.options__1.label"
+        },
+        {
+          "value": "percentage",
+          "label": "t:sections.search.settings.labels__discount.options__2.label"
+        },
+        {
+          "value": "value",
+          "label": "t:sections.search.settings.labels__discount.options__3.label"
+        }
+      ]
+    },
+    {
+      "content": "t:sections.search.settings.header__2.content",
+      "type": "header"
+    },
+    {
+      "id": "image__ratio",
+      "type": "select",
+      "default": "pb-[125%]",
+      "options": [
+        {
+          "value": "pb-[125%]",
+          "label": "t:sections.search.settings.image__ratio.options__1.label"
+        },
+        {
+          "value": "pb-[100%]",
+          "label": "t:sections.search.settings.image__ratio.options__2.label"
+        }
+      ],
+      "label": "t:sections.search.settings.image__ratio.label"
+    },
+    {
+      "id": "image__show_secondary",
+      "type": "checkbox",
+      "default": false,
+      "label": "t:sections.search.settings.image__show_secondary.label"
+    },
+    {
+      "type": "color_background",
+      "id": "image__background",
+      "label": "t:sections.search.settings.image__background.label",
+      "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+    },
+    {
+      "type": "checkbox",
+      "id": "image__drop_shadow",
+      "label": "t:sections.search.settings.image__drop_shadow.label",
+      "info": "t:sections.search.settings.image__drop_shadow.info",
+      "default": false
+    },
+    {
+      "content": "t:sections.search.settings.header__3.content",
+      "type": "header"
+    },
+    {
+      "id": "search_count",
+      "type": "range",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "default": 5,
+      "label": "t:sections.search.settings.search_count.label",
+      "info": "t:sections.search.settings.search_count.info"
+    },
+    {
+      "type": "select",
+      "id": "columns__desktop",
+      "default": "lg:grid-cols-4",
+      "label": "t:sections.search.settings.columns__desktop.label",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "t:sections.search.settings.columns__desktop.options__1.label"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "t:sections.search.settings.columns__desktop.options__2.label"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "t:sections.search.settings.columns__desktop.options__3.label"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "t:sections.search.settings.columns__desktop.options__4.label"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "t:sections.search.settings.columns__desktop.options__5.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "columns__mobile",
+      "default": "grid-cols-2",
+      "label": "t:sections.search.settings.columns__mobile.label",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "t:sections.search.settings.columns__mobile.options__1.label"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "t:sections.search.settings.columns__mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.search.settings.header__4.content",
+      "info": "Blog card styles also apply to page cards in search results. To change card styles update your theme settings."
+    },
+    {
+      "type": "checkbox",
+      "id": "article_show_date",
+      "default": true,
+      "label": "t:sections.search.settings.article_show_date.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "article_show_author",
+      "default": false,
+      "label": "t:sections.search.settings.article_show_author.label"
+    }
+  ]
+}
+{% endschema %}

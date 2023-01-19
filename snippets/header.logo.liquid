@@ -1,0 +1,23 @@
+{%- liquid
+  assign logo_height = section.settings.height | times: section.settings.logo_height | divided_by: 100
+  assign logo = settings[section.settings.logo]
+  assign center_logo = section.settings.center_logo
+  assign force_hamburger_menu = section.settings.force_hamburger_menu
+
+  if force_hamburger_menu and center_logo
+    assign positionClasses = "lg:flex-grow lg:basis-0 justify-center"
+  elsif center_logo
+    assign positionClasses = "flex-grow basis-0 max-lg:justify-center"
+  else
+    assign positionClasses = "flex-grow basis-0"
+  endif
+-%}
+
+<a href="{{ routes.root_url }}"
+   class="flex bg-theme-bg z-10 min-w-min lg:min-w-max max-h-full pr-4 md:pr-0 {{ positionClasses }} {{ class }}">
+  {% if logo %}
+    {% render "_image", image: logo, height: logo_height, default_alt: shop.name, class: "" %}
+  {% else %}
+    <h2 class="text-3xl font-bold whitespace-nowrap">{{ shop.name }}</h2>
+  {% endif %}
+</a>

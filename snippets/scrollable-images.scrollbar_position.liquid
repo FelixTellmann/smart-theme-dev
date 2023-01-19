@@ -1,0 +1,41 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign margin_bottom = block.settings.margin_bottom
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{%- liquid
+  assign overlay = section.settings.overlay
+  assign products = section.settings.products
+  assign _collections = section.settings.collections
+  assign title_type = section.settings.title_type
+  assign min_width_desktop = section.settings.min_width_desktop
+  assign min_width_mobile = section.settings.min_width_mobile
+-%}
+
+<main class="relative pb-6"
+      data-scroll-slider
+      style="margin-bottom: {{ margin_bottom }}px">
+  <div class="grid gap-4 sm:gap-6 grid-flow-col-dense overflow-x-auto scrollbar-none relative snap-mandatory snap-x scroll-smooth md:auto-cols-[minmax(var(--grid-width-desktop),1fr)] auto-cols-[minmax(var(--grid-width-mobile),1fr)] scroll-pl-0"
+       style="--grid-width-mobile: {{ min_width_mobile }}px; --grid-width-desktop: {{ min_width_desktop }}px;"
+       data-scroll-container>
+    {% for item in products %}
+      {% render 'scrollable-images.item', url: item.url, image: item.featured_image, overlay: overlay, title: item.title, title_type: title_type %}
+    {% endfor %}
+    {% for item in _collections %}
+      {% render 'scrollable-images.item', url: item.url, image: item.featured_image, overlay: overlay, title: item.title, title_type: title_type %}
+    {% endfor %}
+    {% for block in section.blocks %}
+      {% if block.type == 'scrollable_image' %}
+        {% render 'scrollable-images.item', url: block.settings.url, image: block.settings.image, overlay: block.settings.image__overlay, title: block.settings.title, title_type: title_type %}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="max-w-[calc(var(--layout-page-width)-4rem)] mx-auto relative mt-4">
+    <div data-scroll-controls
+         class="relative grid hidden select-none">
+      {% render 'scroll-bar-elements', element: 'scrollbar' %}
+    </div>
+  </div>
+</main>

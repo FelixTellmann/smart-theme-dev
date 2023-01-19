@@ -1,0 +1,594 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title_type = section.settings.title_type
+  assign spacing = section.settings.spacing
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign count = section.blocks | map: "type" | where: "object"
+  case count.size
+    when 1
+      assign gridClasses = 'md:grid-cols-2'
+    when 2
+      assign gridClasses = 'md:grid-cols-2'
+    when 3
+      assign gridClasses = 'md:grid-cols-3'
+  endcase
+
+  if blockTypes contains "object_position"
+    assign hideDefaultObjects = true
+  endif
+
+%}
+
+<div class="container-bg-full {{ color_scheme }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'text' %}
+        {% render 'richtext.text', block: block %}
+      {% when 'image' %}
+        {% render 'richtext.image', block: block %}
+      {% when 'buttons' %}
+        {% render 'richtext.buttons', block: block %}
+      {% when 'accent_line' %}
+        {% render 'richtext.accent_line', block: block %}
+      {% when 'object_position' %}
+        <div class="grid {{ gridClasses }}">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'object' %}
+                {% render 'object-over-image.object', block: block %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+    {% endcase %}
+  {% endfor %}
+  {% unless hideDefaultObjects %}
+    <div class="grid {{ gridClasses }}"
+         style="gap: {{ spacing }}px">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'object' %}
+            {% render 'object-over-image.object', block: block %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+  {% endunless %}
+</div>
+
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.object_over_image.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "title_type",
+      "label": "t:sections.object_over_image.settings.title_type.label",
+      "default": 2,
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "info": "t:sections.object_over_image.settings.title_type.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.object_over_image.settings.header__1.content"
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "label": "t:sections.object_over_image.settings.spacing.label",
+      "default": 16,
+      "min": 0,
+      "max": 96,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.object_over_image.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.object_over_image.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.object_over_image.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.object_over_image.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.object_over_image.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.object_over_image.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.object_over_image.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.object_over_image.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.object_over_image.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.object_over_image.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.object_over_image.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.object_over_image.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.object_over_image.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.object_over_image.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.object_over_image.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.object_over_image.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.object_over_image.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.object_over_image.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.object_over_image.settings.color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.object_over_image.blocks.object_position.name",
+      "type": "object_position",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.object_position.settings.header__1.content"
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "label": "t:sections.object_over_image.blocks.object_position.settings.margin_bottom.label",
+          "default": 0,
+          "min": -6,
+          "max": 64,
+          "step": 2,
+          "unit": "px"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.object_over_image.blocks.object_item.name",
+      "type": "object",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.object_item.settings.header__1.content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.image.label"
+        },
+        {
+          "type": "color_background",
+          "id": "image__overlay",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.image__overlay.label",
+          "default": "linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05) 100%)"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.object_item.settings.header__2.content"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.url.label",
+          "info": "t:sections.object_over_image.blocks.object_item.settings.url.info"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.object_item.settings.header__3.content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.title.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.object_item.settings.header__4.content"
+        },
+        {
+          "type": "text",
+          "id": "button_primary__text",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.button_primary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_primary__url",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.button_primary__url.label"
+        },
+        {
+          "type": "radio",
+          "id": "button_primary__style",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.button_primary__style.label",
+          "default": "button-primary",
+          "options": [
+            {
+              "value": "button-primary",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_primary__style.options__1.label"
+            },
+            {
+              "value": "button-primary--outline",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_primary__style.options__2.label"
+            },
+            {
+              "value": "button-secondary",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_primary__style.options__3.label"
+            },
+            {
+              "value": "button-secondary--outline",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_primary__style.options__4.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.object_item.settings.header__5.content"
+        },
+        {
+          "type": "text",
+          "id": "button_secondary__text",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.button_secondary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_secondary__url",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.button_secondary__url.label"
+        },
+        {
+          "type": "radio",
+          "id": "button_secondary__style",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.button_secondary__style.label",
+          "default": "button-primary--outline",
+          "options": [
+            {
+              "value": "button-primary",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_secondary__style.options__1.label"
+            },
+            {
+              "value": "button-primary--outline",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_secondary__style.options__2.label"
+            },
+            {
+              "value": "button-secondary",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_secondary__style.options__3.label"
+            },
+            {
+              "value": "button-secondary--outline",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.button_secondary__style.options__4.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.object_item.settings.header__6.content"
+        },
+        {
+          "type": "radio",
+          "id": "responsive_visibility",
+          "label": "t:sections.object_over_image.blocks.object_item.settings.responsive_visibility.label",
+          "default": "responsive",
+          "options": [
+            {
+              "value": "responsive",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.responsive_visibility.options__1.label"
+            },
+            {
+              "value": "md:hidden",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.responsive_visibility.options__2.label"
+            },
+            {
+              "value": "max-md:hidden",
+              "label": "t:sections.object_over_image.blocks.object_item.settings.responsive_visibility.options__3.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.object_over_image.blocks.text.name",
+      "type": "text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "title",
+          "label": "t:sections.object_over_image.blocks.text.settings.title.label"
+        },
+        {
+          "type": "range",
+          "id": "title_type",
+          "label": "t:sections.object_over_image.blocks.text.settings.title_type.label",
+          "default": 2,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.object_over_image.blocks.text.settings.title_type.info"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.text.settings.header__1.content"
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "label": "t:sections.object_over_image.blocks.text.settings.margin_bottom.label",
+          "default": 0,
+          "min": -6,
+          "max": 42,
+          "step": 2,
+          "unit": "px"
+        },
+        {
+          "type": "radio",
+          "id": "responsive_visibility",
+          "label": "t:sections.object_over_image.blocks.text.settings.responsive_visibility.label",
+          "default": "responsive",
+          "options": [
+            {
+              "value": "responsive",
+              "label": "t:sections.object_over_image.blocks.text.settings.responsive_visibility.options__1.label"
+            },
+            {
+              "value": "md:hidden",
+              "label": "t:sections.object_over_image.blocks.text.settings.responsive_visibility.options__2.label"
+            },
+            {
+              "value": "max-md:hidden",
+              "label": "t:sections.object_over_image.blocks.text.settings.responsive_visibility.options__3.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.object_over_image.blocks.accent_line.name",
+      "type": "accent_line",
+      "settings": [
+        {
+          "type": "color",
+          "id": "color",
+          "label": "t:sections.object_over_image.blocks.accent_line.settings.color.label"
+        },
+        {
+          "type": "range",
+          "id": "height",
+          "label": "t:sections.object_over_image.blocks.accent_line.settings.height.label",
+          "default": 2,
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "t:sections.object_over_image.blocks.accent_line.settings.width.label",
+          "default": 30,
+          "min": 5,
+          "max": 280,
+          "step": 5,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.accent_line.settings.header__1.content"
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "label": "t:sections.object_over_image.blocks.accent_line.settings.margin_bottom.label",
+          "default": 0,
+          "min": -6,
+          "max": 42,
+          "step": 2,
+          "unit": "px"
+        },
+        {
+          "type": "radio",
+          "id": "responsive_visibility",
+          "label": "t:sections.object_over_image.blocks.accent_line.settings.responsive_visibility.label",
+          "default": "responsive",
+          "options": [
+            {
+              "value": "responsive",
+              "label": "t:sections.object_over_image.blocks.accent_line.settings.responsive_visibility.options__1.label"
+            },
+            {
+              "value": "md:hidden",
+              "label": "t:sections.object_over_image.blocks.accent_line.settings.responsive_visibility.options__2.label"
+            },
+            {
+              "value": "max-md:hidden",
+              "label": "t:sections.object_over_image.blocks.accent_line.settings.responsive_visibility.options__3.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.object_over_image.blocks.buttons.name",
+      "type": "buttons",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.buttons.settings.header__1.content"
+        },
+        {
+          "type": "text",
+          "id": "button_primary__text",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.button_primary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_primary__url",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.button_primary__url.label"
+        },
+        {
+          "type": "radio",
+          "id": "button_primary__style",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.button_primary__style.label",
+          "default": "button-primary",
+          "options": [
+            {
+              "value": "button-primary",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_primary__style.options__1.label"
+            },
+            {
+              "value": "button-primary--outline",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_primary__style.options__2.label"
+            },
+            {
+              "value": "button-secondary",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_primary__style.options__3.label"
+            },
+            {
+              "value": "button-secondary--outline",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_primary__style.options__4.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.buttons.settings.header__2.content"
+        },
+        {
+          "type": "text",
+          "id": "button_secondary__text",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.button_secondary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_secondary__url",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.button_secondary__url.label"
+        },
+        {
+          "type": "radio",
+          "id": "button_secondary__style",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.button_secondary__style.label",
+          "default": "button-primary--outline",
+          "options": [
+            {
+              "value": "button-primary",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_secondary__style.options__1.label"
+            },
+            {
+              "value": "button-primary--outline",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_secondary__style.options__2.label"
+            },
+            {
+              "value": "button-secondary",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_secondary__style.options__3.label"
+            },
+            {
+              "value": "button-secondary--outline",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.button_secondary__style.options__4.label"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.object_over_image.blocks.buttons.settings.header__3.content"
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.margin_bottom.label",
+          "default": 0,
+          "min": -6,
+          "max": 42,
+          "step": 2,
+          "unit": "px"
+        },
+        {
+          "type": "radio",
+          "id": "responsive_visibility",
+          "label": "t:sections.object_over_image.blocks.buttons.settings.responsive_visibility.label",
+          "default": "responsive",
+          "options": [
+            {
+              "value": "responsive",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.responsive_visibility.options__1.label"
+            },
+            {
+              "value": "md:hidden",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.responsive_visibility.options__2.label"
+            },
+            {
+              "value": "max-md:hidden",
+              "label": "t:sections.object_over_image.blocks.buttons.settings.responsive_visibility.options__3.label"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.object_over_image.presets.object_over_image.name"
+    }
+  ]
+}
+{% endschema %}

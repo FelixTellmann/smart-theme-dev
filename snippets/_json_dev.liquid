@@ -1,0 +1,638 @@
+{%- comment -%}
+    Renders a JSON blobs
+
+    Accepts:
+    - input: {object}
+    - type: {string}
+    - select: {string}
+    - page_size: {number}
+
+    Usage:
+    {%- render '_json_dev', input: product, type: 'product', select: 'options, variants, variants.price' -%}
+    {%- render '_json_dev', input: product.variant, type: 'variant', select: 'option1, option2' -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign page_size = page_size | default: 24
+
+  if type == null
+    if input.url contains "/collections/"
+      assign type = 'collection'
+    elsif input.url contains "?variant="
+      assign type = 'variant'
+    elsif input.url contains "/products/"
+      assign type = 'product'
+    elsif input.url contains "/blogs/" and input.articles_count != blank
+      assign type = 'blog'
+    elsif input.url contains "/blogs/" and input.author
+      assign type = 'article'
+    elsif input.url contains "/pages/"
+      assign type = 'page'
+    endif
+  endif
+
+
+  assign image_options = 'alt,aspect_ratio,height,id,src,width' | split: ','
+
+  assign media_options = 'alt,aspect_ratio,height,id,media_type,preview_image,src,width' | split: ','
+
+  assign product_options = 'available,collections,compare_at_price,compare_at_price_max,compare_at_price_min,compare_at_price_varies,created_at,description,featured_media,gift_card,handle,has_only_default_variant,id,media,metafields,options,options_with_values,price,price_max,price_min,price_varies,published_at,requires_selling_plan,selected_or_first_available_selling_plan_allocation,selected_selling_plan,selected_selling_plan_allocation,selling_plan_groups,seo_description,tags,template_suffix,title,type,url,variants,vendor' | split: ','
+  assign product_sub_selects = 'featured_media,media,variants,collections,metafields' | split: ','
+
+  assign variant_options = 'available,barcode,compare_at_price,featured_media,id,incoming,inventory_management,inventory_policy,inventory_quantity,matched,metafields,next_incoming_date,option1,option2,option3,options,price,product,product_id,requires_selling_plan,requires_shipping,selected,selected_selling_plan_allocation,selling_plan_allocations,sku,store_availabilities,taxable,title,unit_price,unit_price_measurement,url,weight,weight_in_unit,weight_unit' | split: ','
+  assign variant_sub_selects = 'featured_media,product,metafields' | split: ','
+
+  assign product_collections_options = 'id,handle,updated_at,published_at,sort_order,template_suffix,published_scope,title,body_html,image' | split: ','
+  assign product_collections_sub_selects = 'image' | split: ','
+
+  assign collection_options = 'all_products_count,all_tags,all_types,all_vendors,current_type,current_vendor,default_sort_by,description,seo_description,filters,handle,id,image,metafields,next_product,previous_product,products,product_pagination,products_count,published_at,sort_by,sort_options,tags,template_suffix,title,url' | split: ','
+  assign collection_sub_selects = 'image,products,filters,metafields' | split: ','
+
+  assign filters_options = 'active_values,false_value,inactive_values,label,max_value,min_value,param_name,range_max,true_value,type,url_to_remove,values' | split: ','
+  assign filters_sub_selects = 'active_values,inactive_values,values,max_value,min_value,false_value,true_value' | split: ','
+
+  assign filter_value_options = 'activecount,label,param_name,url_to_add,url_to_remove,value' | split: ','
+
+  assign page_options = 'author,content,handle,id,metafields,published_at,template_suffix,title,url' | split: ','
+
+  assign blog_options = 'all_tags,articles,articles_count,comments_enabled?,handle,id,metafields,moderated,next_article,previous_article,tags,template_suffix,title,url' | split: ','
+  assign blog_sub_selects = 'articles,next_article,previous_article,metafields' | split: ','
+
+  assign article_options = 'author,comment_post_url,comments,comments_count,comments_enabled?,content,created_at,excerpt,excerpt_or_content,handle,id,image,metafields,moderated,published_at,tags,template_suffix,title,updated_at,url,user' | split: ','
+  assign article_sub_selects = 'comments,image,user,metafields' | split: ','
+
+  assign comment_options = 'author,content,created_at,email,id,status,updated_at,url' | split: ','
+
+  assign user_options = 'account_owner,bio,email,first_name,homepage,image,last_name' | split: ','
+
+  assign address_options = 'first_name,address1,phone,city,zip,province,country,last_name,address2,company,latitude,longitude,name,country_code,province_code' | split: ','
+
+  assign routes_options = 'account_addresses_url,account_login_url,account_logout_url,account_recover_url,account_register_url,account_url,all_products_collection_url,cart_add_url,cart_change_url,cart_clear_url,cart_update_url,cart_url,collections_url,predictive_search_url,product_recommendations_url,root_url,search_url' | split: ','
+
+  assign shop_option = 'address,address_city,address_company,address_country,address_country_upper,address_province,address_province_code,address_street,address_summary,address_zip,checkout,collections_count,currency,customer_accounts_enabled,customer_accounts_optional,description,domain,email,enabled_payment_types,id,metafields,money_format,money_with_currency_format,name,password_message,permanent_domain,phone,published_locales,products_count,secure_url,types,url,vendors' | split: ','
+  assign shop_sub_selects = 'metafields,address' | split: ','
+
+  assign recommendations_options = 'recommendation_products,products_count,performed' | split: ','
+  assign recommendations_sub_selects = 'products' | split: ','
+
+  assign request_options = 'design_mode,host,locale,origin,path,page_type' | split: ','
+
+  assign font_options = 'baseline_ratio,fallback_families,family,style,system,weight' | split: ','
+
+  assign color_options = 'hex,alpha,red,green,blue,rgb,hue,lightness,saturation' | split: ','
+
+  assign linklist_options = 'handle,levels,links,title' | split: ','
+  assign linklist_sub_selects = 'links' | split: ','
+
+  assign link_options = 'active,child_active,current,child_current,levels,handle,links,object,title,type,url' | split: ','
+  assign link_sub_selects = 'links,collection,product,article,blog,page' | split: ','
+
+  assign settings_sub_selects = 'image,collection,product,collection_list,product_list,blog,article,page,linklist,font,color' | split: ','
+  assign metafields_sub_selects = 'page,product,product_list,collection,collection_list,variant,variant_list,color,color_list,image,image_list' | split: ','
+
+  assign section_options = 'id,type,settings,blocks' | split: ','
+  assign section_sub_selects = 'settings,blocks' | split: ','
+
+  assign block_options = 'id,type,settings' | split: ','
+  assign block_sub_selects = 'settings' | split: ','
+
+-%}
+
+{%- case type -%}
+  {%- when 'metafields' -%}
+    {%- if input -%}
+      {%- assign metafield_namespaces = null -%}
+      {%- assign subset = select | strip_newlines | replace: ' ', "" | split: ',' -%}
+      {%- assign subset_with_prefix = subset | join: ",|" | prepend: "|" | split: ',' -%}
+      {%- assign select_with_prefix = subset_with_prefix | join: "," -%}
+      {%- for item in subset -%}
+        {%- assign namespace = item | split: '.' | first -%}
+        {%- unless metafield_namespaces contains namespace -%}
+          {%- assign metafield_namespaces = metafield_namespaces | join: ',' | append: ',' | append: namespace | split: ',' -%}
+        {%- endunless -%}
+      {%- endfor -%}
+      {%- assign namespaces = metafield_namespaces | join: ',' | remove_first: ',' | split: ',' -%}
+
+      {
+      {%- for namespace in namespaces -%}
+        {%- assign image_select = null -%}
+        {%- assign product_select = null -%}
+        {%- assign product_list_select = null -%}
+        {%- assign collection_select = null -%}
+        {%- assign collection_list_select = null -%}
+        {%- assign blog_select = null -%}
+        {%- assign article_select = null -%}
+        {%- assign page_select = null -%}
+        {%- assign linklist_select = null -%}
+        {%- assign link_select = null -%}
+        {%- assign font_select = null -%}
+        {%- assign color_select = null -%}
+
+        {%- assign namespace_subset_with_prefix = subset_with_prefix | join: ',' | replace: namespace, '' | replace: "|.", '|' | split: ',' -%}
+        {%- assign namespace_select_with_prefix = select_with_prefix | join: ',' | replace: namespace, '' | replace: "|.", '|' -%}
+        {%- for sub_select in metafields_sub_selects -%}
+          {%- assign prefixed_sub_select = '|' | append: sub_select | append: '.' -%}
+          {%- assign sub_selection = null -%}
+
+          {%- if namespace_select_with_prefix contains prefixed_sub_select -%}
+            {%- assign opt = null -%}
+            {%- for option in namespace_subset_with_prefix -%}
+              {%- if option contains prefixed_sub_select -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: prefixed_sub_select, '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+            {%- assign sub_selection = opt | join: ',' | remove_first: ',' -%}
+          {%- endif -%}
+
+          {%- case sub_select -%}
+            {%- when 'image' -%}
+              {%- assign image_select = sub_selection | default: image_options | join: ',' -%}
+            {%- when 'variant' -%}
+              {%- assign variant_select = sub_selection | default: variant_options | join: ',' | remove_first: ',product' -%}
+            {%- when 'variant_list' -%}
+              {%- assign variant_list_select = sub_selection | default: variant_options | join: ',' | remove_first: ',product' -%}
+            {%- when 'product' -%}
+              {%- assign product_select = sub_selection | default: product_options | join: ',' -%}
+            {%- when 'product_list' -%}
+              {%- assign product_list_select = sub_selection | default: product_options | join: ',' | remove_first: ',variants' -%}
+            {%- when 'collection' -%}
+              {%- assign collection_select = sub_selection | default: collection_options | join: ',' | append: ',products.variants.null' -%}
+            {%- when 'collection_list' -%}
+              {%- assign collection_list_select = sub_selection | default: collection_options | join: ',' | remove_first: ',products' -%}
+            {%- when 'image' -%}
+              {%- assign image_select = sub_selection | default: image_options | join: ',' -%}
+            {%- when 'image_list' -%}
+              {%- assign image_list_select = sub_selection | default: image_options | join: ',' -%}
+            {%- when 'blog' -%}
+              {%- assign blog_select = sub_selection | default: blog_options | join: ',' -%}
+            {%- when 'article' -%}
+              {%- assign article_select = sub_selection | default: article_options | join: ',' -%}
+            {%- when 'page' -%}
+              {%- assign page_select = sub_selection | default: page_options | join: ',' -%}
+            {%- when 'linklist' -%}
+              {%- assign linklist_select = sub_selection | default: linklist_options | join: ',' -%}
+            {%- when 'links' -%}
+              {%- assign link_select = sub_selection | default: link_options | join: ',' -%}
+            {%- when 'font' -%}
+              {%- assign font_select = sub_selection | default: font_options | join: ',' -%}
+            {%- when 'color' -%}
+              {%- assign color_select = sub_selection | default: color_options | join: ',' -%}
+          {%- endcase -%}
+        {%- endfor -%}
+
+        "{{- namespace -}}":
+        {
+        {%- for key in input[namespace] -%}
+          {%- assign metafield = input[namespace][key[0]] -%}
+          {{- key[0] | json -}}:
+          {%- if metafield.type == "page_reference" -%}
+            {%- render '_json_dev', input: metafield.value, type: 'page', select: page_select -%}{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "list.page_reference" -%}
+            {{- metafield -}}{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "dimension" or metafield.type == "weight" or metafield.type == "volume" -%}
+            {
+            "type": {{- metafield.value.type | json -}},
+            "unit": {{- metafield.value.unit | json -}},
+            "value": {{- metafield.value.value | json -}}
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "rating" -%}
+            {
+            "rating": {{- metafield.value.rating | json -}},
+            "scale_max": {{- metafield.value.scale_max | json -}},
+            "scale_min": {{- metafield.value.scale_min | json -}}
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "product_reference" -%}
+            {%- render '_json_dev', input: metafield.value, type: 'product', select: product_select -%}{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "list.product_reference" -%}
+            [{%- for p in metafield.value -%}{%- render '_json_dev', input: p, type: 'product', select: product_list_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "collection_reference" -%}
+            {%- render '_json_dev', input: metafield.value, type: 'collection', select: collection_select -%}{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "list.collection_reference" -%}
+            [{%- for c in metafield.value -%}{%- render '_json_dev', input: c, type: 'collection', select: collection_list_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "variant_reference" -%}
+            {%- render '_json_dev', input: metafield.value, type: 'variant', select: variant_select -%}{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "list.variant_reference" -%}
+            [{%- for v in metafield.value -%}{%- render '_json_dev', input: v, type: 'variant', select: variant_list_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "color" -%}
+            {%- render '_json_dev', input: metafield.value, type: 'color', select: color_select -%}{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "list.color" -%}
+            [{%- for c in metafield.value -%}{%- render '_json_dev', input: c, type: 'color', select: color_list_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "file_reference" -%}
+            {%- if fmetafield.value.media_type == 'image' -%}{%- render '_json_dev', input: metafield.value, type: 'image', select: image_select -%}{%- else -%}{{- metafield.value | json -}}{%- endif -%}{%- unless forloop.last -%},{%- endunless -%}
+          {%- elsif metafield.type == "list.file_reference" -%}
+            [{%- for file in metafield.value -%}
+            {%- if file.media_type == 'image' -%}{%- render '_json_dev', input: file, type: 'image', select: image_list_select -%}{%- else -%}{{- file | json -}}{%- endif -%}
+            {%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- unless forloop.last -%},{%- endunless -%}
+          {%- else -%}
+            {{- metafield.value | json -}}{%- unless forloop.last -%},{%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+        }
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+      }
+    {%- else -%}
+      null
+    {%- endif -%}
+
+  {%- when 'settings' -%}
+    {%- if input -%}
+      {%- assign subset = select | strip_newlines | replace: ' ', "" | split: ',' -%}
+      {%- assign subset_with_prefix = subset | join: ",|" | prepend: "|" | split: ',' -%}
+      {%- assign select_with_prefix = subset_with_prefix | join: "," -%}
+
+      {%- for sub_select in settings_sub_selects -%}
+        {%- assign prefixed_sub_select = '|' | append: sub_select | append: '.' -%}
+        {%- assign sub_selection = null -%}
+
+        {%- if select_with_prefix contains prefixed_sub_select -%}
+          {%- assign opt = null -%}
+          {%- for option in subset_with_prefix -%}{%- if option contains prefixed_sub_select -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: prefixed_sub_select, '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+          {%- assign sub_selection = opt | join: ',' | remove_first: ',' -%}
+        {%- endif -%}
+
+        {%- case sub_select -%}
+          {%- when 'image' -%}
+            {%- assign image_select = sub_selection | default: image_options | join: ',' -%}
+          {%- when 'product' -%}
+            {%- assign product_select = sub_selection | default: product_options | join: ',' -%}
+          {%- when 'product_list' -%}
+            {%- assign product_list_select = sub_selection | default: product_options | join: ',' | remove_first: ',variants' -%}
+          {%- when 'collection' -%}
+            {%- assign collection_select = sub_selection | default: collection_options | join: ',' -%}
+          {%- when 'collection_list' -%}
+            {%- assign collection_list_select = sub_selection | default: collection_options | join: ',' | append: ',products.variants.null' -%}
+          {%- when 'blog' -%}
+            {%- assign blog_select = sub_selection | default: blog_options | join: ',' -%}
+          {%- when 'article' -%}
+            {%- assign article_select = sub_selection | default: article_options | join: ',' -%}
+          {%- when 'page' -%}
+            {%- assign page_select = sub_selection | default: page_options | join: ',' -%}
+          {%- when 'linklist' -%}
+            {%- assign linklist_select = sub_selection | default: linklist_options | join: ',' -%}
+          {%- when 'links' -%}
+            {%- assign link_select = sub_selection | default: link_options | join: ',' -%}
+          {%- when 'font' -%}
+            {%- assign font_select = sub_selection | default: font_options | join: ',' -%}
+          {%- when 'color' -%}
+            {%- assign color_select = sub_selection | default: color_options | join: ',' -%}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {
+      {%- for id in input -%}
+        {%- assign value = input[id] -%}
+        {%- if value.src != blank -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'image', select: image_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/collections/" and value.id != blank -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'collection', select: collection_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/products/" and value.id != blank -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'product', select: product_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.count -%}
+          "{{- id -}}":[
+          {%- for item in value -%}
+            {%- if item.url contains "/collections/" -%}
+              {%- render '_json_dev', input: item, type: 'collection', select: collection_list_select -%}{%- unless forloop.last -%},{%- endunless -%}
+            {%- elsif item.url contains "/products/" -%}
+              {%- render '_json_dev', input: item, type: 'product', select: product_list_select -%}{%- unless forloop.last -%},{%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+          ]{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/blogs/" and value.articles_count != blank and value.id != blank -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'blog', select: blog_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/blogs/" and value.author and value.id != blank -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'article', select: article_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.url contains "/pages/" and value.id != blank -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'page', select: page_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.levels -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'linklist', select: linklist_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.family -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'font', select: font_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif value.alpha and value.alpha > 0 -%}
+          "{{- id -}}": {%- render '_json_dev', input: value, type: 'color', select: color_select -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- else -%}
+          "{{- id -}}": {{- value | json -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+      }
+    {%- else -%}
+      null
+    {%- endif -%}
+
+  {%- when 'product' or 'variant' or 'product_collection' or 'image' or 'media' or 'collection' or 'filters' or 'filters_value' or 'page' or 'comment' or 'user' or 'article' or 'blog' or 'color' or 'font' or 'linklist' or 'link' or 'block' or 'section' or 'routes' or 'shop' or 'request' or 'recommendations' or 'address' -%}
+    {%- if input -%}
+
+      {% liquid
+        case type
+          when 'routes'
+            assign root_options = routes_options
+            assign root_sub_selects = null
+          when 'shop'
+            assign root_options = shop_option
+            assign root_sub_selects = shop_sub_selects
+          when 'address'
+            assign root_options = address_options
+            assign root_sub_selects = null
+          when 'request'
+            assign root_options = request_options
+            assign root_sub_selects = null
+          when 'recommendations'
+            assign root_options = recommendations_options
+            assign root_sub_selects = recommendations_sub_selects
+          when 'linklist'
+            assign root_options = linklist_options
+            assign root_sub_selects = linklist_sub_selects
+          when 'font'
+            assign root_options = font_options
+            assign root_sub_selects = null
+          when 'block'
+            assign root_options = block_options
+            assign root_sub_selects = block_sub_selects
+          when 'section'
+            assign root_options = section_options
+            assign root_sub_selects = section_sub_selects
+          when 'color'
+            assign root_options = color_options
+            assign root_sub_selects = null
+          when 'link'
+            assign root_options = link_options
+            assign root_sub_selects = link_sub_selects
+          when 'image'
+            assign root_options = image_options
+            assign root_sub_selects = null
+          when 'media'
+            assign root_options = media_options
+            assign root_sub_selects = null
+          when 'blog'
+            assign root_options = blog_options
+            assign root_sub_selects = blog_sub_selects
+          when 'article'
+            assign root_options = article_options
+            assign root_sub_selects = article_sub_selects
+          when 'user'
+            assign root_options = user_options
+            assign root_sub_selects = user_sub_selects
+          when 'comment'
+            assign root_options = comment_options
+            assign root_sub_selects = null
+          when 'page'
+            assign root_options = page_options
+            assign root_sub_selects = null
+          when 'collection'
+            assign root_options = collection_options
+            assign root_sub_selects = collection_sub_selects
+          when 'filters'
+            assign root_options = filters_options
+            assign root_sub_selects = filters_sub_selects
+          when 'filters_value'
+            assign root_options = filter_value_options
+            assign root_sub_selects = null
+          when 'product'
+            assign root_options = product_options
+            assign root_sub_selects = product_sub_selects
+          when 'product_collection'
+            assign root_options = product_collections_options
+            assign root_sub_selects = product_collections_sub_selects
+          when 'variant'
+            assign root_options = variant_options
+            assign root_sub_selects = variant_sub_selects
+        endcase
+      %}
+
+      {%- assign subset = select | strip_newlines | replace: ' ', "" | split: ',' | default: root_options -%}
+      {%- if subset contains 'null' -%}
+        null
+        {%- break -%}
+      {%- endif -%}
+      {%- assign subset_with_prefix = subset | join: ",|" | prepend: "|" | split: ',' -%}
+      {%- assign select_with_prefix = subset_with_prefix | join: "," -%}
+      {%- for item in subset -%}
+        {%- assign test_item = item | split: '.' | first -%}
+        {%- if root_options contains test_item -%}{%- assign opt = opt | join: ',' | append: ',' | append: test_item | split: ',' -%}{%- endif -%}
+      {%- endfor -%}
+      {%- assign options = opt | join: ',' | split: ',' -%}
+      {%- if options.size == 0 -%}
+        {%- assign options = root_options -%}
+      {%- endif -%}
+      {%- for sub_select in root_sub_selects -%}
+        {%- assign prefixed_sub_select = '|' | append: sub_select | append: '.' -%}
+        {%- assign sub_selection = null -%}
+
+        {%- if select_with_prefix contains prefixed_sub_select -%}
+          {%- unless options contains sub_select -%}{%- assign options = options | join: ',' | append: ',' | append: sub_select | split: ',' -%}{%- endunless -%}
+          {%- assign opt = null -%}
+          {%- for option in subset_with_prefix -%}{%- if option contains prefixed_sub_select -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: prefixed_sub_select, '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+          {%- assign sub_selection = opt | join: ',' | remove_first: ',' -%}
+        {%- endif -%}
+
+        {%- case sub_select -%}
+          {%- when 'products' or 'product' -%}
+            {%- assign product_select = sub_selection | default: product_options | join: ',' -%}
+            {%- assign variants_test = sub_selection | split: ',' -%}
+            {%- if variants_test contains 'variants.null' -%}
+              {%- if variants_test.size == 1 -%}
+                {%- assign product_select = product_options | join: ',' | remove_first: ',variants' -%}
+              {%- endif -%}
+              {%- if variants_test.size > 1 -%}
+                {%- assign product_select = sub_selection | join: ',' | remove_first: ',variants.null' -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- when 'variants' -%}
+            {%- assign variant_select = sub_selection | default: variant_options | join: ',' | remove_first: ',product' -%}
+          {%- when 'featured_media' -%}
+            {%- assign featured_media_select = sub_selection | default: media_options | join: ',' -%}
+          {%- when 'image' -%}
+            {%- assign image_select = sub_selection | default: image_options | join: ',' -%}
+          {%- when 'media' -%}
+            {%- assign media_select = sub_selection | default: media_options | join: ',' -%}
+          {%- when 'collection' -%}
+            {%- assign collection_select = sub_selection | default: collection_options | join: ',' -%}
+          {%- when 'blog' -%}
+            {%- assign blog_select = sub_selection | default: blog_options | join: ',' -%}
+          {%- when 'article' -%}
+            {%- assign article_select = sub_selection | default: article_options | join: ',' -%}
+          {%- when 'page' -%}
+            {%- assign page_select = sub_selection | default: page_options | join: ',' -%}
+          {%- when 'address' -%}
+            {%- assign address_select = sub_selection | default: address_options | join: ',' -%}
+          {%- when 'collections' -%}
+            {%- assign product_collection_select = sub_selection | default: product_collections_options | join: ',' -%}
+          {%- when 'filters' -%}
+            {%- assign filter_select = sub_selection | default: filters_options | join: ',' -%}
+          {%- when 'false_value' -%}
+            {%- assign false_value_select = sub_selection | default: filter_value_options | join: ',' -%}
+          {%- when 'max_value' -%}
+            {%- assign max_value_select = sub_selection | default: filter_value_options | join: ',' -%}
+          {%- when 'min_value' -%}
+            {%- assign min_value_select = sub_selection | default: filter_value_options | join: ',' -%}
+          {%- when 'true_value' -%}
+            {%- assign true_value_select = sub_selection | default: filter_value_options | join: ',' -%}
+          {%- when 'active_values' -%}
+            {%- assign active_values_select = sub_selection | default: filter_value_options | join: ',' -%}
+          {%- when 'inactive_values' -%}
+            {%- assign inactive_values_select = sub_selection | default: filter_value_options | join: ',' -%}
+          {%- when 'values' -%}
+            {%- assign values_select = sub_selection | default: filter_value_options | join: ',' -%}
+          {%- when 'comments' -%}
+            {%- assign comment_select = sub_selection | default: comment_options | join: ',' -%}
+          {%- when 'user' -%}
+            {%- assign user_select = sub_selection | default: user_options | join: ',' -%}
+          {%- when 'articles' -%}
+            {%- assign article_select = sub_selection | default: article_options | join: ',' -%}
+          {%- when 'next_article' -%}
+            {%- assign next_article_select = sub_selection | default: article_options | join: ',' -%}
+          {%- when 'previous_article' -%}
+            {%- assign previous_article_select = sub_selection | default: article_options | join: ',' -%}
+          {%- when 'linklist' -%}
+            {%- assign linklist_select = sub_selection | default: linklist_options | join: ',' -%}
+          {%- when 'links' -%}
+            {%- assign link_select = sub_selection | default: link_options | join: ',' -%}
+          {%- when 'settings' -%}
+            {%- assign settings_select = sub_selection | join: ',' -%}
+          {%- when 'blocks' -%}
+            {%- assign block_select = sub_selection | default: block_options | join: ',' -%}
+          {%- when 'metafields' -%}
+            {%- assign metafields_select = sub_selection | join: ',' -%}
+        {%- endcase -%}
+      {%- endfor -%}
+
+    {%- else -%}
+      null
+    {%- endif -%}
+{%- endcase -%}
+
+{%- if options -%}
+  {%- assign options = options | sort -%}
+  {
+  {%- for option in options -%}
+    {%- case option -%}
+      {%- when "" -%}
+        {%- continue -%}
+      {%- when 'created_at' or 'published_at' or 'updated_at' -%}
+        "{{- option -}}": "{{- input[option] | date: "%Y-%m-%dT%H:%M:%S%z" -}}"
+
+      {%- when 'metafields' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'metafields', select: metafields_select -%}
+
+      {%- when 'variants' -%}
+        "{{- option -}}": [{%- for variant in input[option] -%}{%- render '_json_dev', input: variant, type: 'variant', select: variant_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'image' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'image', select: image_select -%}
+
+      {%- when 'featured_media' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'media', select: featured_media_select -%}
+
+      {%- when 'filters' -%}
+        "{{- option -}}": [{%- for filter in input[option] -%}{%- render '_json_dev', input: filter, type: 'filters', select: filter_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'images' -%}
+        "{{- option -}}": [{%- for image in input[option] -%}{%- render '_json_dev', input: image, type: 'image', select: image_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'media' -%}
+        "{{- option -}}": [{%- for media in input[option] -%}{%- render '_json_dev', input: media, type: 'media', select: media_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'products' -%}
+        "{{- option -}}": [{%- paginate input.products by page_size -%}{%- for product in input[option] -%}{%- render '_json_dev', input: product, select: product_select, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- endpaginate -%}]
+
+      {%- when 'recommendation_products' -%}
+        "products": [{%- for product in input["products"] -%}{%- render '_json_dev', input: product, select: product_select, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'collections' -%}
+        "{{- option -}}": [{%- for collection in input[option] -%}{%- render '_json_dev', input: collection, select: product_collection_select, type: 'product_collection' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'product_pagination' -%}
+        "{{- option -}}": {%- paginate input.products by page_size -%}{{- paginate | json -}}{%- endpaginate -%}
+
+      {%- when 'active_values' -%}
+        "{{- option -}}": [{%- for value in input[option] -%}{%- render '_json_dev', input: value, type: 'filters_value', select: active_values_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'inactive_values' -%}
+        "{{- option -}}": [{%- for value in input[option] -%}{%- render '_json_dev', input: value, type: 'filters_value', select: inactive_values_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'values' -%}
+        "{{- option -}}": [{%- for value in input[option] -%}{%- render '_json_dev', input: value, type: 'filters_value', select: values_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'false_value' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'filters_value', select: false_value_select -%}
+
+      {%- when 'max_value' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'filters_value', select: max_value_select -%}
+
+      {%- when 'min_value' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'filters_value', select: min_value_select -%}
+
+      {%- when 'true_value' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'filters_value', select: true_value_select -%}
+
+      {%- when 'user' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'user', select: userSelect -%}
+
+      {%- when 'articles' -%}
+        "{{- option -}}": [{%- for article in input[option] -%}{%- render '_json_dev', input: article, type: 'article', select: article_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'next_article' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'article', select: next_article_select -%}
+
+      {%- when 'previous_article' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'article', select: previous_article_select -%}
+
+      {%- when 'comments' -%}
+        "{{- option -}}":  [{%- for comment in input[option] -%}{%- render '_json_dev', input: comment, select: comment_select, type: 'comment' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'linklist' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'linklist', select: linklist_select -%}
+
+      {%- when 'address' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'address', select: address_select -%}
+
+      {%- when 'hex' -%}
+        "{{- option -}}": "{{- input -}}"
+
+      {%- when 'rgb' -%}
+        "{{- option -}}": "{{- input.red -}} {{- input.green -}} {{- input.blue -}}"
+
+      {%- when 'links' -%}
+        "{{- option -}}":[{%- for link in input[option] -%}{%- render '_json_dev', input: link, type: 'link', select: link_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'object' -%}
+        "{{- option -}}":
+        {%- if input[option] -%}
+          {%- if input[option].url contains "/collections/" and input[option].id != blank -%}
+            {%- render '_json_dev', input: input[option], type: 'collection', select: collection_select -%}
+          {%- elsif input[option].url contains "/products/" and input[option].id != blank -%}
+            {%- render '_json_dev', input: input[option], type: 'product', select: product_select -%}
+          {%- elsif input[option].url contains "/blogs/" and input[option].articles_count != blank and input[option].id != blank -%}
+            {%- render '_json_dev', input: input[option], type: 'blog', select: blog_select -%}
+          {%- elsif input[option].url contains "/blogs/" and input[option].author and input[option].id != blank -%}
+            {%- render '_json_dev', input: input[option], type: 'article', select: article_select -%}
+          {%- elsif input[option].url contains "/pages/" and input[option].id != blank -%}
+            {%- render '_json_dev', input: input[option], type: 'page', select: page_select -%}
+          {%- else -%}
+            {{- input[option] | json -}}
+          {%- endif -%}
+        {%- else -%}
+          null
+        {%- endif -%}
+
+      {%- when 'settings' -%}
+        "{{- option -}}": {%- render '_json_dev', input: input[option], type: 'settings', select: settings_select -%}
+
+      {%- when 'blocks' -%}
+        "{{- option -}}": [{%- for block in input[option] -%}{%- render '_json_dev', input: block, type: 'block', select: block_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'linklists' -%}
+        "{{- option -}}": [{%- for l in linklists -%}{%- render '_json_dev', input: l, type: 'linklist', select: global_linklistsSelect -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'seo_description' -%}
+        "{{- option -}}": {%- if input['content'] -%}{{- input['content'] | strip_html | strip_newlines | truncate: 200 | json -}}{%- else -%}{{- input['description'] | strip_html | strip_newlines | truncate: 200 | json -}}{%- endif -%}
+
+      {%- when 'product_id' -%}
+        "{{- option -}}": {{- input.product.id | json -}}
+
+      {%- when 'src' -%}
+        "{{- option -}}": {%- if input.media_type == "image" -%}{{- input[option] | image_url | json -}}{%- else -%}{{- input[option] | json -}}{%- endif -%}
+
+      {%- else -%}
+        "{{- option -}}": {{- input[option] | json -}}
+    {%- endcase -%}{%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+  }
+{%- endif -%}

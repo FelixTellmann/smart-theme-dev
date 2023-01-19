@@ -1,0 +1,28 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign heading = block.settings.heading
+  assign menu = block.settings.menu
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<nav {{ block.shopify_attributes }} >
+  <ul class="grid gap-4 w-full h-min mb-auto leading-none">
+    {% for link in menu.links %}
+      <li>
+        <a href="{{ link.url }}"
+           class="text-lg font-semibold text-theme-text hf:underline flex">{{ link.title }}</a>
+        {% if link.links.size > 0 %}
+          <ul class="grid w-full h-min mb-auto">
+            {% for sublink in link.links %}
+              <li>
+                <a href="{{ sublink.url }}"
+                   class="text-sm text-theme-text/70 hf:text-theme-text flex py-0.5">{{ sublink.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+

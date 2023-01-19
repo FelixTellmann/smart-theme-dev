@@ -1,0 +1,13 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign font_scale = block.settings.font_scale
+  assign grid_span = block.settings.grid_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="title"
+     class="{{ grid_span }}" {{ block.shopify_attributes }}
+     style="--font-scale-h3: {{ font_scale | divided_by: 100.0 }}"
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <h1 class="h3 font-bold">{{ product.title | escape }}</h1>
+</div>

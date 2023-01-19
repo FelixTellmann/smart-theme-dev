@@ -1,0 +1,38 @@
+{% comment %}
+Variables:
+- type
+- content
+- class
+- html_attributes
+{% endcomment %}
+
+{% for i in (1..1) %}
+  {% if content == blank %}
+    {% break %}
+  {% endif %}
+
+  {% capture input %}
+    <place_holder class="class_holder {{ class }}" {{ html_attributes }}>{{ content }}</place_holder>
+  {% endcapture %}
+
+  {% case type %}
+    {% when 1 or "h1" %}
+      {{ input | replace: 'class_holder', 'h1' | replace: 'place_holder', settings.font_heading_1_tag }}
+    {% when 2 or "h2" %}
+      {{ input | replace: 'class_holder', 'h2' | replace: 'place_holder', settings.font_heading_2_tag }}
+    {% when 3 or "h3" %}
+      {{ input | replace: 'class_holder', 'h3' | replace: 'place_holder', settings.font_heading_3_tag }}
+    {% when 4 or "h4" %}
+      {{ input | replace: 'class_holder', 'h4' | replace: 'place_holder', settings.font_heading_4_tag }}
+    {% when 5 or "h5" %}
+      {{ input | replace: 'class_holder', 'h5' | replace: 'place_holder', settings.font_heading_5_tag }}
+    {% when 6 or "h6" %}
+      {{ input | replace: 'class_holder', 'h6' | replace: 'place_holder', settings.font_heading_6_tag }}
+    {% when 7 or "body" %}
+      {{ input | replace: 'class_holder', 'p' | replace: 'place_holder', settings.font_body_tag }}
+    {% when "prose" %}
+      <div class="prose prose-theme p {{ class }}" {{ html_attributes }}>
+        {{ content }}
+      </div>
+  {% endcase %}
+{% endfor %}

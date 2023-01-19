@@ -1,0 +1,39 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign button_primary__text = block.settings.button_primary__text
+  assign button_primary__url = block.settings.button_primary__url
+  assign button_primary__style = block.settings.button_primary__style
+  assign button_secondary__text = block.settings.button_secondary__text
+  assign button_secondary__url = block.settings.button_secondary__url
+  assign button_secondary__style = block.settings.button_secondary__style
+  assign margin_bottom = block.settings.margin_bottom
+  assign responsive_visibility = block.settings.responsive_visibility
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  if button_primary__text != blank and button_primary__url != blank
+    assign button_primary__show = true
+  endif
+
+  if button_secondary__text != blank and button_secondary__url != blank
+    assign button_secondary__show = true
+  endif
+%}
+
+<div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+     class="-mx-2 flex flex-col md:flex-row {{ max_width }} {{ responsive_visibility }} {{ section.settings.align__horizontal | replace: "items", "sm:justify" }}"
+     style="margin-bottom: {{ margin_bottom }}px;">
+  {% if button_secondary__show %}
+    <a href="{{ button_secondary__url }}"
+       class="{{ button_secondary__style }} m-2">
+      {{ button_secondary__text }}
+    </a>
+  {% endif %}
+  {% if button_primary__show %}
+    <a href="{{ button_primary__url }}"
+       class="{{ button_primary__style }} m-2">
+      {{ button_primary__text }}
+    </a>
+  {% endif %}
+</div>

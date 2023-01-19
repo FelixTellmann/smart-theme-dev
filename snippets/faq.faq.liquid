@@ -1,0 +1,17 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title = block.settings.title
+  assign answer = block.settings.answer
+  assign _page = block.settings.page
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{%- liquid
+  assign question = _page.title | default: title
+  assign answer = _page.content | default: answer
+-%}
+
+
+<div class="grid border-b border-b-theme-text/50 my-2" {{ block.shopify_attributes }}>
+  {% render '_collapsible', title: question, content: answer, blockId: block.id %}
+</div>

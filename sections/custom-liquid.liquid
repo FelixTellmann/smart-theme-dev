@@ -1,0 +1,26 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign custom_liquid = section.settings.custom_liquid
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{{ custom_liquid }}
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.custom_liquid.name",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:sections.custom_liquid.settings.custom_liquid.label",
+      "info": "t:sections.custom_liquid.settings.custom_liquid.info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.custom_liquid.presets.custom_liquid.name"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign text = block.settings.text
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="text"
+     class="col-span-12" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <div class="prose prose-theme">
+    {{ text }}
+  </div>
+</div>

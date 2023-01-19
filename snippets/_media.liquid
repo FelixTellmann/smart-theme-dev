@@ -1,0 +1,25 @@
+{% if media %}
+  {% case media.media_type %}
+    {% when 'image' %}
+      {% render "_image", image: media, class: class %}
+    {% when 'video' %}
+      {{ media | media_tag: image_size: "2048x", autoplay: true, muted: true, loop: section.settings.gallery__loop_videos, controls: true, preload: "none", class: class }}
+    {% when 'external_video' %}
+      {%- assign video_class = class | append: ' js-' | append: media.host -%}
+      {%- if media.host == 'youtube' -%}
+        {{ media | external_video_url: autoplay: true, muted: '1', loop: section.settings.gallery__loop_videos, playlist: media.external_id | external_video_tag: class: video_class, loading: "lazy" }}
+      {%- else -%}
+        {{ media | external_video_url: autoplay: true, muted: '1', loop: section.settings.gallery__loop_videos | external_video_tag: class: video_class, loading: "lazy" }}
+      {%- endif -%}
+    {% when 'model' %}
+      {% if reserverSpace %}
+        <span class="relative w-full h-full top-0 left-0 block"
+              style="padding-bottom: calc(100% * {{ media.preview_image.aspect_ratio }})"></span>
+      {% endif %}
+      <span class="absolute w-full h-full top-0 left-0 block"
+            style="padding-bottom: calc(100% * {{ media.preview_image.aspect_ratio }})">
+        {{ media | model_viewer_tag: class: class, style: "position: absolute; top: 0; left: 0;" }}
+      </span>
+
+  {% endcase %}
+{% endif %}

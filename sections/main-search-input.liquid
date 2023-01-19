@@ -1,0 +1,63 @@
+<div class="bg-theme-bg text-theme-text">
+  <form class="container py-16"
+        data-search-types-form>
+    <input type="hidden"
+           name="q"
+           value="{{ search.terms }}">
+
+    <input type="hidden"
+           name="sort_buy"
+           value="{{ search.sort_by }}">
+
+    <h1 class="h3 font-bold mb-4">
+      {{ "main_search_input.search_results" | t }}
+      ({{ search.results_count }})
+    </h1>
+    <div class="grid auto-cols-min grid-flow-col-dense gap-2 items-center">
+      <fieldset class="grid auto-cols-min grid-flow-col-dense gap-2 items-center">
+        <label class="grid cursor-pointer">
+          <input type="checkbox"
+                 {% if search.types contains 'article' %}checked="checked"{% endif %}
+                 class="peer appearance-none"
+                 name="type"
+                 value="article">
+          <span class="badge peer-checked:bg-primary-bg peer-checked:text-primary-text">
+            {{ "main_search_input.article" | t }}
+          </span>
+        </label>
+        <label class="grid cursor-pointer">
+          <input type="checkbox"
+                 {% if search.types contains 'page' %}checked="checked"{% endif %}
+                 class="peer appearance-none"
+                 name="type"
+                 value="page">
+          <span class="badge peer-checked:bg-primary-bg peer-checked:text-primary-text">
+            {{ "main_search_input.page" | t }}
+          </span>
+        </label>
+        <label class="grid cursor-pointer">
+          <input type="checkbox"
+                 {% if search.types contains 'product' %}checked="checked"{% endif %}
+                 class="peer appearance-none"
+                 name="type"
+                 value="product">
+          <span class="badge peer-checked:bg-primary-bg peer-checked:text-primary-text">
+            {{ "main_search_input.product" | t }}
+          </span>
+        </label>
+      </fieldset>
+      <button type="submit"
+              class="ml-2 button-primary--outline text-xs px-2 py-1 whitespace-nowrap hf:bg-primary-bg/10">
+        {{ "main_search_input.apply_changes" | t }}
+      </button>
+    </div>
+  </form>
+</div>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.search_bar_input.name",
+  "settings": []
+}
+{% endschema %}

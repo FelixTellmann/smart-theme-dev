@@ -1,0 +1,54 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign disable_unavailable = block.settings.disable_unavailable
+  assign image_selector = block.settings.image_selector
+  assign color_selector = block.settings.color_selector
+  assign color_list = block.settings.color_list
+  assign default_type = block.settings.default_type
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign product_form_id = 'product-form-' | append: section.id | append: "-" | append: product.id
+
+  assign allVariantsHaveImages = true
+  for variant in product.variants
+    if variant.image == blank
+      assign allVariantsHaveImages = false
+      break
+    endif
+  endfor
+
+  assign colors = color_list | strip_newlines | split: ','
+%}
+{% capture colors %}{% for color in colors %}{{ color | strip }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endcapture %}
+{% assign color_labels = colors | split: "," %}
+
+<div data-product-block="variant_selector"
+     class="grid gap-2 col-span-12" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+
+  <noscript>
+    <div data-variant-selectors="no-js">
+      <label>
+        <span class="block text-sm font-semibold mb-2">{{ product.options | join: " / " }}:</span>
+
+        <select class="truncate w-full input-primary flex w-full"
+                form="{{ product_form_id }}">
+          {% for variant in product.variants %}
+            <option class="truncate"
+                    {% if variant.available == false %}disabled="disabled"{% endif %}
+              {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                    class="truncate"
+                    value="{{ variant.id }}">
+
+              {{ variant.title }} - {{ variant.price | money | strip_html }}
+              {% if variant.available == false %} -
+                {{ "product.sold_out_2" | t }}{% endif %}
+            </option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+  </noscript>
+</div>

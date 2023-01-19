@@ -1,0 +1,1629 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign type = section.settings.type
+  assign hide_if_account = section.settings.hide_if_account
+  assign show_only_on_target = section.settings.show_only_on_target
+  assign target_id = section.settings.target_id
+  assign success_message = section.settings.success_message
+  assign redirect = section.settings.redirect
+  assign width = section.settings.width
+  assign fullwidth = section.settings.fullwidth
+  assign image = section.settings.image
+  assign image__overlay = section.settings.image__overlay
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign formClasses = 'group/form flex flex-col md:justify-center md:grid md:grid-cols-12 mx-auto gap-4' | append: " " | append: width
+
+
+  assign blockTypes = section.blocks | map: "type"
+  assign blockNames = section.blocks | map: "settings" | map: "name"
+
+  if fullwidth == false
+    assign containerClasses = 'container'
+  endif
+
+
+  case redirect
+    when "off"
+      assign return_to = null
+    when "/"
+      assign return_to = routes.root_url
+    when "/account"
+      if customer.has_account
+        assign return_to = routes.account_url
+      endif
+    when "/account/login"
+      assign return_to = routes.account_login_url
+    when "/account/login#recover"
+      assign return_to = "/account/login#recover"
+    when "/account/register"
+      assign return_to = routes.account_register_url
+    when "/account/logout"
+      if customer.has_account
+        assign return_to = routes.account_logout_url
+      endif
+    when "/account/addresses"
+      assign return_to = routes.account_addresses_url
+    when "/cart"
+      assign return_to = routes.cart_url
+  endcase
+  if show_only_on_target and target_id != blank and request.design_mode != true
+    assign targetClasses = 'hidden target:block'
+  endif
+
+  if hide_if_account and customer.has_account
+    case type
+      when 'reset_customer_password' or 'recover_customer_password'
+        assign hide_account = false
+      else
+        assign hide_account = true
+    endcase
+  endif
+%}
+
+{% for i in (1..1) %}
+  {% if hide_account and request.design_mode != true %}
+    {% break %}
+  {% endif %}
+
+  <div class="bg-theme-bg text-theme-text scroll-mt-top-bar-spacing {{ color_scheme }} {{ targetClasses }}"
+       {% if target_id != blank %}id="{{ target_id }}"{% endif %}>
+    <div class="grid w-full relative isolate px-4 md:px-8 {{ containerClasses }}">
+      {% render '_image', image: image, class: 'absolute inset-0 w-full h-full object-cover z-0 pointer-events-none' %}
+      <div class="absolute w-full h-full inset-0 pointer-events-none"
+           style="background-image: {{ image__overlay }};"></div>
+      <div class="container p-0 py-16">
+        {% if show_only_on_target and target_id != blank and request.design_mode == true %}
+          <div class="text-warning text-lg font-semibold text-center py-4">Showing in Theme Editor for Convenience - Hidden unless target</div>
+        {% endif %}
+        {% form type, id: id, class: formClasses, data-form-type: type, return_to: return_to %}
+          {% liquid
+            assign formElementClasses = ""
+            if form.errors.messages.size == 1 and form.errors.messages['form'] contains 'verify your email'
+              assign verify_email = true
+            endif
+            if form.posted_successfully? or verify_email
+              assign formElementClasses = "hidden"
+            endif
+            case type
+              when 'customer' or 'customer_login' or 'create_customer'
+                if request.design_mode == false and customer.has_account
+                  assign formElementClasses = "hidden"
+                  assign already_signed_in = "hidden"
+                endif
+            endcase
+
+          %}
+
+          {% for block in section.blocks %}
+            {% liquid
+              assign colSpanClasses = block.settings.grid_span | default: "col-span-12"
+              assign label = block.settings.title | default: block.name
+              assign confirm_pw__title = block.settings.confirm_pw__title
+              assign reset__title = block.settings.reset__title
+              assign placeholder = block.settings.placeholder
+              assign autocomplete = block.settings.autocomplete | default: block.type
+              assign required = block.settings.required
+              assign rows = block.settings.rows
+              assign value = block.settings.value | escape
+
+              if block.settings.required == null
+                assign required = true
+              endif
+
+              assign rawName = block.settings.name | default: block.type | escape | handleize | replace: '-', '_'
+              assign name = type | append: "[" | append: rawName | append: "]"
+              case type
+                when 'recover_customer_password'
+                  if block.type == 'email'
+                    assign name = 'email'
+                    assign autocomplete = 'username'
+                  endif
+                when 'customer'
+                  assign name = 'contact' | append: "[" | append: rawName | append: "]"
+                when 'create_customer' or 'reset_customer_password' or 'activate_customer_password'
+                  assign name = 'customer' | append: "[" | append: rawName | append: "]"
+                  if block.type == 'password'
+                    assign autocomplete = 'new-password'
+                  endif
+                  if block.type == 'email'
+                    assign autocomplete = 'username'
+                  endif
+                when 'customer_login'
+                  assign name = 'customer' | append: "[" | append: rawName | append: "]"
+                  if block.type == 'password'
+                    assign autocomplete = 'current-password'
+                  endif
+                  if block.type == 'email'
+                    assign autocomplete = 'username'
+                  endif
+              endcase
+            %}
+
+            {% case block.type %}
+              {% when 'text' %}
+                <div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+                     class="max-w-lg w-full sm:mx-auto sm:text-center {{ colSpanClasses }}">
+                  {% liquid
+                    assign content = block.settings.title
+                    assign trimmedContent = content | replace: '<p>', '<br />' | replace: '</p>', '' | replace: '<ul>', '<br />' | replace: '</ul>', '' | replace: '<ol>', '' | replace: '</ol>', '<br />' | replace: '<li>', '<br />' | replace: '</li>', '' | replace_first: '<br />', '' | replace_first: '<br>', '' | strip_newlines
+                    assign style = block.settings.style
+                  %}
+                  {% case style %}
+                    {% when 'h1' %}
+                      <h1 class="h1">{{ trimmedContent }}</h1>
+                    {% when 'h2' %}
+                      <h2 class="h2">{{ trimmedContent }}</h2>
+                    {% when 'h3' %}
+                      <h3 class="h3">{{ trimmedContent }}</h3>
+                    {% when 'h4' %}
+                      <h4 class="h4">{{ trimmedContent }}</h4>
+                    {% when 'preheading' %}
+                      <p class="pre-heading">{{ trimmedContent }}</p>
+                    {% when 'richtext' %}
+                      <div class="prose prose-theme leading-snug">
+                        {{ content }}
+                      </div>
+                  {% endcase %}
+                </div>
+              {% when 'separator' %}
+                <hr id="block--{{ block.id }}" {{ block.shopify_attributes }}
+                    class="col-span-12 border-none"
+                    style="height: {{ block.settings.height }}px">
+              {% when 'email' %}
+                <div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+                     class="{{ colSpanClasses }} {{ formElementClasses }}">
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'email',
+                      name: name,
+                      class: '',
+                      label: label,
+                      placeholder: label,
+                      required: required,
+                      autocomplete: autocomplete
+                  %}
+                </div>
+              {% when 'input' %}
+                <div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+                     class="{{ colSpanClasses }} {{ formElementClasses }}">
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: block.settings.type,
+                      name: name,
+                      class: '',
+                      label: label,
+                      placeholder: label,
+                      required: required,
+                      autocomplete: autocomplete
+                  %}
+                </div>
+              {% when 'password' %}
+                <div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+                     class="grid gap-3 {{ colSpanClasses }} {{ formElementClasses }}">
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'password',
+                      name: name,
+                      class: '',
+                      label: label,
+                      placeholder: label,
+                      required: required,
+                      autocomplete: autocomplete
+                  %}
+                  {% if type == 'reset_customer_password' %}
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'password',
+                        name: 'customer[password_confirmation]',
+                        class: '',
+                        label: confirm_pw__title,
+                        placeholder: confirm_pw__title,
+                        required: required,
+                        autocomplete: "new-password"
+                    %}
+                  {% endif %}
+                </div>
+              {% when 'hidden' %}
+                {%
+                    render '_form-elements',
+                    form: form,
+                    type: 'hidden',
+                    name: name,
+                    value: value
+                %}
+              {% when 'textarea' %}
+                <div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+                     class="{{ colSpanClasses }} grid {{ formElementClasses }}">
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'textarea',
+                      name: name,
+                      class: '',
+                      label: label,
+                      placeholder: label,
+                      required: required,
+                      autocomplete: autocomplete,
+                      rows: rows
+                  %}
+                </div>
+              {% when 'buttons' %}
+                {% assign blockGridClass = block.settings.reset__show | default: '!grid-cols-1' %}
+                {% assign blockAlignClass = block.settings.fullwidth | default: "ml-auto" %}
+                <div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+                     class="{{ colSpanClasses }} grid grid-cols-2 gap-4 {{ blockAlignClass }} {{ blockGridClass }} {{ formElementClasses }}">
+                  {% if block.settings.reset__show %}
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'reset',
+                        label: reset__title
+                    %}
+                  {% endif %}
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'submit',
+                      label: label
+                  %}
+                </div>
+            {% endcase %}
+          {% endfor %}
+          {% comment %} Fallback input in case its not added as a block {% endcomment %}
+          {% if formElementClasses != 'hidden' %}
+            {% case type %}
+              {% when "contact" %}
+                {% unless blockTypes contains 'email' %}
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'email',
+                      name: 'contact[email]',
+                      class: 'col-span-12',
+                      label: "Email",
+                      placeholder: "tim@apple.com",
+                      required: true
+                  %}
+                {% endunless %}
+                {% unless blockNames contains 'body' %}
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'textarea',
+                      name: 'contact[body]',
+                      class: 'col-span-12',
+                      label: "Message",
+                      placeholder: "Hi, ...",
+                      required: true,
+                      rows: 4
+                  %}
+                {% endunless %}
+                {% unless blockTypes contains 'buttons' %}
+                  <div class="col-end-13 col-span-6 grid grid-cols-2 gap-4">
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'reset',
+                        label: "Reset"
+                    %}
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'submit',
+                        label: "Send"
+                    %}
+                  </div>
+                {% endunless %}
+
+              {% when "customer" %}
+                {% unless blockTypes contains 'email' %}
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'email',
+                      name: 'contact[email]',
+                      class: 'col-span-8',
+                      label: "Email",
+                      placeholder: "tim@apple.com",
+                      required: true
+                  %}
+                {% endunless %}
+                {% unless blockTypes contains 'buttons' %}
+                  <div class="col-span-4 grid col-end-13">
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'submit',
+                        label: "Send"
+                    %}
+                  </div>
+                {% endunless %}
+
+              {% when "create_customer" or "customer_login" %}
+                {% unless blockTypes contains 'email' %}
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'email',
+                      name: 'customer[email]',
+                      class: 'col-span-12',
+                      label: "Email",
+                      placeholder: "Email",
+                      required: true
+                  %}
+                {% endunless %}
+                {% unless blockTypes contains 'password' %}
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'password',
+                      name: 'customer[password]',
+                      class: 'col-span-12',
+                      label: "Password",
+                      placeholder: "Password",
+                      required: true
+                  %}
+                {% endunless %}
+                {% unless blockTypes contains 'buttons' %}
+                  <div class="col-span-12 grid">
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'submit',
+                        label: "Send"
+                    %}
+                  </div>
+                {% endunless %}
+
+              {% when "customer_address" %}
+                {% comment %}TODO: Implement{% endcomment %}
+                {% comment %}TODO: New Address - Update Address{% endcomment %}
+
+              {% when "reset_customer_password" or "activate_customer_password" %}
+                {% unless blockTypes contains 'password' %}
+                  <div class="grid gap-3 col-span-12">
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'password',
+                        name: 'customer[password]',
+                        class: '',
+                        label: 'Password',
+                        placeholder: 'Password',
+                        required: required,
+                        autocomplete: "new-password"
+                    %}
+                    {% if type == 'reset_customer_password' %}
+                      {%
+                          render '_form-elements',
+                          form: form,
+                          type: 'password',
+                          name: 'customer[password_confirmation]',
+                          class: '',
+                          label: "Confirm Password",
+                          placeholder: "Confirm Password",
+                          required: required,
+                          autocomplete: "new-password"
+                      %}
+                    {% endif %}
+                  </div>
+                {% endunless %}
+                {% unless blockTypes contains 'buttons' %}
+                  <div class="col-span-12 grid">
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'submit',
+                        label: "Send"
+                    %}
+                  </div>
+                {% endunless %}
+
+              {% when "recover_customer_password" %}
+                {% unless blockTypes contains 'email' %}
+                  {%
+                      render '_form-elements',
+                      form: form,
+                      type: 'email',
+                      name: 'email',
+                      class: 'col-span-12',
+                      label: "Email",
+                      placeholder: "Email",
+                      required: true
+                  %}
+                {% endunless %}
+                {% unless blockTypes contains 'buttons' %}
+                  <div class="col-span-12 grid">
+                    {%
+                        render '_form-elements',
+                        form: form,
+                        type: 'submit',
+                        label: "Send"
+                    %}
+                  </div>
+                {% endunless %}
+            {% endcase %}
+          {% endif %}
+
+
+          {% if form.errors %}
+            <small class="text-xs col-span-12 grid gap-2 text-error sm:mx-auto sm:text-center">
+              {%- if form.errors contains 'form' -%}
+                {% if form.errors.messages['form'] contains 'verify your email' %}
+                  <small class="text-info font-medium flex items-center mt-1.5 ml-1 text-xs">
+                    {% render '_icon', icon: 'warning', class: 'w-6 h-6 mr-2 opacity-70' %}
+                    <span>
+                      {{ form.errors.messages['form'] }}.
+                    </span>
+                  </small>
+                {% else %}
+                  <small class="text-error font-medium flex items-center mt-1.5 ml-1 text-xs [&_a]:underline">
+                    {% render '_icon', icon: 'warning-triangle', class: 'w-5 h-5 mr-2 opacity-70' %}
+                    <span>
+                      {{ form.errors.messages['form'] }}.
+                    </span>
+                  </small>
+                {%- endif -%}
+              {%- endif -%}
+            </small>
+          {% endif %}
+
+          {% if form.posted_successfully? %}
+            <div class="text-lg font-bold col-span-12 grid gap-2 text-success sm:mx-auto sm:text-center">
+              <span>{{ success_message }}</span>
+            </div>
+          {% endif %}
+
+          {% if already_signed_in %}
+            <div class="text-lg font-bold col-span-12 grid gap-2 sm:mx-auto sm:text-center">
+              <span>Already Signed Up</span>
+            </div>
+          {% endif %}
+        {% endform %}
+
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.forms.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "type",
+      "label": "t:sections.forms.settings.type.label",
+      "default": "customer_login",
+      "options": [
+        {
+          "value": "customer",
+          "label": "t:sections.forms.settings.type.options__1.label"
+        },
+        {
+          "value": "customer_login",
+          "label": "t:sections.forms.settings.type.options__2.label"
+        },
+        {
+          "value": "create_customer",
+          "label": "t:sections.forms.settings.type.options__3.label"
+        },
+        {
+          "value": "customer_address",
+          "label": "t:sections.forms.settings.type.options__4.label"
+        },
+        {
+          "value": "contact",
+          "label": "t:sections.forms.settings.type.options__5.label"
+        },
+        {
+          "value": "reset_customer_password",
+          "label": "t:sections.forms.settings.type.options__6.label"
+        },
+        {
+          "value": "recover_customer_password",
+          "label": "t:sections.forms.settings.type.options__7.label"
+        },
+        {
+          "value": "activate_customer_password",
+          "label": "t:sections.forms.settings.type.options__8.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_if_account",
+      "label": "t:sections.forms.settings.hide_if_account.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_on_target",
+      "label": "t:sections.forms.settings.show_only_on_target.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "target_id",
+      "label": "t:sections.forms.settings.target_id.label"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "t:sections.forms.settings.success_message.label",
+      "info": "t:sections.forms.settings.success_message.info",
+      "default": "Thank you for contacting us."
+    },
+    {
+      "type": "select",
+      "id": "redirect",
+      "label": "t:sections.forms.settings.redirect.label",
+      "default": "off",
+      "options": [
+        {
+          "value": "off",
+          "label": "t:sections.forms.settings.redirect.options__1.label"
+        },
+        {
+          "value": "/",
+          "label": "t:sections.forms.settings.redirect.options__2.label"
+        },
+        {
+          "value": "/account",
+          "label": "t:sections.forms.settings.redirect.options__3.label"
+        },
+        {
+          "value": "/account/login",
+          "label": "t:sections.forms.settings.redirect.options__4.label"
+        },
+        {
+          "value": "/account/login#recover",
+          "label": "t:sections.forms.settings.redirect.options__5.label"
+        },
+        {
+          "value": "/account/register",
+          "label": "t:sections.forms.settings.redirect.options__6.label"
+        },
+        {
+          "value": "/account/logout",
+          "label": "t:sections.forms.settings.redirect.options__7.label"
+        },
+        {
+          "value": "/account/addresses",
+          "label": "t:sections.forms.settings.redirect.options__8.label"
+        },
+        {
+          "value": "/cart",
+          "label": "t:sections.forms.settings.redirect.options__9.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:sections.forms.settings.width.label",
+      "default": "max-w-xl",
+      "options": [
+        {
+          "value": "max-w-full",
+          "label": "t:sections.forms.settings.width.options__1.label"
+        },
+        {
+          "value": "max-w-[var(--layout-page-width)]",
+          "label": "t:sections.forms.settings.width.options__2.label"
+        },
+        {
+          "value": "max-w-3xl",
+          "label": "t:sections.forms.settings.width.options__3.label"
+        },
+        {
+          "value": "max-w-2xl",
+          "label": "t:sections.forms.settings.width.options__4.label"
+        },
+        {
+          "value": "max-w-xl",
+          "label": "t:sections.forms.settings.width.options__5.label"
+        },
+        {
+          "value": "max-w-lg",
+          "label": "t:sections.forms.settings.width.options__6.label"
+        },
+        {
+          "value": "max-w-md",
+          "label": "t:sections.forms.settings.width.options__7.label"
+        },
+        {
+          "value": "max-w-sm",
+          "label": "t:sections.forms.settings.width.options__8.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.forms.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "fullwidth",
+      "label": "t:sections.forms.settings.fullwidth.label",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.forms.settings.image.label"
+    },
+    {
+      "type": "color_background",
+      "id": "image__overlay",
+      "label": "t:sections.forms.settings.image__overlay.label",
+      "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.forms.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.forms.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.forms.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.forms.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.forms.settings.color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.forms.blocks.text.name",
+      "type": "text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "title",
+          "label": "t:sections.forms.blocks.text.settings.title.label"
+        },
+        {
+          "type": "radio",
+          "id": "style",
+          "label": "t:sections.forms.blocks.text.settings.style.label",
+          "default": "h2",
+          "options": [
+            {
+              "value": "h1",
+              "label": "t:sections.forms.blocks.text.settings.style.options__1.label"
+            },
+            {
+              "value": "h2",
+              "label": "t:sections.forms.blocks.text.settings.style.options__2.label"
+            },
+            {
+              "value": "h3",
+              "label": "t:sections.forms.blocks.text.settings.style.options__3.label"
+            },
+            {
+              "value": "h4",
+              "label": "t:sections.forms.blocks.text.settings.style.options__4.label"
+            },
+            {
+              "value": "preheading",
+              "label": "t:sections.forms.blocks.text.settings.style.options__5.label"
+            },
+            {
+              "value": "richtext",
+              "label": "t:sections.forms.blocks.text.settings.style.options__6.label"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "grid_span",
+          "default": "col-span-12",
+          "label": "t:sections.forms.blocks.text.settings.grid_span.label",
+          "options": [
+            {
+              "value": "col-span-3",
+              "label": "t:sections.forms.blocks.text.settings.grid_span.options__1.label"
+            },
+            {
+              "value": "col-span-4",
+              "label": "t:sections.forms.blocks.text.settings.grid_span.options__2.label"
+            },
+            {
+              "value": "col-span-6",
+              "label": "t:sections.forms.blocks.text.settings.grid_span.options__3.label"
+            },
+            {
+              "value": "col-span-8",
+              "label": "t:sections.forms.blocks.text.settings.grid_span.options__4.label"
+            },
+            {
+              "value": "col-span-9",
+              "label": "t:sections.forms.blocks.text.settings.grid_span.options__5.label"
+            },
+            {
+              "value": "col-span-12",
+              "label": "t:sections.forms.blocks.text.settings.grid_span.options__6.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.separator.name",
+      "type": "separator",
+      "settings": [
+        {
+          "type": "range",
+          "id": "height",
+          "label": "t:sections.forms.blocks.separator.settings.height.label",
+          "default": 30,
+          "min": 2,
+          "max": 128,
+          "step": 2,
+          "unit": "px"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.password.name",
+      "type": "password",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.forms.blocks.password.settings.header__1.content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.forms.blocks.password.settings.title.label",
+          "default": "Password"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.forms.blocks.password.settings.header__2.content"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.forms.blocks.password.settings.paragraph__1.content"
+        },
+        {
+          "type": "text",
+          "id": "confirm_pw__title",
+          "label": "t:sections.forms.blocks.password.settings.confirm_pw__title.label",
+          "default": "Confirm Password"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.forms.blocks.password.settings.header__3.content"
+        },
+        {
+          "type": "select",
+          "id": "grid_span",
+          "default": "col-span-12",
+          "label": "t:sections.forms.blocks.password.settings.grid_span.label",
+          "options": [
+            {
+              "value": "col-span-3",
+              "label": "t:sections.forms.blocks.password.settings.grid_span.options__1.label"
+            },
+            {
+              "value": "col-span-4",
+              "label": "t:sections.forms.blocks.password.settings.grid_span.options__2.label"
+            },
+            {
+              "value": "col-span-6",
+              "label": "t:sections.forms.blocks.password.settings.grid_span.options__3.label"
+            },
+            {
+              "value": "col-span-8",
+              "label": "t:sections.forms.blocks.password.settings.grid_span.options__4.label"
+            },
+            {
+              "value": "col-span-9",
+              "label": "t:sections.forms.blocks.password.settings.grid_span.options__5.label"
+            },
+            {
+              "value": "col-span-12",
+              "label": "t:sections.forms.blocks.password.settings.grid_span.options__6.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.email.name",
+      "type": "email",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.forms.blocks.email.settings.title.label",
+          "default": "Email"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "t:sections.forms.blocks.email.settings.placeholder.label"
+        },
+        {
+          "type": "select",
+          "id": "grid_span",
+          "default": "col-span-12",
+          "label": "t:sections.forms.blocks.email.settings.grid_span.label",
+          "options": [
+            {
+              "value": "col-span-3",
+              "label": "t:sections.forms.blocks.email.settings.grid_span.options__1.label"
+            },
+            {
+              "value": "col-span-4",
+              "label": "t:sections.forms.blocks.email.settings.grid_span.options__2.label"
+            },
+            {
+              "value": "col-span-6",
+              "label": "t:sections.forms.blocks.email.settings.grid_span.options__3.label"
+            },
+            {
+              "value": "col-span-8",
+              "label": "t:sections.forms.blocks.email.settings.grid_span.options__4.label"
+            },
+            {
+              "value": "col-span-9",
+              "label": "t:sections.forms.blocks.email.settings.grid_span.options__5.label"
+            },
+            {
+              "value": "col-span-12",
+              "label": "t:sections.forms.blocks.email.settings.grid_span.options__6.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.input.name",
+      "type": "input",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.forms.blocks.input.settings.title.label"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:sections.forms.blocks.input.settings.name.label",
+          "info": "t:sections.forms.blocks.input.settings.name.info"
+        },
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "t:sections.forms.blocks.input.settings.type.label",
+          "default": "text",
+          "options": [
+            {
+              "value": "text",
+              "label": "t:sections.forms.blocks.input.settings.type.options__1.label"
+            },
+            {
+              "value": "tel",
+              "label": "t:sections.forms.blocks.input.settings.type.options__2.label"
+            },
+            {
+              "value": "number",
+              "label": "t:sections.forms.blocks.input.settings.type.options__3.label"
+            },
+            {
+              "value": "email",
+              "label": "t:sections.forms.blocks.input.settings.type.options__4.label"
+            },
+            {
+              "value": "date",
+              "label": "t:sections.forms.blocks.input.settings.type.options__5.label"
+            },
+            {
+              "value": "url",
+              "label": "t:sections.forms.blocks.input.settings.type.options__6.label"
+            },
+            {
+              "value": "checkbox",
+              "label": "t:sections.forms.blocks.input.settings.type.options__7.label"
+            },
+            {
+              "value": "hidden",
+              "label": "t:sections.forms.blocks.input.settings.type.options__8.label"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "t:sections.forms.blocks.input.settings.placeholder.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "required",
+          "label": "t:sections.forms.blocks.input.settings.required.label",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "autocomplete",
+          "label": "t:sections.forms.blocks.input.settings.autocomplete.label",
+          "default": "off",
+          "options": [
+            {
+              "value": "off",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__1.label"
+            },
+            {
+              "value": "name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__2.label"
+            },
+            {
+              "value": "honorific-prefix",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__3.label"
+            },
+            {
+              "value": "given-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__4.label"
+            },
+            {
+              "value": "additional-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__5.label"
+            },
+            {
+              "value": "family-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__6.label"
+            },
+            {
+              "value": "honorific-suffix",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__7.label"
+            },
+            {
+              "value": "nickname",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__8.label"
+            },
+            {
+              "value": "email",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__9.label"
+            },
+            {
+              "value": "username",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__10.label"
+            },
+            {
+              "value": "new-password",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__11.label"
+            },
+            {
+              "value": "current-password",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__12.label"
+            },
+            {
+              "value": "one-time-code",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__13.label"
+            },
+            {
+              "value": "organization-title",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__14.label"
+            },
+            {
+              "value": "organization",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__15.label"
+            },
+            {
+              "value": "street-address",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__16.label"
+            },
+            {
+              "value": "address-line1",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__17.label"
+            },
+            {
+              "value": "address-line2",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__18.label"
+            },
+            {
+              "value": "address-line3",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__19.label"
+            },
+            {
+              "value": "address-level4",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__20.label"
+            },
+            {
+              "value": "address-level3",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__21.label"
+            },
+            {
+              "value": "address-level2",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__22.label"
+            },
+            {
+              "value": "address-level1",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__23.label"
+            },
+            {
+              "value": "country",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__24.label"
+            },
+            {
+              "value": "country-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__25.label"
+            },
+            {
+              "value": "postal-code",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__26.label"
+            },
+            {
+              "value": "cc-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__27.label"
+            },
+            {
+              "value": "cc-given-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__28.label"
+            },
+            {
+              "value": "cc-additional-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__29.label"
+            },
+            {
+              "value": "cc-family-name",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__30.label"
+            },
+            {
+              "value": "cc-number",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__31.label"
+            },
+            {
+              "value": "cc-exp",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__32.label"
+            },
+            {
+              "value": "cc-exp-month",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__33.label"
+            },
+            {
+              "value": "cc-exp-year",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__34.label"
+            },
+            {
+              "value": "cc-csc",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__35.label"
+            },
+            {
+              "value": "cc-type",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__36.label"
+            },
+            {
+              "value": "transaction-currency",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__37.label"
+            },
+            {
+              "value": "transaction-amount",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__38.label"
+            },
+            {
+              "value": "language",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__39.label"
+            },
+            {
+              "value": "bday",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__40.label"
+            },
+            {
+              "value": "bday-day",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__41.label"
+            },
+            {
+              "value": "bday-month",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__42.label"
+            },
+            {
+              "value": "bday-year",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__43.label"
+            },
+            {
+              "value": "sex",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__44.label"
+            },
+            {
+              "value": "tel",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__45.label"
+            },
+            {
+              "value": "tel-country-code",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__46.label"
+            },
+            {
+              "value": "tel-national",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__47.label"
+            },
+            {
+              "value": "tel-area-code",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__48.label"
+            },
+            {
+              "value": "tel-local",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__49.label"
+            },
+            {
+              "value": "tel-extension",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__50.label"
+            },
+            {
+              "value": "impp",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__51.label"
+            },
+            {
+              "value": "url",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__52.label"
+            },
+            {
+              "value": "photo",
+              "label": "t:sections.forms.blocks.input.settings.autocomplete.options__53.label"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "grid_span",
+          "default": "col-span-12",
+          "label": "t:sections.forms.blocks.input.settings.grid_span.label",
+          "options": [
+            {
+              "value": "col-span-3",
+              "label": "t:sections.forms.blocks.input.settings.grid_span.options__1.label"
+            },
+            {
+              "value": "col-span-4",
+              "label": "t:sections.forms.blocks.input.settings.grid_span.options__2.label"
+            },
+            {
+              "value": "col-span-6",
+              "label": "t:sections.forms.blocks.input.settings.grid_span.options__3.label"
+            },
+            {
+              "value": "col-span-8",
+              "label": "t:sections.forms.blocks.input.settings.grid_span.options__4.label"
+            },
+            {
+              "value": "col-span-9",
+              "label": "t:sections.forms.blocks.input.settings.grid_span.options__5.label"
+            },
+            {
+              "value": "col-span-12",
+              "label": "t:sections.forms.blocks.input.settings.grid_span.options__6.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.hidden_input.name",
+      "type": "hidden",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:sections.forms.blocks.hidden_input.settings.name.label",
+          "info": "t:sections.forms.blocks.hidden_input.settings.name.info"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "t:sections.forms.blocks.hidden_input.settings.value.label",
+          "info": "t:sections.forms.blocks.hidden_input.settings.value.info"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.select.name",
+      "type": "select",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.forms.blocks.select.settings.title.label"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:sections.forms.blocks.select.settings.name.label",
+          "info": "t:sections.forms.blocks.select.settings.name.info"
+        },
+        {
+          "type": "checkbox",
+          "id": "all_countries",
+          "label": "t:sections.forms.blocks.select.settings.all_countries.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.grouped_input.name",
+      "type": "Input_group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.forms.blocks.grouped_input.settings.title.label"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:sections.forms.blocks.grouped_input.settings.name.label",
+          "info": "t:sections.forms.blocks.grouped_input.settings.name.info"
+        },
+        {
+          "type": "radio",
+          "id": "type",
+          "label": "t:sections.forms.blocks.grouped_input.settings.type.label",
+          "default": "radio",
+          "options": [
+            {
+              "value": "radio",
+              "label": "t:sections.forms.blocks.grouped_input.settings.type.options__1.label"
+            },
+            {
+              "value": "checkbox",
+              "label": "t:sections.forms.blocks.grouped_input.settings.type.options__2.label"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.textarea.name",
+      "type": "textarea",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.forms.blocks.textarea.settings.title.label"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "t:sections.forms.blocks.textarea.settings.name.label",
+          "default": "body",
+          "info": "t:sections.forms.blocks.textarea.settings.name.info"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "t:sections.forms.blocks.textarea.settings.placeholder.label"
+        },
+        {
+          "type": "range",
+          "id": "rows",
+          "label": "t:sections.forms.blocks.textarea.settings.rows.label",
+          "default": 4,
+          "min": 2,
+          "max": 8,
+          "step": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "required",
+          "label": "t:sections.forms.blocks.textarea.settings.required.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.blocks.buttons.name",
+      "type": "buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.forms.blocks.buttons.settings.header__1.content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.forms.blocks.buttons.settings.title.label",
+          "default": "Submit"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.forms.blocks.buttons.settings.header__2.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "reset__show",
+          "label": "t:sections.forms.blocks.buttons.settings.reset__show.label"
+        },
+        {
+          "type": "text",
+          "id": "reset__title",
+          "label": "t:sections.forms.blocks.buttons.settings.reset__title.label",
+          "default": "Reset"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.forms.blocks.buttons.settings.header__3.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "fullwidth",
+          "label": "t:sections.forms.blocks.buttons.settings.fullwidth.label"
+        },
+        {
+          "type": "select",
+          "id": "grid_span",
+          "default": "col-span-12",
+          "label": "t:sections.forms.blocks.buttons.settings.grid_span.label",
+          "options": [
+            {
+              "value": "col-span-3",
+              "label": "t:sections.forms.blocks.buttons.settings.grid_span.options__1.label"
+            },
+            {
+              "value": "col-span-4",
+              "label": "t:sections.forms.blocks.buttons.settings.grid_span.options__2.label"
+            },
+            {
+              "value": "col-span-6",
+              "label": "t:sections.forms.blocks.buttons.settings.grid_span.options__3.label"
+            },
+            {
+              "value": "col-span-8",
+              "label": "t:sections.forms.blocks.buttons.settings.grid_span.options__4.label"
+            },
+            {
+              "value": "col-span-9",
+              "label": "t:sections.forms.blocks.buttons.settings.grid_span.options__5.label"
+            },
+            {
+              "value": "col-span-12",
+              "label": "t:sections.forms.blocks.buttons.settings.grid_span.options__6.label"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.forms.presets.contact_form.name",
+      "settings": {
+        "type": "contact",
+        "width": "max-w-2xl",
+        "fullwidth": true,
+        "image__overlay": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)",
+        "color_scheme": "bg-theme-bg text-theme-text color-inherit"
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>Lorem Ipsum</strong></p>",
+            "style": "h2",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "title": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
+            "style": "h4",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "title": "<p>Trade name: Your Business Name Inc.<br/>Phone number: +1 123-456-7891<br/>Email: yourbusinessemail@address.com<br/>Physical address: 3 Industrial Pkwy S, Aurora Ontario L4G 3V9<br/>VAT number: FRXX999999999<br/>Trade number: 123456789</p>",
+            "style": "richtext",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "separator",
+          "settings": {
+            "height": 20
+          }
+        },
+        {
+          "type": "input",
+          "settings": {
+            "title": "Name",
+            "name": "name",
+            "type": "text",
+            "required": false,
+            "autocomplete": "name",
+            "grid_span": "col-span-6"
+          }
+        },
+        {
+          "type": "email",
+          "settings": {
+            "title": "Email",
+            "grid_span": "col-span-6"
+          }
+        },
+        {
+          "type": "input",
+          "settings": {
+            "title": "Phone Number",
+            "name": "phone number",
+            "type": "tel",
+            "required": false,
+            "autocomplete": "tel",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "textarea",
+          "settings": {
+            "title": "Message",
+            "name": "body",
+            "rows": 4
+          }
+        },
+        {
+          "type": "buttons",
+          "settings": {
+            "title": "Send",
+            "fullwidth": true,
+            "reset__show": false,
+            "reset__title": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.presets.newsletter_signup.name",
+      "settings": {
+        "type": "customer",
+        "width": "max-w-2xl",
+        "fullwidth": true,
+        "image__overlay": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)",
+        "color_scheme": "bg-theme-bg text-theme-text color-inherit"
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>Newsletter Signup</strong></p>",
+            "style": "h3",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "separator",
+          "settings": {
+            "height": 20
+          }
+        },
+        {
+          "type": "email",
+          "settings": {
+            "title": "Email",
+            "grid_span": "col-span-9"
+          }
+        },
+        {
+          "type": "buttons",
+          "settings": {
+            "title": "Subscribe",
+            "fullwidth": true,
+            "reset__show": false,
+            "reset__title": "",
+            "grid_span": "col-span-3"
+          }
+        },
+        {
+          "type": "hidden",
+          "settings": {
+            "name": "tags",
+            "value": "newsletter, special, discount"
+          }
+        }
+      ]
+    },
+    {
+      "name": "t:sections.forms.presets.customer_signup.name",
+      "settings": {
+        "type": "create_customer",
+        "width": "max-w-md",
+        "fullwidth": true,
+        "image__overlay": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)",
+        "color_scheme": "bg-theme-bg text-theme-text color-inherit"
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>Sign Up</strong></p>",
+            "style": "h2",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "title": "<p>Lorem <strong>ipsum </strong>dolor sit amet, consectetur adipiscing elit.</p>",
+            "style": "richtext",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "separator",
+          "settings": {
+            "height": 20
+          }
+        },
+        {
+          "type": "input",
+          "settings": {
+            "title": "First Name",
+            "name": "first_name",
+            "type": "text",
+            "required": false,
+            "autocomplete": "given-name",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "input",
+          "settings": {
+            "title": "Last Name",
+            "name": "last_name",
+            "type": "text",
+            "required": false,
+            "autocomplete": "family-name",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "email",
+          "settings": {
+            "title": "Email",
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "password",
+          "settings": {
+            "grid_span": "col-span-12"
+          }
+        },
+        {
+          "type": "buttons",
+          "settings": {
+            "title": "Sign Up",
+            "reset__show": false,
+            "reset__title": "Reset",
+            "fullwidth": true,
+            "grid_span": "col-span-12"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,179 @@
+{%- liquid
+
+  assign product_options = 'available,collections,compare_at_price,compare_at_price_max,compare_at_price_min,compare_at_price_varies,created_at,description,images,featured_media,featured_media_id,gift_card,handle,has_only_default_variant,id,media,options,option1,option2,option3,options_with_values,price,price_max,price_min,price_varies,published_at,requires_selling_plan,selected_or_first_available_selling_plan_allocation,selected_selling_plan,selected_selling_plan_allocation,selling_plan_groups,seo_description,tags,template_suffix,title,type,url,variants,vendor,variants_size,selected_or_first_available_variant' | split: ','
+
+  assign product_sub_selects = 'variants,metafields' | split: ','
+
+  assign subset = select | strip_newlines | replace: ' ', "" | split: ',' | default: product_options
+
+  assign subset_with_prefix = subset | join: ",|" | prepend: "|" | split: ','
+  assign select_with_prefix = subset_with_prefix | join: ","
+
+  for item in subset
+    assign test_item = item | split: '.' | first
+    if product_options contains test_item
+      assign opt = opt | join: ',' | append: ',' | append: test_item | split: ','
+    endif
+  endfor
+
+  assign options = opt | join: ',' | split: ','
+
+  if options.size == 0
+    assign options = product_options
+  endif
+
+  assign options = options | sort
+
+  for sub_select in product_sub_selects
+    assign prefixed_sub_select = '|' | append: sub_select | append: '.'
+    assign sub_selection = null
+
+    if select_with_prefix contains prefixed_sub_select
+      unless options contains sub_select
+        assign options = options | join: ',' | append: ',' | append: sub_select | split: ','
+      endunless
+      assign opt = null
+      for option in subset_with_prefix
+        if option contains prefixed_sub_select
+          assign opt = opt | join: ',' | append: ',' | append: option | replace: prefixed_sub_select, '' | split: ','
+        endif
+      endfor
+      assign sub_selection = opt | join: ',' | remove_first: ','
+    endif
+
+    case sub_select
+      when 'variants'
+        assign variant_select = sub_selection | default: variant_options | join: ',' | remove_first: ',product'
+      when 'metafields'
+        assign metafields_namespaces = sub_selection | split: ','
+    endcase
+  endfor
+-%}
+
+{%- capture json -%}
+  {
+  {%- if options contains "available" -%}
+    ,"available": {{- input["available"] | json -}}
+  {%- endif -%}
+  {%- if options contains "collections" -%}
+    ,"collections": {{- input["collections"] | json -}}
+  {%- endif -%}
+  {%- if options contains "compare_at_price" -%}
+    ,"compare_at_price": {{- input["compare_at_price"] | json -}}
+  {%- endif -%}
+  {%- if options contains "compare_at_price_max" -%}
+    ,"compare_at_price_max": {{- input["compare_at_price_max"] | json -}}
+  {%- endif -%}
+  {%- if options contains "compare_at_price_min" -%}
+    ,"compare_at_price_min": {{- input["compare_at_price_min"] | json -}}
+  {%- endif -%}
+  {%- if options contains "compare_at_price_varies" -%}
+    ,"compare_at_price_varies": {{- input["compare_at_price_varies"] | json -}}
+  {%- endif -%}
+  {%- if options contains "created_at" -%}
+    ,"created_at": "{{- input["created_at"] | date: "%Y-%m-%dT%H:%M:%S%z" -}}"
+  {%- endif -%}
+  {%- if options contains "description" -%}
+    ,"description": {{- input["description"] | json -}}
+  {%- endif -%}
+  {%- if options contains "featured_media" -%}
+    ,"featured_media": {{- input["featured_media"] | json -}}
+  {%- endif -%}
+  {%- if options contains "featured_media_id" -%}
+    ,"featured_media_id": {{- input["featured_media"].id | json -}}
+  {%- endif -%}
+  {%- if options contains "images" -%}
+    ,"images": {{- input["images"] | json -}}
+  {%- endif -%}
+  {%- if options contains "gift_card" -%}
+    ,"gift_card": {{- input["gift_card"] | json -}}
+  {%- endif -%}
+  {%- if options contains "handle" -%}
+    ,"handle": {{- input["handle"] | json -}}
+  {%- endif -%}
+  {%- if options contains "has_only_default_variant" -%}
+    ,"has_only_default_variant": {{- input["has_only_default_variant"] | json -}}
+  {%- endif -%}
+  {%- if options contains "id" -%}
+    ,"id": {{- input["id"] | json -}}
+  {%- endif -%}
+  {%- if options contains "media" -%}
+    ,"media": {{- input["media"] | json -}}
+  {%- endif -%}
+  {%- if metafields_namespaces.size > 0 -%}
+    ,"metafields": {
+    {%- for namespace in metafields_namespaces -%}
+      "{{- namespace -}}": {%- render '_json_metafields', input: input.metafields[namespace] -%}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+    }
+  {%- endif -%}
+  {%- if options contains "options" -%}
+    ,"options": {{- input["options"] | json -}}
+  {%- endif -%}
+  {%- if options contains "options_with_values" -%}
+    ,"options_with_values": {{- input["options_with_values"] | json -}}
+  {%- endif -%}
+  {%- if options contains "price" -%}
+    ,"price": {{- input["price"] | json -}}
+  {%- endif -%}
+  {%- if options contains "price_max" -%}
+    ,"price_max": {{- input["price_max"] | json -}}
+  {%- endif -%}
+  {%- if options contains "price_min" -%}
+    ,"price_min": {{- input["price_min"] | json -}}
+  {%- endif -%}
+  {%- if options contains "price_varies" -%}
+    ,"price_varies": {{- input["price_varies"] | json -}}
+  {%- endif -%}
+  {%- if options contains "published_at" -%}
+    ,"published_at": "{{- input["published_at"] | date: "%Y-%m-%dT%H:%M:%S%z" -}}"
+  {%- endif -%}
+  {%- if options contains "requires_selling_plan" -%}
+    ,"requires_selling_plan": {{- input["requires_selling_plan"] | json -}}
+  {%- endif -%}
+  {%- if options contains "selected_or_first_available_selling_plan_allocation" -%}
+    ,"selected_or_first_available_selling_plan_allocation": {{- input["selected_or_first_available_selling_plan_allocation"] | json -}}
+  {%- endif -%}
+  {%- if options contains "selected_selling_plan" -%}
+    ,"selected_selling_plan": {{- input["selected_selling_plan"] | json -}}
+  {%- endif -%}
+  {%- if options contains "selected_selling_plan_allocation" -%}
+    ,"selected_selling_plan_allocation": {{- input["selected_selling_plan_allocation"] | json -}}
+  {%- endif -%}
+  {%- if options contains "selling_plan_groups" -%}
+    ,"selling_plan_groups": {{- input["selling_plan_groups"] | json -}}
+  {%- endif -%}
+  {%- if options contains "seo_description" -%}
+    ,"seo_description": {{- input['description'] | strip_html | strip_newlines | truncate: 200 | json -}}
+  {%- endif -%}
+  {%- if options contains "tags" -%}
+    ,"tags": {{- input["tags"] | json -}}
+  {%- endif -%}
+  {%- if options contains "template_suffix" -%}
+    ,"template_suffix": {{- input["template_suffix"] | json -}}
+  {%- endif -%}
+  {%- if options contains "title" -%}
+    ,"title": {{- input["title"] | json -}}
+  {%- endif -%}
+  {%- if options contains "type" -%}
+    ,"type": {{- input["type"] | json -}}
+  {%- endif -%}
+  {%- if options contains "url" -%}
+    ,"url": {{- input["url"] | split: '?' | first | json -}}
+  {%- endif -%}
+  {%- if options contains "variants" -%}
+    ,"variants": [{%- for variant in input.variants -%}{%- render '_json_variant', input: variant, select: variant_select -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+  {%- endif -%}
+  {%- if options contains "variants_size" -%}
+    ,"variants_size": {{ input.variants.size | json }}
+  {%- endif -%}
+  {%- if options contains "selected_or_first_available_variant" -%}
+    ,"selected_or_first_available_variant": {%- render '_json_variant', input: input['selected_or_first_available_variant'], select: variant_select -%}
+  {%- endif -%}
+  {%- if options contains "vendor" -%}
+    ,"vendor": {{- input["vendor"] | json -}}
+  {%- endif -%}
+  }
+{%- endcapture -%}
+
+{{- json | remove_first: ',' | trim | strip_newlines -}}

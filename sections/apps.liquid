@@ -1,0 +1,20 @@
+{% for block in section.blocks %}
+  {{ block }}
+{% endfor %}
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.apps.name",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.apps.presets.apps.name"
+    }
+  ]
+}
+{% endschema %}

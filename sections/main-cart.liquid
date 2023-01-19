@@ -1,0 +1,466 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% for block in section.blocks %}
+  {% if block.type == 'empty' %}
+    {% render 'main-cart.empty', block: block %}
+    {% assign renderDefaultEmptyCart = false %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if renderDefaultEmptyCart %}
+  {% render 'main-cart.empty' %}
+{% endif %}
+
+{% if cart.items.size == 0 %}
+  {% assign hidden = "hidden" %}
+{% endif %}
+
+<div class="{{ color_scheme }} {{ section_layout }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }} {{ hidden }}"
+     data-cart-content>
+  <div class="py-16 container grid lg:grid-cols-[1fr_340px] gap-x-8">
+    <header class="mb-4 lg:col-span-2">
+      <h1 class="h4 font-bold">
+        {{ "main_cart.my_cart" | t }}
+      </h1>
+    </header>
+    <main class="mt-8 grid">
+      <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 max-w-[calc(100%+2rem)] sm:max-w-[calc(100%+3rem)] lg:max-w-[calc(100%+4rem)]">
+        <div class="inline-block min-w-full pt-2 pb-4 align-middle md:px-6 lg:px-8">
+          <div class="overflow-hidden shadow-lg shadow-gray-300/20 ring-1 ring-black ring-opacity-5 md:rounded-theme-md">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col"
+                      class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-full">
+                    {{ "main_cart.product" | t }}
+                  </th>
+                  <th scope="col"
+                      class="px-4 sm:px-6 py-3.5 text-left text-sm font-semibold text-gray-900 max-md:hidden">
+                    {{ "main_cart.sku" | t }}
+                  </th>
+                  <th scope="col"
+                      class="px-4 sm:px-6 py-3.5 text-center text-sm font-semibold text-gray-900 text-right max-sm:hidden">
+                    {{ "main_cart.quantity" | t }}
+                  </th>
+                  <th scope="col"
+                      class="px-4 sm:px-6 py-3.5 text-left text-sm font-semibold text-gray-900 text-right">
+                    {{ "main_cart.total" | t }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white"
+                     data-cart-line-items>
+                {% for line_item in cart.items %}
+                  <tr class="group hf:bg-gray-50">
+                    <td class="pl-4 pr-3 text-sm sm:pl-6 py-4">
+                      <div class="grid sm:grid-cols-[100px_1fr] items-center w-full gap-4">
+                        {% render '_image', image: line_item.image, width: 100, height: 100, placeholder: 'product-1', class: 'w-[100px]', default_alt: line_item.title %}
+                        <a class="flex-1 block"
+                           href="{{ line_item.url }}">
+                          <h3 class="font-semibold group-hf:underline">{{ line_item.product.title }}</h3>
+                          <h4 class="text-xs uppercase tracking-wide text-gray-500">{{ line_item.title | replace: line_item.product.title, "" | replace_first: "-", "" | strip }}</h4>
+                          {% for property in line_item.properties %}
+                            {% assign key = property[0] %}
+                            {% assign value = property[1] %}
+                            {% assign testKey = key | split: '' %}
+                            {% if textKey[0] == "_" %}
+                              {% continue %}
+                            {% endif %}
+
+                            {% if key == 'preorder' %}
+                              <p class="text-xs text-gray-600 flex opacity-70 mt-1">
+                                {% render '_icon', icon: "timer", class: "w-4 h-4 mr-2" %} <span>{{ value }}</span>
+                              </p>
+                            {% else %}
+
+                              <p class="text-xs text-gray-600">
+                                {{ key | capitalize }}: {{ value }}
+                              </p>
+                            {% endif %}
+                          {% endfor %}
+                          <div class="text-primary-outline mt-1">
+                            {{ line_item.final_price | money }}
+                          </div>
+                        </a>
+                      </div>
+                    </td>
+                    <td class="whitespace-nowrap px-4 sm:px-6 py-2 text-sm text-gray-500 max-md:hidden">
+                      {{ line_item.sku }}
+                    </td>
+                    <td class="whitespace-nowrap px-4 sm:px-6 py-2 text-sm text-gray-500 text-right max-sm:hidden">
+                      {% render 'main-cart.quantity-selector', line_item: line_item, line: forloop.index %}
+                    </td>
+                    <td class="whitespace-nowrap px-4 sm:px-6 py-2 text-sm text-gray-700 text-right font-medium">
+                      {{ line_item.final_line_price | money }}
+                      <div class="sm:hidden mb-auto mt-4">
+                        {% render 'main-cart.quantity-selector', line_item: line_item, line: forloop.index %}
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="pt-8 z-10 relative bottom-0 w-full justify-end h-min lg:sticky lg:top-top-bar-spacing">
+      <form data-cart-checkout-form
+            action="{{ routes.cart_url }}"
+            method="post"
+            class="block -mx-4 sm:mx-0 sm:ml-auto sm:max-w-xs grid gap-3 shadow-lg shadow-gray-300/20 ring-1 ring-black ring-opacity-5 p-4 sm:rounded-theme-lg">
+
+        <div class="flex justify-between text-lg font-bold tracking-tight mt-4">
+          <span>Subtotal</span>
+          <span class="relative">
+            {% render '_loading-spinner', class: 'bg-white text-gray-500' %}
+            <span data-cart-total>{{ cart.total_price | money }}</span>
+          </span>
+        </div>
+        <small class="flex text-gray-500">
+          {{ "main_cart.shipping_and" | t }}
+        </small>
+        <button type="submit"
+                name="checkout"
+                value="Checkout"
+                class="button-primary w-full relative"
+                data-cart-checkout-button
+                {% if cart.items.size == 0 %}disabled="disabled"{% endif %}>
+          {% render '_loading-spinner' %}
+          <span>
+            {{ "main_cart.checkout" | t }}
+          </span>
+        </button>
+
+        <div class="mt-4 grid items-center grid-cols-[auto_1fr]">
+          {% if settings.cart_gift_checkbox %}
+            <input id="cart__gift"
+                   name="attributes[This is a gift]"
+                   data-cart-gift-checkbox
+                   type="checkbox"
+                   class="peer inline-flex focus:ring-primary-outline h-4 w-4 border-gray-300 rounded-theme-sm text-primary-bg items-center justify-center p-px"
+                   value="Yes">
+            <label class="inline-flex select-none space-x-4 h-4 ml-2 leading-none cursor-pointer mr-auto"
+                   for="cart__gift">
+              <span class="text-sm font-medium">
+                {{ "main_cart.this_is" | t }}
+              </span>
+            </label>
+            {% assign cartNoteClasses = "peer-checked:opacity-100 opacity-0 max-h-0 overflow-hidden peer-checked:max-h-[200px] transition-all ease-linear peer-checked:overflow-visible duration-300" %}
+          {% endif %}
+          {% if settings.cart_note %}
+            <label class="flex mt-1 items-center col-span-2 {{ cartNoteClasses }}">
+              <span class="sr-only">
+                {{ "main_cart.cart_note" | t }}
+              </span>
+              <textarea data-cart-note-textarea
+                        class="border border-gray-200 mt-2 w-full rounded-theme focus:ring-primary-outline focus:ring-2 max-h-[200px] min-h-[60px] focus:border-transparent placeholder:text-sm placeholder:text-gray-400 text-[13px] resize-y p-2"
+                        name="note"
+                        rows="3"
+                        placeholder="Add special Instructions"></textarea>
+            </label>
+          {% endif %}
+        </div>
+
+      </form>
+    </footer>
+  </div>
+</div>
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.main_cart.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.main_cart.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.main_cart.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.main_cart.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.main_cart.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.main_cart.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.main_cart.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.main_cart.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.main_cart.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.main_cart.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.main_cart.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.main_cart.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.main_cart.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.main_cart.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.main_cart.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.main_cart.settings.color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.main_cart.blocks.empty_cart_screen.name",
+      "type": "empty",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.main_cart.blocks.empty_cart_screen.settings.header__1.content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.image.label"
+        },
+        {
+          "type": "color_background",
+          "id": "image__overlay",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.image__overlay.label",
+          "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.main_cart.blocks.empty_cart_screen.settings.header__2.content"
+        },
+        {
+          "type": "text",
+          "id": "preheading",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.preheading.label"
+        },
+        {
+          "type": "text",
+          "id": "no_display_title",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.no_display_title.label"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.subtitle.label"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.content.label"
+        },
+        {
+          "type": "text",
+          "id": "button_primary__text",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.button_primary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_primary__url",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.button_primary__url.label"
+        },
+        {
+          "type": "text",
+          "id": "button_secondary__text",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.button_secondary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_secondary__url",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.button_secondary__url.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.main_cart.blocks.empty_cart_screen.settings.header__3.content"
+        },
+        {
+          "type": "range",
+          "id": "min_height",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.min_height.label",
+          "default": 320,
+          "min": 240,
+          "max": 640,
+          "step": 20,
+          "unit": "px"
+        },
+        {
+          "type": "radio",
+          "id": "align__vertical",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__vertical.label",
+          "default": "justify-center",
+          "options": [
+            {
+              "value": "justify-start",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__vertical.options__1.label"
+            },
+            {
+              "value": "justify-center",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__vertical.options__2.label"
+            },
+            {
+              "value": "justify-end",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__vertical.options__3.label"
+            }
+          ]
+        },
+        {
+          "type": "radio",
+          "id": "align__horizontal",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__horizontal.label",
+          "default": "items-center text-center",
+          "options": [
+            {
+              "value": "items-start text-left",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__horizontal.options__1.label"
+            },
+            {
+              "value": "items-center text-center",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__horizontal.options__2.label"
+            },
+            {
+              "value": "items-end text-right",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.align__horizontal.options__3.label"
+            }
+          ]
+        },
+        {
+          "type": "radio",
+          "id": "section_layout",
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.section_layout.label",
+          "default": "container-bg-full",
+          "options": [
+            {
+              "value": "container-bg-full",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.section_layout.options__1.label"
+            },
+            {
+              "value": "fullwidth",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.section_layout.options__2.label"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "padding_top",
+          "default": "pt-0",
+          "options": [
+            {
+              "value": "pt-0",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_top.options__1.label"
+            },
+            {
+              "value": "pt-sm",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_top.options__2.label"
+            },
+            {
+              "value": "pt-md",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_top.options__3.label"
+            },
+            {
+              "value": "pt-lg",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_top.options__4.label"
+            }
+          ],
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_top.label"
+        },
+        {
+          "type": "select",
+          "id": "padding_bottom",
+          "default": "pb-0",
+          "options": [
+            {
+              "value": "pb-0",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_bottom.options__1.label"
+            },
+            {
+              "value": "pb-sm",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_bottom.options__2.label"
+            },
+            {
+              "value": "pb-md",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_bottom.options__3.label"
+            },
+            {
+              "value": "pb-lg",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_bottom.options__4.label"
+            }
+          ],
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.padding_bottom.label"
+        },
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "default": "bg-theme-bg text-theme-text color-inherit",
+          "options": [
+            {
+              "value": "bg-theme-bg text-theme-text color-inherit",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.color_scheme.options__1.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-1",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.color_scheme.options__2.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-2",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.color_scheme.options__3.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-3",
+              "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.color_scheme.options__4.label"
+            }
+          ],
+          "label": "t:sections.main_cart.blocks.empty_cart_screen.settings.color_scheme.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

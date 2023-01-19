@@ -1,0 +1,147 @@
+{
+  "sections": {
+    "c80b3ce3-6800-4329-9100-0328d929b0c1": {
+      "type": "forms",
+      "blocks": {
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-0": {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>Sign Up<\/strong><\/p>",
+            "style": "h2",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-1": {
+          "type": "text",
+          "settings": {
+            "title": "<p>Lorem <strong>ipsum <\/strong>dolor sit amet, consectetur adipiscing elit.<\/p>",
+            "style": "richtext",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-2": {
+          "type": "separator",
+          "settings": {
+            "height": 20
+          }
+        },
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-5": {
+          "type": "email",
+          "settings": {
+            "title": "Email",
+            "placeholder": "",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-6": {
+          "type": "password",
+          "settings": {
+            "title": "Password",
+            "confirm_pw__title": "Confirm Password",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-7": {
+          "type": "buttons",
+          "settings": {
+            "title": "Sign In",
+            "reset__show": false,
+            "reset__title": "Reset",
+            "fullwidth": true,
+            "grid_span": "col-span-12"
+          }
+        },
+        "f12cdc08-e461-433d-928b-f1411aad0985": {
+          "type": "text",
+          "settings": {
+            "title": "<p><a href=\"#recover\" title=\"#recover\">Forgot your password?<\/a> or <a href=\"\/account\/register\" title=\"\/account\/register\">Create an Account<\/a><\/p>",
+            "style": "richtext",
+            "grid_span": "col-span-12"
+          }
+        }
+      },
+      "block_order": [
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-0",
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-1",
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-2",
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-5",
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-6",
+        "template--16759632593215__c80b3ce3-6800-4329-9100-0328d929b0c1-167144177264140682-7",
+        "f12cdc08-e461-433d-928b-f1411aad0985"
+      ],
+      "settings": {
+        "type": "customer_login",
+        "hide_if_account": true,
+        "show_only_on_target": false,
+        "target_id": "",
+        "success_message": "Thank you for contacting us.",
+        "redirect": "off",
+        "width": "max-w-md",
+        "fullwidth": true,
+        "image__overlay": "linear-gradient(135deg, rgb(var(--color-text) \/ 0.01) 0%, rgb(var(--color-text) \/ 0.05) 100%)",
+        "color_scheme": "color-inherit"
+      }
+    },
+    "306f04d4-3150-4f0a-956c-cb4e7e14d1e3": {
+      "type": "forms",
+      "blocks": {
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-0": {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>Reset your password<\/strong><\/p>",
+            "style": "h3",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-1": {
+          "type": "text",
+          "settings": {
+            "title": "<p>Lorem <strong>ipsum <\/strong>dolor sit amet, consectetur adipiscing elit.<\/p>",
+            "style": "richtext",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-5": {
+          "type": "email",
+          "settings": {
+            "title": "Email",
+            "placeholder": "",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-7": {
+          "type": "buttons",
+          "settings": {
+            "title": "Submit",
+            "reset__show": false,
+            "reset__title": "Reset",
+            "fullwidth": true,
+            "grid_span": "col-span-12"
+          }
+        }
+      },
+      "block_order": [
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-0",
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-1",
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-5",
+        "template--16759632593215__306f04d4-3150-4f0a-956c-cb4e7e14d1e3-167144264988ae5123-7"
+      ],
+      "settings": {
+        "type": "recover_customer_password",
+        "hide_if_account": true,
+        "show_only_on_target": true,
+        "target_id": "recover",
+        "success_message": "Check your emails for for the next steps.",
+        "redirect": "\/account\/login#recover",
+        "width": "max-w-md",
+        "fullwidth": true,
+        "image__overlay": "linear-gradient(135deg, rgb(var(--color-text) \/ 0.01) 0%, rgb(var(--color-text) \/ 0.05) 100%)",
+        "color_scheme": "color-inherit"
+      }
+    }
+  },
+  "order": [
+    "c80b3ce3-6800-4329-9100-0328d929b0c1",
+    "306f04d4-3150-4f0a-956c-cb4e7e14d1e3"
+  ]
+}

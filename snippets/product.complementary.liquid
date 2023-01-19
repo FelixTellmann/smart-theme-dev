@@ -1,0 +1,40 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title = block.settings.title
+  assign image__show_secondary = block.settings.image__show_secondary
+  assign products = block.settings.products
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% assign upsellProducts = product.metafields.shopify--discovery--product_recommendation.complementary_products.value %}
+
+<div data-product-block="complementary"
+     class="col-span-12" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+
+  <div>
+    <h2 class="h4 text-lg font-bold">{{ title }}</h2>
+    <main class="relative py-2">
+      <div class="grid gap-6 grid-flow-col-dense overflow-x-auto scroll-pl-8 py-8 -my-8 relative snap-mandatory snap-x scroll-smooth "
+           style="grid-auto-columns: 170px">
+        {% assign complementaryClass = "" %}
+
+        {% for item in upsellProducts %}
+          {% assign complementaryClass = "hidden" %}
+          {% if item.id == product.id %}
+            {% continue %}
+          {% endif %}
+          {% render '_product-card--small', product: item, settings: section.settings %}
+        {% endfor %}
+
+        {% for item in products %}
+          {% assign currentClass = complementaryClass %}
+          {% if item.id == product.id %}
+            {% assign currentClass = complementaryClass | replace: "hidden", "" | append: "hidden" %}
+          {% endif %}
+          {% render '_product-card--small', product: item, settings: section.settings, class: currentClass %}
+        {% endfor %}
+      </div>
+    </main>
+  </div>
+</div>

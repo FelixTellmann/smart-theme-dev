@@ -1,0 +1,231 @@
+{% case form %}
+  {% when 'country-selector' %}
+    {% if localization.available_countries.size > 1 %}
+      <div class="{{ class }}">
+        {% form 'localization', class: "relative flex flex-col" %}
+          <input type="checkbox"
+                 tabindex="0"
+                 class="peer/master absolute opacity-0 inset-0 z-10 w-full h-full appearance-none cursor-pointer">
+          <input type="checkbox"
+                 tabindex="-1"
+                 class="peer/slave fixed opacity-0 z-10 inset-0 w-full h-full appearance-none pointer-events-none
+                 peer-checked/master:pointer-events-auto
+                 checked:pointer-events-auto
+                 peer-checked/master:checked:pointer-events-none">
+          <button type="button"
+                  tabindex="-1"
+                  class="input-primary pr-16 relative whitespace-nowrap
+                          peer-focus/master:outline
+                          peer-checked/master:bg-theme-text peer-checked/master:text-theme-bg peer-checked/master:svg:text-theme-bg/70
+                          peer-checked/slave:bg-theme-text peer-checked/slave:text-theme-bg peer-checked/slave:svg:text-theme-bg/70
+                          peer-checked/master:peer-checked/slave:bg-theme-bg
+                          peer-checked/master:peer-checked/slave:text-theme-text
+                          peer-checked/master:peer-checked/slave:svg:text-theme-text/70
+">
+            <span>
+              {{ localization.country.name }} ({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})
+            </span>
+            <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              {% render "_icon", icon: 'chevron-up-down', class: "h-5 w-5 text-theme-text/70 " %}
+            </span>
+          </button>
+
+          <div class="absolute z-50 bottom-[calc(100%+0.5rem)] rounded-primary shadow left-0 whitespace-nowrap py-1 bg-theme-text opacity-0 pointer-events-none transition-all duration-75 overflow-hidden min-w-full
+                peer-checked/master:opacity-100 peer-checked/master:pointer-events-auto
+                peer-checked/slave:opacity-100 peer-checked/slave:pointer-events-auto
+                peer-checked/master:peer-checked/slave:opacity-0 peer-checked/master:peer-checked/slave:pointer-events-none">
+            <div class="grid h-full max-h-[400px] overflow-y-auto scrollbar-y-slim overflow-x-hidden"
+                 role="radiogroup">
+              {% for country in localization.available_countries %}
+                <button class="flex py-2 pl-4 pr-10 relative z-10 w-full svg:text-theme-text svg:hf:text-primary-text/10 text-theme-bg/70 hf:bg-primary-bg/80 hf:text-primary-text/80 {% if country.iso_code == localization.country.iso_code %}!bg-primary-bg !text-primary-text svg:!text-primary-text{% endif %}"
+                        type="submit"
+                        name="country_code"
+                        role="radio"
+                        {% if country.iso_code == localization.country.iso_code %}aria-checked="true"{% endif %}
+                        value="{{ country.iso_code }}">
+                  <span>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</span>
+                  <span class="absolute inset-y-0 right-2 flex items-center pr-2 pointer-events-none ">
+                    {% render "_icon", icon: 'check-mark', class: "h-5 w-5" %}
+                  </span>
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    {% endif %}
+  {% when 'language-selector' %}
+    {% if localization.available_languages.size > 1 %}
+
+      <div class="{{ class }}">
+        {% form 'localization', class: "relative flex flex-col" %}
+          <input type="checkbox"
+                 tabindex="0"
+                 class="peer/master absolute opacity-0 inset-0 z-10 w-full h-full appearance-none cursor-pointer">
+          <input type="checkbox"
+                 tabindex="-1"
+                 class="peer/slave fixed opacity-0 z-10 inset-0 w-full h-full appearance-none pointer-events-none
+                 peer-checked/master:pointer-events-auto
+                 checked:pointer-events-auto
+                 peer-checked/master:checked:pointer-events-none">
+          <button type="button"
+                  tabindex="-1"
+                  class="input-primary pr-16 relative whitespace-nowrap
+                          peer-focus/master:outline
+                          peer-checked/master:bg-theme-text peer-checked/master:text-theme-bg peer-checked/master:svg:text-theme-bg/70
+                          peer-checked/slave:bg-theme-text peer-checked/slave:text-theme-bg peer-checked/slave:svg:text-theme-bg/70
+                          peer-checked/master:peer-checked/slave:bg-theme-bg
+                          peer-checked/master:peer-checked/slave:text-theme-text
+                          peer-checked/master:peer-checked/slave:svg:text-theme-text/70
+">
+            <span>
+              {{ localization.language.endonym_name | capitalize }}
+            </span>
+            <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              {% render "_icon", icon: 'chevron-up-down', class: "h-5 w-5 text-theme-text/70 " %}
+            </span>
+          </button>
+
+          <div class="absolute z-50 bottom-[calc(100%+0.5rem)] rounded-primary shadow left-0 whitespace-nowrap py-1 bg-theme-text opacity-0 pointer-events-none transition-all duration-75 overflow-hidden min-w-full
+                peer-checked/master:opacity-100 peer-checked/master:pointer-events-auto
+                peer-checked/slave:opacity-100 peer-checked/slave:pointer-events-auto
+                peer-checked/master:peer-checked/slave:opacity-0 peer-checked/master:peer-checked/slave:pointer-events-none">
+            <div class="grid h-full max-h-[400px] overflow-y-auto scrollbar-y-slim overflow-x-hidden"
+                 role="radiogroup">
+              {% for language in localization.available_languages %}
+                <button class="flex py-2 pl-4 pr-10 relative z-10 w-full svg:text-theme-text svg:hf:text-primary-text/10 text-theme-bg/70 hf:bg-primary-bg/80 hf:text-primary-text/80 {% if language.iso_code == localization.language.iso_code %}!bg-primary-bg !text-primary-text svg:!text-primary-text{% endif %}"
+                        {% if language.iso_code == localization.language.iso_code %}aria-checked="true"{% endif %}
+                        type="submit"
+                        name="language_code"
+                        role="radio"
+                        value="{{ language.iso_code }}">
+                  <span>{{ language.endonym_name | capitalize }}</span>
+                  <span class="absolute inset-y-0 right-2 flex items-center pr-2 pointer-events-none ">
+                    {% render "_icon", icon: 'check-mark', class: "h-5 w-5" %}
+                  </span>
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    {% endif %}
+  {% when 'newsletter' %}
+    <div class="{{ class }}">
+      {%- form 'customer', id: id, class: 'block' -%}
+        {%- if section.settings.newsletter_heading != blank -%}
+          <h2 class="text-lg font-medium tracking-tight mb-2">{{ section.settings.newsletter_heading | escape }}</h2>
+        {%- endif -%}
+
+        <div class="flex sm:space-x-2 space-y-2 flex-col sm:flex-row sm:space-y-0">
+          <label class="flex sm:inline-flex flex-1">
+            <input
+                type="email"
+                name="contact[email]"
+                class="input-primary flex w-full placeholder:text-center sm:placeholder:text-left"
+                value="{{ form.email }}"
+                aria-required="true"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                {% if form.errors %}
+                  autofocus
+                  aria-invalid="true"
+                  aria-describedby="ContactFooter-error"
+                {% elsif form.posted_successfully? %}
+                  aria-describedby="ContactFooter-success"
+                {% endif %}
+                placeholder="Enter your email"
+                required
+            >
+            <span class="sr-only">
+              {{ "form.newsletter" | t }}
+            </span>
+
+            {%- if form.errors -%}
+              <small class="block">
+                {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+              </small>
+            {%- endif -%}
+
+            {%- if form.posted_successfully? -%}
+              <h3 class=""
+                  tabindex="-1"
+                  autofocus>
+                {{ "form.thank_you" | t }}
+              </h3>
+            {%- endif -%}
+          </label>
+ 
+          <button type="submit"
+                  class="button-primary w-full sm:w-auto">
+            Submit
+          </button>
+        </div>
+        {% if tag and tag != blank %}
+          <input type="hidden"
+                 name="customer[tags]"
+                 value="{{ tag }}">
+        {% endif %}
+      {%- endform -%}
+    </div>
+  {% when 'no-js-collection-sort' %}
+    {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+    <div class="{{ class }}">
+      <form class="relative flex flex-col">
+        <input type="checkbox"
+               tabindex="0"
+               class="peer/master absolute opacity-0 inset-0 z-10 w-full h-full appearance-none cursor-pointer">
+        <input type="checkbox"
+               tabindex="-1"
+               class="peer/slave fixed opacity-0 z-10 inset-0 w-full h-full appearance-none pointer-events-none
+                 peer-checked/master:pointer-events-auto
+                 checked:pointer-events-auto
+                 peer-checked/master:checked:pointer-events-none">
+        <button type="button"
+                tabindex="-1"
+                class="input-primary pr-16 relative whitespace-nowrap
+                          peer-focus/master:outline
+                          peer-checked/master:bg-theme-text peer-checked/master:text-theme-bg peer-checked/master:svg:text-theme-bg/70
+                          peer-checked/slave:bg-theme-text peer-checked/slave:text-theme-bg peer-checked/slave:svg:text-theme-bg/70
+                          peer-checked/master:peer-checked/slave:bg-theme-bg
+                          peer-checked/master:peer-checked/slave:text-theme-text
+                          peer-checked/master:peer-checked/slave:svg:text-theme-text/70
+">
+          <span>
+            {% for option in collection.sort_options %}
+              {% if option.value == sort_by %}
+                {{ option.name | escape }}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          </span>
+          <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+            {% render "_icon", icon: 'chevron-up-down', class: "h-5 w-5 text-theme-text/70 " %}
+          </span>
+        </button>
+
+        <div class="absolute z-50 bottom-[calc(100%+0.5rem)] rounded-primary shadow left-0 whitespace-nowrap py-1 bg-theme-text opacity-0 pointer-events-none transition-all duration-75 overflow-hidden min-w-full
+                peer-checked/master:opacity-100 peer-checked/master:pointer-events-auto
+                peer-checked/slave:opacity-100 peer-checked/slave:pointer-events-auto
+                peer-checked/master:peer-checked/slave:opacity-0 peer-checked/master:peer-checked/slave:pointer-events-none">
+          <div class="grid h-full max-h-[400px] overflow-y-auto scrollbar-y-slim overflow-x-hidden"
+               role="radiogroup">
+            {% for option in collection.sort_options %}
+              <button class="flex py-2 pl-4 pr-10 relative z-10 w-full svg:text-theme-text svg:hf:text-primary-text/10 text-theme-bg/70 hf:bg-primary-bg/80 hf:text-primary-text/80 {% if option.value == sort_by %}!bg-primary-bg !text-primary-text svg:!text-primary-text{% endif %}"
+                      type="submit"
+                      name="sort_by"
+                      role="radio"
+                      {% if option.value == sort_by %}aria-checked="true"{% endif %}
+                      value="{{ option.value | escape }}">
+                <span>{{ option.name | escape }}</span>
+                <span class="absolute inset-y-0 right-2 flex items-center pr-2 pointer-events-none ">
+                  {% render "_icon", icon: 'check-mark', class: "h-5 w-5" %}
+                </span>
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+      </form>
+    </div>
+{% endcase %}

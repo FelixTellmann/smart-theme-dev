@@ -1,0 +1,60 @@
+{% assign now_date = 'now' | date: '%s' %}
+<div class="relative h-announcement w-full {{ class }}"
+     data-announcement-bar>
+  {% assign blockIndex = 0 %}
+  {% for block in section.blocks %}
+    {% if block.type != 'announcement' %}{% continue %}{% endif %}
+
+    {% if block.settings.scheduled %}
+      {% if block.settings.start_date != blank and request.design_mode == false %}
+
+        {% assign block_start_date = block.settings.start_date | date: '%s' %}
+        {% if block_start_date > now_date %}{% continue %}{% endif %}
+
+        {% if block.settings.end_date != blank %}
+          {% assign block_end_date = block.settings.end_date | date: '%s' %}
+          {% if block_end_date < now_date %}{% continue %}{% endif %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+    {% if blockIndex == 0 and header == true %}
+      <style>
+        :root {
+          --announcement-height: {{ section.settings.announcements__height }}px;
+        }
+      </style>
+    {% endif %}
+
+
+    {% case block.settings.position %}
+      {% when 'left' %}
+        {% assign positionClasses = "self-start text-left" %}
+      {% when 'center' %}
+        {% assign positionClasses = "self-center text-center" %}
+      {% when 'right' %}
+        {% assign positionClasses = "self-end text-right" %}
+    {% endcase %}
+
+    <div class="absolute left-0 top-0 w-full h-full transition-all duration-500 ease-linear"
+         data-announcement-index="{{ blockIndex }}"
+         data-announcement-duration="{{ block.settings.display_duration }}"
+         data-announcement-text="{{ block.settings.color_text }}"
+         data-announcement-bg="{{ block.settings.color_bg }}"
+         style="opacity: 0; pointer-events: none;">
+      <a class="flex items-center w-full h-full bg-theme-bg-hex text-theme-text-hex"
+         href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
+        <div class="container w-fit flex-shrink {{ positionClasses }}">
+          {% case text %}
+            {% when 'short' %}
+              {{ block.settings.short_text | default: block.settings.text }}
+            {% else %}
+              {{ block.settings.text }}
+          {% endcase %}
+        </div>
+      </a>
+    </div>
+
+    {% assign blockIndex = blockIndex | plus: 1 %}
+  {% endfor %}
+</div>

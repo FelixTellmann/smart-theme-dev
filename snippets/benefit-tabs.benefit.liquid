@@ -1,0 +1,40 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+  assign title = block.settings.title
+  assign title_font = block.settings.title_font
+  assign content = block.settings.content
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% case type %}
+  {% when 'image-mobile-content' %}
+    <figure class="relative grid transition-all ease-in-out snap-start min-w-full md:min-w-full snap-always"
+            data-scroll-item>
+      <picture class="block relative pb-[100%] w-full overflow-hidden rounded-theme-md">
+        {% render "_image", image: image, class: "absolute top-0 left-0 h-full w-full bg-inherit object-cover", placeholder: 'collection-3' %}
+      </picture>
+      <figcaption class="lg:hidden text-center mt-4 overflow-hidden">
+        {% render 'typography', type: title_font, content: title %}
+        {% render 'typography', type: "prose", content: content %}
+      </figcaption>
+    </figure>
+
+  {% when 'desktop-text-content' %}
+    <button class="h-min opacity-50 block text-left ac:opacity-100 transition-all duration-75 {% if forloop.first %}active{% endif %}"
+            type="button"
+            data-scroll-tab-button="{{ forloop.index0 }}">
+      {% render 'typography', type: title_font, content: title %}
+      {% render 'typography', type: "prose", content: content %}
+    </button>
+
+  {% when 'scroll-tab-button' %}
+    <button class="group p-2 flex opacity-50 hf:opacity-70 ac:opacity-100 {% if forloop.first %}active{% endif %}"
+            type="button"
+            data-scroll-tab-button="{{ forloop.index0 }}">
+      <span class="rounded-theme-sm h-1 w-14 bg-gray-600 flex group-hf:bg-gray-900 transition-all duration-75"></span>
+      <span class="sr-only">
+        {{ "benefit_tabs.select_tab" | t }} {{ forloop.index }}
+      </span>
+    </button>
+{% endcase %}

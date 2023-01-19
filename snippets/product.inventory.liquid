@@ -1,0 +1,61 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign threshold = block.settings.threshold
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign threshold = threshold | times: 1.0
+  assign available = variant.available
+  assign inventory_quantity = variant.inventory_quantity
+
+  if variant.inventory_policy == "continue" or inventory_quantity > threshold or variant.inventory_management != "shopify"
+    assign inStock = true
+    assign percentage = 100
+    assign color = 'success'
+  endif
+
+  if inStock != true and available
+    assign percentage = inventory_quantity | divided_by: threshold | times: 100.0
+
+    if percentage < 33
+      assign color = 'error'
+    endif
+    if percentage >= 33 and percentage < 66
+      assign color = 'warning'
+    endif
+    if percentage >= 66
+      assign color = 'success'
+    endif
+  endif
+
+
+  if available != true
+    assign percentage = 0
+  endif
+%}
+<div data-product-block="inventory"
+     class="grid grid-cols-[1fr_minmax(10%,80px)] items-center col-span-12" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <div class="w-full h-2 flex rounded-full bg-gray-300 max-w-xl overflow-hidden">
+    <div class="relative h-full flex-1">
+      <div class="h-full transition-all duration-500 ease-in-out data-[color=success]:bg-success data-[color=warning]:bg-warning data-[color=error]:bg-error"
+           style="width: Max(0%, Min(100%, {{ percentage }}%))"
+           data-color="{{ color }}">
+      </div>
+    </div>
+  </div>
+  <span class="text-xs text-right font-medium"
+        data-product-inventory-display>
+    {% if inStock %}
+      {{ "product.in_stock" | t }}
+    {% elsif available != true %}
+      {{ "product.available" | t }}
+    {% elsif variant.inventory_quantity == 1 %}
+      {{ "product.last_item" | t }}
+    {% else %}
+      {{ variant.inventory_quantity }}
+      {{ "product.items_left" | t }}
+    {% endif %}
+  </span>
+</div>

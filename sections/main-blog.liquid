@@ -1,0 +1,154 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image__show = section.settings.image__show
+  assign image__ratio = section.settings.image__ratio
+  assign image__background = section.settings.image__background
+  assign date__show = section.settings.date__show
+  assign author__show = section.settings.author__show
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div class="bg-theme-bg text-theme-text scroll-mt-top-bar-spacing {{ color_scheme }}">
+  <section class="container py-16">
+    <header>
+      <h1 class="h4 font-bold">{{ blog.title }}</h1>
+      <div class="relative grid mt-4 mb-8"
+           data-scroll-slider>
+        <div class="grid grid-flow-col-dense auto-cols-min gap-3 overflow-x-auto pb-4 pt-1 scroll-smooth snap-mandatory snap-x max-w-full"
+             data-scroll-container
+             data-product-media-container>
+          <div class="grid grid-flow-col-dense auto-cols-min gap-3">
+            <a class="max-w-xs truncate block rounded-full px-4 py-2 bg-gray-200 text-xs ac:bg-gray-800 ac:text-white {% if current_tags == blank %}active{% endif %}"
+               data-scroll-item
+               href="/blogs/{{ blog.handle }}">
+              {{ "main_blog.view_all" | t }}
+            </a>
+            {% for tag in blog.all_tags %}
+              <a class="max-w-xs truncate block rounded-full px-4 py-2 bg-gray-200 text-xs ac:bg-gray-800 ac:text-white {% if current_tags contains tag %}active{% endif %}"
+                 data-scroll-item
+                 href="/blogs/{{ blog.handle }}/tagged/{{ tag | handle }}">
+                {{ tag }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div data-scroll-controls
+             class="hidden select-none">
+          {% render 'scroll-bar-elements', element: 'scrollbar' %}
+        </div>
+      </div>
+    </header>
+    {% paginate blog.articles by 24 %}
+      <main class="grid grid-cols-3 gap-8">
+        {% for article in blog.articles %}
+          <a href="{{ article.url }}"
+             class="group grid gap-2 p-4 bg-gray-50 border border-gray-200 rounded-theme-lg shadow-lg shadow-gray-300/10">
+            {% if image__show %}
+              <picture class="grid relative {{ image__ratio }} overflow-hidden rounded-theme-lg shadow">
+                {% render '_image', image: article.image, class: 'absolute w-full h-full inset-0 object-cover group-hf:scale-105 transition-all ease-in' %}
+                <div class="absolute inset-0 w-full h-full"
+                     style="background-image: {{ image__background }}"></div>
+              </picture>
+            {% endif %}
+            <h2 class="text-lg font-bold mt-2 group-hf:underline">{{ article.title }}</h2>
+            <div class="flex justify-between text-sm text-gray-500">
+              {% if author__show %}
+                <span class="font-medium">{{ article.author }}</span>
+              {% endif %}
+              {% if date__show %}
+                <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </main>
+      <footer class="py-4 flex justify-center">
+        {% render '_pagination', paginate: paginate %}
+      </footer>
+    {% endpaginate %}
+  </section>
+</div>
+
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.blog_posts.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.blog_posts.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "image__show",
+      "default": true,
+      "label": "t:sections.blog_posts.settings.image__show.label"
+    },
+    {
+      "id": "image__ratio",
+      "type": "select",
+      "default": "pb-[125%]",
+      "options": [
+        {
+          "value": "pb-[125%]",
+          "label": "t:sections.blog_posts.settings.image__ratio.options__1.label"
+        },
+        {
+          "value": "pb-[100%]",
+          "label": "t:sections.blog_posts.settings.image__ratio.options__2.label"
+        }
+      ],
+      "label": "t:sections.blog_posts.settings.image__ratio.label"
+    },
+    {
+      "type": "color_background",
+      "id": "image__background",
+      "label": "t:sections.blog_posts.settings.image__background.label",
+      "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+    },
+    {
+      "type": "checkbox",
+      "id": "date__show",
+      "default": true,
+      "label": "t:sections.blog_posts.settings.date__show.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "author__show",
+      "default": false,
+      "label": "t:sections.blog_posts.settings.author__show.label"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.blog_posts.settings.paragraph__1.content"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.blog_posts.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.blog_posts.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.blog_posts.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.blog_posts.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.blog_posts.settings.color_scheme.label"
+    }
+  ]
+}
+{% endschema %}

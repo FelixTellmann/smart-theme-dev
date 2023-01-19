@@ -1,0 +1,23 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign grid_span = block.settings.grid_span
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="quantity_selector"
+     class="{{ grid_span }}" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <noscript>
+    <label class="input-primary flex text-[13px] font-semibold select-none no-js-hidden">
+      <span class="flex-1">
+        {{ "product.quantity" | t }}
+      </span>
+      <input class="w-16 outline-none text-right"
+             type="number"
+             name="quantity"
+             min="1"
+             value="1"
+             form="{{ product_form_id }}">
+    </label>
+  </noscript>
+</div>

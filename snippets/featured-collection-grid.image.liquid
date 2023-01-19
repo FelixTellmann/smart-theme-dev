@@ -1,0 +1,20 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+  assign image__overlay = block.settings.image__overlay
+  assign color_scheme = block.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<picture class="col-span-4 lg:col-span-4 xl:col-span-4 xl:row-span-2 relative block {{ color_scheme }}">
+  {% render '_image', image: image, class: "w-full h-full object-cover" %}
+  <div class="absolute w-full h-full inset-0 p-6 flex flex-col justify-end"
+       style="background-image: {{ image__overlay }}">
+    <div>
+      <a href="{{ _collection.url }}"
+         class="hf:underline text-lg font-medium">
+        View all
+      </a>
+    </div>
+  </div>
+</picture>

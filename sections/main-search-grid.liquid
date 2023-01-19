@@ -1,0 +1,210 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign vendor__show = section.settings.vendor__show
+  assign rating__show = section.settings.rating__show
+  assign labels__show = section.settings.labels__show
+  assign labels__discount = section.settings.labels__discount
+  assign image__ratio = section.settings.image__ratio
+  assign image__show_secondary = section.settings.image__show_secondary
+  assign image__background = section.settings.image__background
+  assign image__drop_shadow = section.settings.image__drop_shadow
+  assign pagination_size = section.settings.pagination_size
+  assign columns__desktop = section.settings.columns__desktop
+  assign columns__mobile = section.settings.columns__mobile
+  assign article_show_date = section.settings.article_show_date
+  assign article_show_author = section.settings.article_show_author
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<section class="text-theme-text bg-theme-bg {{ color_scheme }}">
+  <main class="container pt-8 pb-8">
+    {% paginate search.results by pagination_size -%}
+      <div class="grid gap-x-6 gap-y-10 {{ columns__mobile }} {{ columns__desktop }}">
+        {% for result in search.results -%}
+          {% case result.object_type %}
+            {% when 'product' %}
+              {% render '_product-card', product: result, settings: section.settings %}
+            {% when 'article' %}
+              <div>ARTICLE</div>
+            {% when 'page' %}
+              <div>PAGE</div>
+          {% endcase %}
+        {%- endfor %}
+      </div>
+      <div class="flex justify-center mt-10">
+        {% render '_pagination', paginate: paginate %}
+      </div>
+    {%- endpaginate %}
+  </main>
+</section>
+
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.search_results.name",
+  "settings": [
+    {
+      "content": "t:sections.search_results.settings.header__1.content",
+      "type": "header"
+    },
+    {
+      "id": "vendor__show",
+      "type": "checkbox",
+      "default": false,
+      "label": "t:sections.search_results.settings.vendor__show.label"
+    },
+    {
+      "id": "rating__show",
+      "type": "checkbox",
+      "default": false,
+      "label": "t:sections.search_results.settings.rating__show.label",
+      "info": "t:sections.search_results.settings.rating__show.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "labels__show",
+      "label": "t:sections.search_results.settings.labels__show.label",
+      "default": true
+    },
+    {
+      "content": "t:sections.search_results.settings.paragraph__1.content",
+      "type": "paragraph"
+    },
+    {
+      "type": "radio",
+      "id": "labels__discount",
+      "label": "t:sections.search_results.settings.labels__discount.label",
+      "info": "t:sections.search_results.settings.labels__discount.info",
+      "default": "sale",
+      "options": [
+        {
+          "value": "sale",
+          "label": "t:sections.search_results.settings.labels__discount.options__1.label"
+        },
+        {
+          "value": "percentage",
+          "label": "t:sections.search_results.settings.labels__discount.options__2.label"
+        },
+        {
+          "value": "value",
+          "label": "t:sections.search_results.settings.labels__discount.options__3.label"
+        }
+      ]
+    },
+    {
+      "content": "t:sections.search_results.settings.header__2.content",
+      "type": "header"
+    },
+    {
+      "id": "image__ratio",
+      "type": "select",
+      "default": "pb-[125%]",
+      "options": [
+        {
+          "value": "pb-[125%]",
+          "label": "t:sections.search_results.settings.image__ratio.options__1.label"
+        },
+        {
+          "value": "pb-[100%]",
+          "label": "t:sections.search_results.settings.image__ratio.options__2.label"
+        }
+      ],
+      "label": "t:sections.search_results.settings.image__ratio.label"
+    },
+    {
+      "id": "image__show_secondary",
+      "type": "checkbox",
+      "default": false,
+      "label": "t:sections.search_results.settings.image__show_secondary.label"
+    },
+    {
+      "type": "color_background",
+      "id": "image__background",
+      "label": "t:sections.search_results.settings.image__background.label",
+      "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+    },
+    {
+      "type": "checkbox",
+      "id": "image__drop_shadow",
+      "label": "t:sections.search_results.settings.image__drop_shadow.label",
+      "info": "t:sections.search_results.settings.image__drop_shadow.info",
+      "default": false
+    },
+    {
+      "content": "t:sections.search_results.settings.header__3.content",
+      "type": "header"
+    },
+    {
+      "id": "pagination_size",
+      "type": "range",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "t:sections.search_results.settings.pagination_size.label"
+    },
+    {
+      "type": "select",
+      "id": "columns__desktop",
+      "default": "lg:grid-cols-4",
+      "label": "t:sections.search_results.settings.columns__desktop.label",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "t:sections.search_results.settings.columns__desktop.options__1.label"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "t:sections.search_results.settings.columns__desktop.options__2.label"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "t:sections.search_results.settings.columns__desktop.options__3.label"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "t:sections.search_results.settings.columns__desktop.options__4.label"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "t:sections.search_results.settings.columns__desktop.options__5.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "columns__mobile",
+      "default": "grid-cols-2",
+      "label": "t:sections.search_results.settings.columns__mobile.label",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "t:sections.search_results.settings.columns__mobile.options__1.label"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "t:sections.search_results.settings.columns__mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.search_results.settings.header__4.content",
+      "info": "Blog card styles also apply to page cards in search results. To change card styles update your theme settings."
+    },
+    {
+      "type": "checkbox",
+      "id": "article_show_date",
+      "default": true,
+      "label": "t:sections.search_results.settings.article_show_date.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "article_show_author",
+      "default": false,
+      "label": "t:sections.search_results.settings.article_show_author.label"
+    }
+  ]
+}
+{% endschema %}

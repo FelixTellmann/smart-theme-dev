@@ -1,0 +1,72 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = block.settings.image
+  assign image__overlay = block.settings.image__overlay
+  assign preheading = block.settings.preheading
+  assign preheading_font = block.settings.preheading_font
+  assign title = block.settings.title
+  assign title_font = block.settings.title_font
+  assign subtitle = block.settings.subtitle
+  assign subtitle_font = block.settings.subtitle_font
+  assign content = block.settings.content
+  assign button_primary__text = block.settings.button_primary__text
+  assign button_primary__url = block.settings.button_primary__url
+  assign button_primary__style = block.settings.button_primary__style
+  assign button_secondary__text = block.settings.button_secondary__text
+  assign button_secondary__url = block.settings.button_secondary__url
+  assign button_secondary__style = block.settings.button_secondary__style
+  assign align__vertical = block.settings.align__vertical
+  assign align__horizontal = block.settings.align__horizontal
+  assign slide = block.settings.slide
+  assign slide_speed = block.settings.slide_speed
+  assign responsive_visibility = block.settings.responsive_visibility
+  assign color_scheme = block.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  if button_primary__text != blank and button_primary__url != blank
+    assign button_primary__show = true
+  endif
+
+  if button_secondary__text != blank and button_secondary__url != blank
+    assign button_secondary__show = true
+  endif
+%}
+<figure id="block--{{ block.id }}" {{ block.shopify_attributes }}
+        data-slideshow-slide-duration="{% if block_slide %}{{ block_slide_speed }}{% else %}{{ slide_speed }}{% endif %}"
+        data-slideshow-slide="{{ forloop.index0 }}"
+        class="group w-full h-full absolute inset-0 overflow-hidden opacity-0 pointer-events-none ac:opacity-100 ac:pointer-events-auto transition-all {% if forloop.first %}active{% endif %} {{ color_scheme }} {{ responsive_visibility }}">
+
+  {% render '_image', image: image, class: "absolute inset-0 w-full h-full object-cover scale-110 group-ac:scale-100 transition-all", placeholder: 'lifestyle-2' %}
+
+  <figcaption class="relative z-10 inset-0 w-full h-full md:px-6 py-8"
+              style="background-image: {{ image__overlay }};">
+    <div class="container h-full w-full flex flex-col {{ align__vertical }} {{ align__horizontal }}">
+
+      <div class="max-w-lg grid gap-3">
+        {% render 'typography', type: preheading_font, content: preheading, class: "text-theme-overlay-text" %}
+        {% render 'typography', type: title_font, content: title, class: "text-theme-overlay-text" %}
+        {% render 'typography', type: subtitle_font, content: subtitle, class: "text-theme-overlay-text" %}
+        {% render 'typography', type: "prose", content: content, class: "text-theme-overlay-text" %}
+
+        {% if button_secondary__show or button_primary__show %}
+          <div class="mt-4 -mx-2 flex flex-col sm:flex-row {{ align__horizontal | replace: "items", "sm:justify" | replace: "items-end", "sm:justify-end" }}">
+            {% if button_secondary__show %}
+              <a href="{{ button_secondary__url }}"
+                 class="{{ button_secondary__style }} m-2">
+                {{ button_secondary__text }}
+              </a>
+            {% endif %}
+            {% if button_primary__show %}
+              <a href="{{ button_primary__url }}"
+                 class="{{ button_primary__style }} m-2">
+                {{ button_primary__text }}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </figcaption>
+</figure>

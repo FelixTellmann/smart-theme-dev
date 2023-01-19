@@ -1,0 +1,22 @@
+<details class="flex appearance-none group"
+         data-collapsible
+         data-block-id="{{ blockId }}">
+  <summary class="py-2 select-none cursor-pointer">
+    <span class="flex justify-between items-center">
+      <h2 class="text-sm font-semibold"
+          data-collapsible-title>
+        {{ title }}
+      </h2>
+      {% render '_icon', icon: 'plus', class: "w-3 h-3 group-open:-rotate-90 transition-all" %}
+    </span>
+
+  </summary>
+
+  <div class="transition-all duration-150 overflow-hidden ease-linear"
+       style="max-height: 0;">
+    <div class="prose prose-theme [&_>_*]:max-w-none max-w-none prose-sm pb-2"
+         data-collapsible-content>
+      {{ content }}
+    </div>
+  </div>
+</details>

@@ -1,0 +1,41 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign layout = block.settings.layout
+  assign size = block.settings.size
+  assign icon_1 = block.settings.icon_1
+  assign image_1 = block.settings.image_1
+  assign heading_1 = block.settings.heading_1
+  assign icon_2 = block.settings.icon_2
+  assign image_2 = block.settings.image_2
+  assign heading_2 = block.settings.heading_2
+  assign icon_3 = block.settings.icon_3
+  assign image_3 = block.settings.image_3
+  assign heading_3 = block.settings.heading_3
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<div data-product-block="icon_with_text"
+     class="col-span-12" {{ block.shopify_attributes }}
+     data-block-settings="{{- block.settings | json | escape -}}">
+  <div class="{{ layout }} flex justify-center py-2 gap-y-2.5">
+    {% for i in (1..3) %}
+      {% assign icon = 'icon_' | append: i %}
+      {% assign image = 'image_' | append: i %}
+      {% assign heading = 'heading_' | append: i %}
+      {% if block.settings[heading] == blank %}{% continue %}{% endif %}
+
+      <div class="flex items-center mr-2.5">
+        <span class="relative inline-flex items-center justify-center"
+              style="width: {{ size }}px; height: {{ size }}px;">
+          {% if block.settings[image] == blank %}
+            {% render '_icon', icon: block.settings[icon], class: "w-full h-full relative" %}
+          {% endif %}
+          {% render '_image', image: block.settings[image], width: 20, class: "w-full h-full object-contain" %}
+        </span>
+        <span class="ml-1.5 text-[13px] tracking-tight">
+          {{ block.settings[heading] }}
+        </span>
+      </div>
+    {% endfor %}
+  </div>
+</div>

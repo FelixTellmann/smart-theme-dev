@@ -1,0 +1,382 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign products = section.settings.products
+  assign _collection = section.settings.collection
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign block = section.blocks[0]
+  assign type = block.type | default: "none"
+
+  if button_primary__text and button_primary__url
+    assign button_primary__show = true
+  endif
+
+  if button_secondary__text and button_secondary__url
+    assign button_secondary__show = true
+  endif
+
+  case type
+    when 'image'
+      assign gridClasses = 'grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 md:[&_>_*:nth-of-type(n+7)]:hidden max-lg:[&_>_*:nth-of-type(n+5)]:hidden'
+    when 'content'
+      assign gridClasses = 'grid-cols-4 md:grid-cols-6 md:[&_>_*:nth-of-type(n+6)]:hidden max-xl:[&_>_*:nth-of-type(n+5)]:hidden'
+    when 'none'
+      assign gridClasses = 'grid-cols-4 md:grid-cols-6 xl:grid-cols-8 max-xl:[&_>_*:nth-of-type(n+7)]:hidden max-md:[&_>_*:nth-of-type(n+5)]:hidden'
+  endcase
+%}
+
+<section class="container-bg-full {{ color_scheme }} {{ section_layout }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+  <div class="grid gap-2 md:gap-x-4 md:gap-y-6 {{ gridClasses }}">
+    {% case block.type %}
+      {% when 'image' %}
+        {% render 'featured-collection-grid.image', block: block, _collection: _collection %}
+      {% when 'content' %}
+        {% render 'featured-collection-grid.content', block: block %}
+    {% endcase %}
+    {% assign count = 8 %}
+    {% assign productIds = "" %}
+    {% for product in section.settings.products limit: 8 %}
+      {% assign count = count | minus: 1 %}
+      {% assign productIds = productIds | append: "|||" | append: product.id %}
+      {% render "product-card", product: product, class: 'col-span-2' %}
+    {% endfor %}
+    {% for product in _collection.products %}
+      {% if productIds contains product.id %}{% continue %}{% endif %}
+      {% if count <= 0 %}
+        {% break %}
+      {% endif %}
+      {% assign count = count | minus: 1 %}
+      {% assign productIds = productIds | append: "|||" | append: product.id %}
+      {% render "product-card", product: product, class: 'col-span-2' %}
+    {% endfor %}
+  </div>
+</section>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.featured_collection_grid.name",
+  "settings": [
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "t:sections.featured_collection_grid.settings.products.label"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.featured_collection_grid.settings.collection.label"
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.featured_collection_grid.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.featured_collection_grid.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.featured_collection_grid.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.featured_collection_grid.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.featured_collection_grid.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.featured_collection_grid.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.featured_collection_grid.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.featured_collection_grid.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.featured_collection_grid.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.featured_collection_grid.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.featured_collection_grid.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.featured_collection_grid.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.featured_collection_grid.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.featured_collection_grid.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.featured_collection_grid.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.featured_collection_grid.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.featured_collection_grid.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.featured_collection_grid.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.featured_collection_grid.settings.color_scheme.label"
+    }
+  ],
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "name": "t:sections.featured_collection_grid.blocks.image.name",
+      "type": "image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.featured_collection_grid.blocks.image.settings.image.label"
+        },
+        {
+          "type": "color_background",
+          "id": "image__overlay",
+          "label": "t:sections.featured_collection_grid.blocks.image.settings.image__overlay.label",
+          "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+        },
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "default": "bg-theme-bg text-theme-text color-inherit",
+          "options": [
+            {
+              "value": "bg-theme-bg text-theme-text color-inherit",
+              "label": "t:sections.featured_collection_grid.blocks.image.settings.color_scheme.options__1.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-1",
+              "label": "t:sections.featured_collection_grid.blocks.image.settings.color_scheme.options__2.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-2",
+              "label": "t:sections.featured_collection_grid.blocks.image.settings.color_scheme.options__3.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-3",
+              "label": "t:sections.featured_collection_grid.blocks.image.settings.color_scheme.options__4.label"
+            }
+          ],
+          "label": "t:sections.featured_collection_grid.blocks.image.settings.color_scheme.label"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.featured_collection_grid.blocks.content.name",
+      "type": "content",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.featured_collection_grid.blocks.content.settings.header__1.content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.image.label"
+        },
+        {
+          "type": "color_background",
+          "id": "image__overlay",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.image__overlay.label",
+          "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.featured_collection_grid.blocks.content.settings.header__2.content"
+        },
+        {
+          "type": "text",
+          "id": "preheading",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.preheading.label"
+        },
+        {
+          "type": "range",
+          "id": "preheading_font",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.preheading_font.label",
+          "default": 3,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.featured_collection_grid.blocks.content.settings.preheading_font.info"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.title.label"
+        },
+        {
+          "type": "range",
+          "id": "title_font",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.title_font.label",
+          "default": 1,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.featured_collection_grid.blocks.content.settings.title_font.info"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.subtitle.label"
+        },
+        {
+          "type": "range",
+          "id": "subtitle_font",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.subtitle_font.label",
+          "default": 2,
+          "min": 1,
+          "max": 7,
+          "step": 1,
+          "info": "t:sections.featured_collection_grid.blocks.content.settings.subtitle_font.info"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.content.label"
+        },
+        {
+          "type": "text",
+          "id": "button_primary__text",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.button_primary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_primary__url",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.button_primary__url.label"
+        },
+        {
+          "type": "text",
+          "id": "button_secondary__text",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.button_secondary__text.label"
+        },
+        {
+          "type": "url",
+          "id": "button_secondary__url",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.button_secondary__url.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.featured_collection_grid.blocks.content.settings.header__3.content"
+        },
+        {
+          "type": "radio",
+          "id": "align__vertical",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.align__vertical.label",
+          "default": "justify-center",
+          "options": [
+            {
+              "value": "justify-start",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.align__vertical.options__1.label"
+            },
+            {
+              "value": "justify-center",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.align__vertical.options__2.label"
+            },
+            {
+              "value": "justify-end",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.align__vertical.options__3.label"
+            }
+          ]
+        },
+        {
+          "type": "radio",
+          "id": "align__horizontal",
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.align__horizontal.label",
+          "default": "items-center text-center",
+          "options": [
+            {
+              "value": "items-start text-left",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.align__horizontal.options__1.label"
+            },
+            {
+              "value": "items-center text-center",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.align__horizontal.options__2.label"
+            },
+            {
+              "value": "items-end text-right",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.align__horizontal.options__3.label"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "default": "bg-theme-bg text-theme-text color-inherit",
+          "options": [
+            {
+              "value": "bg-theme-bg text-theme-text color-inherit",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.color_scheme.options__1.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-1",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.color_scheme.options__2.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-2",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.color_scheme.options__3.label"
+            },
+            {
+              "value": "bg-theme-bg text-theme-text color-group-3",
+              "label": "t:sections.featured_collection_grid.blocks.content.settings.color_scheme.options__4.label"
+            }
+          ],
+          "label": "t:sections.featured_collection_grid.blocks.content.settings.color_scheme.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_collection_grid.presets.featured_collection_grid.name"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,103 @@
+{
+  "sections": {
+    "cee59fac-0001-4f85-8f1b-1ea3c969257c": {
+      "type": "forms",
+      "blocks": {
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-0": {
+          "type": "text",
+          "settings": {
+            "title": "<p><strong>Sign Up<\/strong><\/p>",
+            "style": "h2",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-1": {
+          "type": "text",
+          "settings": {
+            "title": "<p>Lorem <strong>ipsum <\/strong>dolor sit amet, consectetur adipiscing elit.<\/p>",
+            "style": "richtext",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-2": {
+          "type": "separator",
+          "settings": {
+            "height": 20
+          }
+        },
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-3": {
+          "type": "input",
+          "settings": {
+            "title": "First Name",
+            "name": "first_name",
+            "type": "text",
+            "placeholder": "",
+            "required": false,
+            "autocomplete": "given-name",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-4": {
+          "type": "input",
+          "settings": {
+            "title": "Last Name",
+            "name": "last_name",
+            "type": "text",
+            "placeholder": "",
+            "required": false,
+            "autocomplete": "family-name",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-5": {
+          "type": "email",
+          "settings": {
+            "title": "Email",
+            "placeholder": "",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-6": {
+          "type": "password",
+          "settings": {
+            "title": "Password",
+            "confirm_pw__title": "Confirm Password",
+            "grid_span": "col-span-12"
+          }
+        },
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-7": {
+          "type": "buttons",
+          "settings": {
+            "title": "Sign Up",
+            "reset__show": false,
+            "reset__title": "Reset",
+            "fullwidth": true,
+            "grid_span": "col-span-12"
+          }
+        }
+      },
+      "block_order": [
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-0",
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-1",
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-2",
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-3",
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-4",
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-5",
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-6",
+        "template--16759632920895__cee59fac-0001-4f85-8f1b-1ea3c969257c-1671430087d6cef0c4-7"
+      ],
+      "settings": {
+        "type": "create_customer",
+        "success_message": "Thank you for contacting us.",
+        "redirect": "\/account",
+        "width": "max-w-md",
+        "fullwidth": true,
+        "image__overlay": "linear-gradient(135deg, rgb(var(--color-text) \/ 0.01) 0%, rgb(var(--color-text) \/ 0.05) 100%)",
+        "color_scheme": "color-inherit"
+      }
+    }
+  },
+  "order": [
+    "cee59fac-0001-4f85-8f1b-1ea3c969257c"
+  ]
+}

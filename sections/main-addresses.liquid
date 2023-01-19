@@ -1,0 +1,165 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign new_address = customer.new_address
+%}
+
+<div class="bg-theme-bg text-theme-text scroll-mt-top-bar-spacing {{ color_scheme }}">
+  <div class="container py-6">{% render '_breadcrumbs' %}</div>
+  <section class="container pb-16 grid lg:grid-cols-[240px_1fr] gap-8">
+    <aside class="lg:sticky lg:top-top-bar-spacing grid gap-6 h-min">
+      <div class="bg-gray-50/30 md:shadow-lg md:shadow-gray-300/20 md:rounded-theme-md border-y md:border-x border-gray-200 -mx-4 md:mx-0 py-4 px-6">
+        <h1 class="h4 font-bold mb-3">Account</h1>
+        <nav class="grid gap-1 text-theme-text/70 text-sm">
+          <a class="hf:underline hf:text-theme-text {% if routes.account_url == request.path %}text-theme-text/90 font-semibold{% endif %}"
+             href="{{ routes.account_url }}">
+            Order History
+          </a>
+          <a class="hf:underline hf:text-theme-text {% if routes.account_addresses_url == request.path %}text-theme-text/90 font-semibold{% endif %}"
+             href="{{ routes.account_addresses_url }}">
+            Addresses
+          </a>
+          <a class="hf:underline hf:text-theme-text "
+             href="{{ routes.account_logout_url }}">
+            Log Out
+          </a>
+        </nav>
+      </div>
+    </aside>
+    <section>
+      <header class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <div class="flex justify-between">
+            <h1 class="text-xl font-semibold text-gray-900">Addresses ({{ customer.addresses_count }})</h1>
+            <button class="button-primary--outline"
+                    type="button"
+                    data-drawer-open="edit-address-{{ new_address.id }}">Add new Address
+            </button>
+          </div>
+          <p class="mt-1 text-sm text-gray-700">
+            <a href="{{ routes.account_url }}"
+               class="inline-flex items-center text-xs tracking-wide uppercase text-gray-400 hf:underline hf:text-gray-600">
+              {% render '_icon', icon: 'chevron-left', class: "w-2 h-2 mr-2" %}
+              <span>Back to Account</span>
+            </a>
+          </p>
+        </div>
+      </header>
+      {% paginate customer.addresses by 6 %}
+
+        <main class="mt-4 grid md:grid-cols-3 sm:grid-cols-2 gap-6 -mx-4 sm:mx-0">
+          {% assign address = customer.default_address %}
+
+          {%- for address in customer.addresses -%}
+            {%- if address.id != customer.default_address.id -%}
+              {%- continue -%}
+            {%- endif -%}
+            <section class="bg-white border-y border-gray-200 sm:border-x md:shadow-lg md:shadow-gray-300/20 sm:rounded-theme-md py-4 px-6 text-sm leading-[1.7] flex flex-col h-full">
+              <header class="font-medium uppercase tracking-wide mb-2">Default Address</header>
+              <main>
+                {{- address | format_address -}}
+              </main>
+              <footer class="flex items-end gap-3 flex-1 mt-2 text-[13px] uppercase text-primary-outline">
+                <button type="button"
+                        data-drawer-open="edit-address-{{ address.id }}">
+                  Edit
+                </button>
+                <form method="post"
+                      action="/account/addresses/{{ address.id }}"
+                >
+                  <input type="hidden"
+                         name="_method"
+                         value="delete"
+                         data-address-delete="{{ address.id }}">
+                  <button type="submit">Delete</button>
+                </form>
+              </footer>
+            </section>
+          {% endfor %}
+
+          {%- assign address_count = paginate.current_offset | plus: 2 -%}
+
+          {%- for address in customer.addresses -%}
+            {%- if address.id == customer.default_address.id -%}
+              {%- continue -%}
+            {%- endif -%}
+
+            <section class="bg-white border-y border-gray-200 sm:border-x md:shadow-lg md:shadow-gray-300/20 sm:rounded-theme-md py-4 px-6 text-sm leading-[1.7] flex flex-col h-full">
+              <header class="font-medium uppercase tracking-wide mb-2">Address {{ address_count }}</header>
+              <main>
+                {{- address | format_address -}}
+              </main>
+              <footer class="flex items-end gap-3 flex-1 mt-2 text-[13px] uppercase text-primary-outline">
+                <button type="button"
+                        data-drawer-open="edit-address-{{ address.id }}">
+                  Edit
+                </button>
+                <form method="post"
+                      action="/account/addresses/{{ address.id }}">
+                  <input type="hidden"
+                         name="_method"
+                         value="delete"
+                         data-address-delete="{{ address.id }}">
+                  <button type="submit">Delete</button>
+                </form>
+              </footer>
+            </section>
+
+            {%- assign address_count = address_count | plus: 1 -%}
+          {%- endfor -%}
+
+        </main>
+        <footer class="py-4 flex justify-center">
+          {% render '_pagination', paginate: paginate %}
+        </footer>
+      {% endpaginate %}
+
+    </section>
+  </section>
+</div>
+
+{% render 'main-addresses.form', address: new_address %}
+
+{% paginate customer.addresses by 9 %}
+  {%- for address in customer.addresses -%}
+    {% render 'main-addresses.form', address: address, title: "Edit your Address" %}
+  {% endfor %}
+{% endpaginate %}
+
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.addresses.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.addresses.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.addresses.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.addresses.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.addresses.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.addresses.settings.color_scheme.label"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign color = block.settings.color
+  assign height = block.settings.height
+  assign width = block.settings.width
+  assign margin_bottom = block.settings.margin_bottom
+  assign responsive_visibility = block.settings.responsive_visibility
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+<hr id="block--{{ block.id }}" {{ block.shopify_attributes }}
+    class="w-full flex {{ responsive_visibility }}"
+    style="border-top: {{ height }}px solid {{ color }}; max-width: {{ width }}px; margin-bottom: {{ margin_bottom }}px" />

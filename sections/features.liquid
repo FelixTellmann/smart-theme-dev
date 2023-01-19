@@ -1,0 +1,407 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign preheading = section.settings.preheading
+  assign title = section.settings.title
+  assign description = section.settings.description
+  assign layout = section.settings.layout
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign color_scheme = section.settings.color_scheme
+  assign layout = section.settings.layout
+  assign preheading = section.settings.preheading
+  assign title = section.settings.title
+  assign description = section.settings.description
+%}
+
+<div class="py-16 bg-theme-bg text-theme-text {{ color_scheme }}">
+  <section class="container {% if layout == 'icon-minimal' %}lg:grid lg:grid-cols-[1fr_2fr] lg:gap-8{% endif %}">
+    <header class="mb-8">
+      {% if preheading != blank %}
+        <p class="pre-heading">{{ preheading }}</p>
+      {% endif %}
+      {% if title != blank %}
+        <h2 class="h3 font-bold">{{ title }}</h2>
+      {% endif %}
+      {% if description != blank %}
+        <div class="prose prose-theme prose-sm pb-2">
+          {{ description }}
+        </div>
+      {% endif %}
+    </header>
+
+    {% case layout %}
+      {% when 'icon-minimal' %}
+        <main class="grid gap-4 grid-cols-1 md:grid-cols-2">
+          {% for block in section.blocks %}
+            {% render 'features.feature', block: block, type: layout %}
+          {% endfor %}
+        </main>
+
+      {% when 'icon-flat' %}
+        {% liquid
+          assign gridClasses = 'grid-cols-2'
+          if section.blocks.size > 4
+            assign gridClasses = 'grid-cols-2 lg:grid-cols-4'
+          endif
+          if section.blocks.size == 3 or section.blocks.size == 6
+            assign gridClasses = 'grid-cols-2 lg:grid-cols-3'
+          endif
+        %}
+        <main class="grid gap-x-6 gap-y-12 lg:gap-x-8 lg:gap-y-16 {{ gridClasses }}">
+          {% for block in section.blocks %}
+            {% render 'features.feature', block: block, type: layout %}
+          {% endfor %}
+        </main>
+      {% when 'icon-cards' %}
+        {% liquid
+          assign gridClasses = 'grid-cols-1 md:grid-cols-2'
+          if section.blocks.size > 4
+            assign gridClasses = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+          endif
+          if section.blocks.size == 3 or section.blocks.size == 6
+            assign gridClasses = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          endif
+        %}
+        <main class="grid gap-x-6 gap-y-8 lg:gap-x-8 lg:gap-y-10 {{ gridClasses }}">
+          {% for block in section.blocks %}
+            {% render 'features.feature', block: block, type: layout %}
+          {% endfor %}
+        </main>
+      {% when 'image-flat' %}
+        {% liquid
+          assign gridClasses = 'grid-cols-1 md:grid-cols-2'
+          if section.blocks.size > 2
+            assign gridClasses = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+          endif
+          if section.blocks.size == 3 or section.blocks.size == 6
+            assign gridClasses = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          endif
+        %}
+        <main class="grid gap-x-6 gap-y-8 lg:gap-x-8 lg:gap-y-10 {{ gridClasses }}">
+          {% for block in section.blocks %}
+            {% render 'features.feature', block: block, type: layout %}
+          {% endfor %}
+        </main>
+      {% when 'image-column' %}
+        <main class="grid gap-8">
+          {% for block in section.blocks %}
+            {% render 'features.feature', block: block, type: layout %}
+          {% endfor %}
+        </main>
+      {% when 'story' %}
+        <main class="grid gap-16">
+          {% for block in section.blocks %}
+            {% render 'features.feature', block: block, forloop: forloop, type: layout %}
+          {% endfor %}
+        </main>
+    {% endcase %}
+
+
+  </section>
+</div>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.features.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "preheading",
+      "label": "t:sections.features.settings.preheading.label"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.features.settings.title.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.features.settings.description.label"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.features.settings.layout.label",
+      "default": "icon-flat",
+      "options": [
+        {
+          "value": "icon-minimal",
+          "label": "t:sections.features.settings.layout.options__1.label"
+        },
+        {
+          "value": "icon-flat",
+          "label": "t:sections.features.settings.layout.options__2.label"
+        },
+        {
+          "value": "icon-cards",
+          "label": "t:sections.features.settings.layout.options__3.label"
+        },
+        {
+          "value": "image-flat",
+          "label": "t:sections.features.settings.layout.options__4.label"
+        },
+        {
+          "value": "image-column",
+          "label": "t:sections.features.settings.layout.options__5.label"
+        },
+        {
+          "value": "story",
+          "label": "t:sections.features.settings.layout.options__6.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.features.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.features.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.features.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.features.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.features.settings.color_scheme.label"
+    }
+  ],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "name": "t:sections.features.blocks.feature.name",
+      "type": "feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_list",
+          "label": "t:sections.features.blocks.feature.settings.icon_list.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__1.label"
+            },
+            {
+              "value": "apple",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__2.label"
+            },
+            {
+              "value": "banana",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__3.label"
+            },
+            {
+              "value": "bottle",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__4.label"
+            },
+            {
+              "value": "box",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__5.label"
+            },
+            {
+              "value": "carrot",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__6.label"
+            },
+            {
+              "value": "chat_bubble",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__7.label"
+            },
+            {
+              "value": "check_mark",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__8.label"
+            },
+            {
+              "value": "clipboard",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__9.label"
+            },
+            {
+              "value": "dairy",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__10.label"
+            },
+            {
+              "value": "dairy_free",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__11.label"
+            },
+            {
+              "value": "dryer",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__12.label"
+            },
+            {
+              "value": "eye",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__13.label"
+            },
+            {
+              "value": "fire",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__14.label"
+            },
+            {
+              "value": "gluten_free",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__15.label"
+            },
+            {
+              "value": "heart",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__16.label"
+            },
+            {
+              "value": "iron",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__17.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__18.label"
+            },
+            {
+              "value": "leather",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__19.label"
+            },
+            {
+              "value": "lightning_bolt",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__20.label"
+            },
+            {
+              "value": "lipstick",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__21.label"
+            },
+            {
+              "value": "lock",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__22.label"
+            },
+            {
+              "value": "map_pin",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__23.label"
+            },
+            {
+              "value": "nut_free",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__24.label"
+            },
+            {
+              "value": "pants",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__25.label"
+            },
+            {
+              "value": "paw_print",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__26.label"
+            },
+            {
+              "value": "pepper",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__27.label"
+            },
+            {
+              "value": "perfume",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__28.label"
+            },
+            {
+              "value": "plane",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__29.label"
+            },
+            {
+              "value": "plant",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__30.label"
+            },
+            {
+              "value": "price_tag",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__31.label"
+            },
+            {
+              "value": "question_mark",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__32.label"
+            },
+            {
+              "value": "recycle",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__33.label"
+            },
+            {
+              "value": "return",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__34.label"
+            },
+            {
+              "value": "ruler",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__35.label"
+            },
+            {
+              "value": "serving_dish",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__36.label"
+            },
+            {
+              "value": "shirt",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__37.label"
+            },
+            {
+              "value": "shoe",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__38.label"
+            },
+            {
+              "value": "silhouette",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__39.label"
+            },
+            {
+              "value": "snowflake",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__40.label"
+            },
+            {
+              "value": "star",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__41.label"
+            },
+            {
+              "value": "stopwatch",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__42.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__43.label"
+            },
+            {
+              "value": "washing",
+              "label": "t:sections.features.blocks.feature.settings.icon_list.options__44.label"
+            }
+          ],
+          "default": "heart"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.features.blocks.feature.settings.title.label"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.features.blocks.feature.settings.content.label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.features.blocks.feature.settings.url.label"
+        },
+        {
+          "type": "textarea",
+          "id": "svg",
+          "label": "t:sections.features.blocks.feature.settings.svg.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.features.blocks.feature.settings.image.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.features.presets.features.name"
+    }
+  ]
+}
+{% endschema %}

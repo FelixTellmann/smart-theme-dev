@@ -1,0 +1,16 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign title = block.settings.title
+  assign title_type = block.settings.title_type
+  assign margin_bottom = block.settings.margin_bottom
+  assign responsive_visibility = block.settings.responsive_visibility
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% assign trimmedContent = title | replace: '<p>', '<br />' | replace: '</p>', '' | replace: '<ul>', '<br />' | replace: '</ul>', '' | replace: '<ol>', '' | replace: '</ol>', '<br />' | replace: '<li>', '<br />' | replace: '</li>', '' | replace_first: '<br />', '' | replace_first: '<br>', '' | strip_newlines %}
+
+<div id="block--{{ block.id }}" {{ block.shopify_attributes }}
+     class="prose prose-theme {{ max_width | default: "max-w-full" }} {{ responsive_visibility }}"
+     style="margin-bottom: {{ margin_bottom }}px; max-width: {{ max_width }}px;">
+  {% render 'typography', type: title_type, content: trimmedContent %}
+</div>

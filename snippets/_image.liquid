@@ -1,0 +1,63 @@
+{%- comment -%}
+
+Variables:
+ image: Image Drop
+ default_alt: string
+ class: string
+ placeholder:
+    | image
+    | collection-1
+    | collection-2
+    | collection-3
+    | collection-4
+    | collection-5
+    | collection-6
+    | lifestyle-1
+    | lifestyle-2
+    | product-1
+    | product-2
+    | product-3
+    | product-4
+    | product-5
+    | product-6
+
+{%- endcomment -%}
+{% assign class = class | append: " select-none" %}
+
+{%- if image != blank -%}
+  {%- assign alt = image.alt | default: default_alt -%}
+  {% if image.presentation.focal_point %}
+    {% assign focalPointStyle = 'object-position: ' | append: image.presentation.focal_point | append: ';' %}
+  {% endif %}
+  {{ image
+  | image_url: height: height, width: width
+  | image_tag: alt: alt, class: class, style: focalPointStyle, sizes: sizes, widths: widths, preload: preload, loading: loading }}
+{%- endif -%}
+
+{%- if image == blank and placeholder and placeholder != blank -%}
+  {% assign svg = placeholder | placeholder_svg_tag %}
+  {% assign svgURI = 'data:image/svg+xml;utf8,' | append: svg %}
+  <img src='data:image/svg+xml;utf8,{{ placeholder | placeholder_svg_tag }}'
+       class="rounded-[inherit] border-2 border-gray-300 {{ class }}"
+       height="{{ height }}"
+       width="{{ width }}" />
+{%- endif -%}
+
+{%- if request.design_mode -%}
+  {%- if image -%}
+    {%- if image.alt == blank and default_alt == blank -%}
+      <script>
+        console.log(
+          "%cSEO Warning : Missing ALT tag - image: {{ image }}",
+          "color: #ed8a48;",
+        );
+        window['missingImageAltTags'].push({
+          image: `{{ image }}`,
+          section: `{{ section.id }}`,
+          block: `{{ block.id }}`,
+        });
+      </script>
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+

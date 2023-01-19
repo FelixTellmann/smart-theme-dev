@@ -1,0 +1,184 @@
+{% comment %}
+
+  Accepts:
+  - type: {String}
+  - class: {String} Adds a price class to the price element (optional)
+  - name: {String}
+  - label: {String}
+  - autocomplete: {String}
+  - html_attributes: {String}
+
+{% endcomment %}
+
+{% case type %}
+  {% when 'floating-label' %}
+    <label class="grid relative {{ class }}">
+      <input name="{{ name }}"
+             type="{{ input_type | default: 'text' }}"
+             class="w-full h-full border-2 border-primary-outline pt-5 px-3 pb-1.5 peer rounded-primary text-sm placeholder-transparent"
+             placeholder="{{ placeholder | default: "." }}"
+             {% if required %}required{% endif %}
+             autocomplete="{{ autocomplete }}"
+        {% if autofocus %}autofocus{% endif %}
+             value="{{ value }}"
+          {{ html_attributes }} />
+      <span class="absolute left-3 top-[0.3125rem] text-gray-500 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:top-[0.3125rem] peer-focus:text-gray-500 peer-focus:text-xs">{{ label }}</span>
+    </label>
+
+  {% when 'select-floating-label' %}
+    <label class="{{ class }} relative col-span-12">
+      <select name="{{ name }}"
+              tabindex="0"
+              class="w-full h-full border-2 border-primary-outline pt-5 px-3 pb-1.5 peer rounded-primary text-sm appearance-none"
+              data-select-value="{{ value }}"
+          {{ html_attributes }}>
+        {% if options contains '<option' %}
+          {{ options }}
+        {% else %}
+          {% for option in options %}
+            <option value="{{ option }}"
+                    {% if option == value %}selected="selected"{% endif %}>
+              {{ option }}
+            </option>
+          {% endfor %}
+        {% endif %}
+      </select>
+      {% render "_icon", icon: 'chevron-up-down', class: "h-5 w-5 absolute right-2 bottom-0 my-2.5 text-theme-text/70 pointer-events-none" %}
+      <span class="absolute left-3 top-1.5 text-gray-500 text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-gray-500 peer-focus:text-xs">{{ label }}</span>
+    </label>
+
+  {% when 'text' or 'tel' or 'month' or 'date' or 'week' or 'number' or 'url' %}
+    <label class="grid {{ class }}">
+      <input type="{{ type }}"
+             name="{{ name }}"
+             class="input-primary flex w-full"
+             autocomplete="{{ autocomplete }}"
+             tabindex="0"
+             placeholder="{{ placeholder }}"
+             value="{{ value }}"
+          {{ html_attributes }}
+        {% if required %}required{% endif %} />
+      <span class="sr-only">{{ label }}</span>
+      {% render '_form-elements', form: form, type: 'error', form_name: name %}
+    </label>
+  {% when 'password' %}
+    <label class="grid relative {{ class }}"
+           data-password>
+      <input type="password"
+             name="{{ name }}"
+             class="input-primary pr-12 flex w-full"
+             autocomplete="{{ autocomplete }}"
+             tabindex="0"
+             placeholder="{{ placeholder }}"
+          {{ html_attributes }}
+        {% if required %}required{% endif %}
+             data-password-input />
+      <span class="sr-only">{{ label }}</span>
+      <button type="button"
+              data-password-toggle
+              class="absolute text-theme-text/30 right-2 top-1.5 bg-gray-50 hf:bg-gray-100 hf:text-theme-text/70 p-1 rounded-primary transition-all duration-75 group">
+        {% render '_icon', icon: 'password-eye', class: "w-5 h-5 hidden group-ac:block" %}
+        {% render '_icon', icon: 'password-eye-slash', class: "w-5 h-5 block group-ac:hidden" %}
+      </button>
+      {% render '_form-elements', form: form, type: 'error', form_name: name %}
+    </label>
+  {% when 'hidden' %}
+    <input type="hidden"
+           name="{{ name }}"
+           class="hidden absolute"
+           value="{{ value }}"
+           tabindex="-1"
+        {{ html_attributes }} />
+  {% when 'email' %}
+    <label class="grid {{ class }}">
+      <input type="email"
+             name="{{ name }}"
+             class="input-primary flex w-full"
+             autocorrect="off"
+             autocapitalize="off"
+             autocomplete="{{ autocomplete }}"
+             value="{{ value }}"
+             tabindex="0"
+             placeholder="{{ placeholder }}"
+          {{ html_attributes }}
+        {% if required %}required{% endif %} />
+      <span class="sr-only">{{ label }}</span>
+      {% render '_form-elements', form: form, type: 'error', form_name: name %}
+    </label>
+  {% when 'radio' %}
+  {% when 'checkbox' %}
+    <label class="items-center cursor-pointer flex text-sm {{ class | escape }}">
+      <span class="relative w-4 h-4 flex">
+        <input type="checkbox"
+               class="peer appearance-none w-full h-full rounded-theme-sm border-primary-outline border-2 bg-theme-bg"
+               name="{{ name }}"
+               value="0"
+               {% if checked %}checked="checked"{% endif %} >
+        <span class="absolute left-0 top-0 w-full h-full flex items-center justify-center opacity-0 peer-checked:opacity-100">
+          {% render '_icon', icon: 'check-mark', class: 'w-3.5 h-3.5 stroke-2 text-gray-800' %}
+        </span>
+      </span>
+      <span class="ml-2">{{ label }}</span>
+    </label>
+
+  {% when 'textarea' %}
+    <label class="grid {{ class | escape }}">
+      <textarea name="{{ name }}"
+                class="input-primary flex w-full"
+                autocorrect="on"
+                tabindex="0"
+                placeholder="{{ placeholder | escape }}"
+                rows="{{ rows }}"
+                {{ html_attributes }}
+                {% if required %}required{% endif %}>{{ body }}</textarea>
+      <span class="sr-only">{{ label | escape }}</span>
+      {% render '_form-elements', form: form, type: 'error', form_name: name %}
+    </label>
+  {% when 'select' %}
+  {% when 'reset' %}
+    <label class="grid min-w-[160px] relative {{ class }}">
+      <input type="reset"
+             class="button-primary--outline flex w-full cursor-pointer disabled:cursor-not-allowed"
+             tabindex="0"
+             value="{{ label }}"
+          {{ html_attributes }}
+        {% if required %}required{% endif %} />
+      <span class="sr-only">{{ label }}</span>
+    </label>
+  {% when 'submit' %}
+    <label class="grid min-w-[160px] relative {{ class }}">
+      <input type="submit"
+             class="button-primary flex w-full cursor-pointer disabled:cursor-not-allowed"
+             tabindex="0"
+             value="{{ label }}"
+          {{ html_attributes }}
+        {% if required %}required{% endif %} />
+      <span class="sr-only">{{ label }}</span>
+      {% render '_loading-spinner', class: "bg-primary-bg group-[.active]/form:opacity-100" %}
+    </label>
+  {% when 'error' %}
+    {% assign error_options = 'body,author,email,password,password_confirmation,form' | split: ',' %}
+    {% for error in error_options %}
+      {% assign error_name = '[' | append: error | append: ']' %}
+
+      {% if form_name %}
+        {%- if form.errors contains error and form_name contains error_name -%}
+          <small class="text-error font-medium flex items-center mt-1.5 ml-1 text-xs">
+            {% render '_icon', icon: 'warning-triangle', class: 'w-5 h-5 mr-2 opacity-70' %}
+            <span>
+              {{ form.errors.translated_fields[error] | capitalize }} {{ form.errors.messages[error] }}.
+            </span>
+          </small>
+        {%- endif -%}
+      {% else %}
+        {%- if form.errors contains error -%}
+          <small class="text-error font-medium flex items-center mt-1.5 ml-1 text-xs">
+            {% render '_icon', icon: 'warning-triangle', class: 'w-5 h-5 mr-2 opacity-70' %}
+            <span>
+              {{ form.errors.translated_fields[error] | capitalize }} {{ form.errors.messages[error] }}.
+            </span>
+          </small>
+        {%- endif -%}
+      {%- endif -%}
+    {% endfor %}
+{% endcase %}

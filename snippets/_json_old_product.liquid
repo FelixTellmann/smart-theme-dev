@@ -1,0 +1,177 @@
+{%- comment -%}
+    Renders a JSON blobs
+
+    Accepts:
+    - input: {object}
+    - type: {string}
+    - select: {string}
+    - page_size: {number}
+
+    Usage:
+    {%- render '_json', input: product, type: 'product', select: 'options, variants, variants.price' -%}
+    {%- render '_json', input: product.variant, type: 'variant', select: 'option1, option2' -%}
+{%- endcomment -%}
+
+{%- assign page_size = page_size | default: 50 -%}
+
+{%- assign productOptions = 'available,collections,compare_at_price,compare_at_price_max,compare_at_price_min,compare_at_price_varies,content,created_at,description,seo_description,featured_image,featured_media,featured_image_id,featured_image_url,featured_media_id,featured_media_url,first_available_variant,gift_card,handle,has_only_default_variant,id,images,media,metafields,options,options_by_name,options_with_values,price,price_max,price_min,price_varies,published_at,requires_selling_plan,selected_or_first_available_selling_plan_allocation,selected_or_first_available_variant,selected_selling_plan,selected_selling_plan_allocation,selected_variant,selling_plan_groups,tags,template_suffix,title,type,url,variants,vendor' | split: ',' -%}
+
+{%- assign variantOptions = 'available,barcode,compare_at_price,featured_image,featured_media,featured_image_id,featured_image_url,featured_image_id,featured_image_url,featured_media_id,featured_media_url,id,image,incoming,inventory_management,inventory_policy,inventory_quantity,matched,metafields,next_incoming_date,option1,option2,option3,options,price,product,requires_selling_plan,requires_shipping,selected,selected_selling_plan_allocation,selling_plan_allocations,sku,store_availabilities,taxable,title,unit_price,unit_price_measurement,url,weight,weight_in_unit,weight_unit' | split: ',' -%}
+
+{%- case type -%}
+  {%- when 'image' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: imageOptions -%}
+      {%- for option in options -%}{%- if imageOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+  {%- when 'product' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: productOptions -%}
+      {%- for option in options -%}{%- if productOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+      {%- if opts.size == 0 -%}
+        {%- assign opts = productOptions -%}
+      {%- endif -%}
+
+      {%- if select contains 'variants.' -%}
+        {%- unless opts contains 'variants' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'variants' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}{%- if option contains 'variants.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'variants.', '' | split: ',' -%}{%- endif -%}{%- endfor -%}
+        {%- assign variantSelect = opt | join: ',' | remove_first: ',' -%}
+      {%- endif -%}
+
+      {%- if variantSelect == null and opts contains 'variants' or select == null -%}
+        {%- assign variantSelect = variantOptions | join: ',' | remove_first: ',product' -%}
+      {%- endif -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'variant' -%}
+    {%- if input -%}
+      {%- assign options = select | strip_newlines | replace: ' ', "" | split: ',' | default: variantOptions -%}
+      {%- for option in options -%}{%- if variantOptions contains option -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | split: ',' -%}{%- endif -%}{%- endfor -%}
+      {%- assign opts = opt | join: ',' | split: ',' -%}
+
+      {%- if select contains 'metafields.' -%}
+        {%- unless opts contains 'metafields' -%}{%- assign opts = opts | join: ',' | append: ',' | append: 'metafields' | split: ',' -%}{%- endunless -%}
+        {%- assign opt = null -%}
+        {%- for option in options -%}
+          {%- assign op = option | replace: 'metafields.', '' -%}
+          {%- if op contains '.' -%}{%- elsif option contains 'metafields.' -%}{%- assign opt = opt | join: ',' | append: ',' | append: option | replace: 'metafields.', '' | split: ',' -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign metafieldNamespaces = opt | join: ',' | remove_first: ',' | split: ',' -%}
+      {%- endif -%}
+    {%- else -%}
+      null
+    {%- endif -%}
+
+
+  {%- when 'metafields' -%}
+    {%- if input -%}
+      {
+      {%- for key in input -%}
+        {%- assign metafield = input[key[0]] -%}
+        {{- key[0] | json -}}:
+        {%- if metafield.type == "page_reference" -%}
+          {%- render '_json', input: metafield.value, type: 'page' -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "list.page_reference" -%}
+          {{- metafield -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "dimension" or metafield.type == "weight" or metafield.type == "volume" -%}
+          {
+          "type": {{- metafield.value.type | json -}},
+          "unit": {{- metafield.value.unit | json -}},
+          "value": {{- metafield.value.value | json -}}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "rating" -%}
+          {
+          "rating": {{- metafield.value.rating | json -}},
+          "scale_max": {{- metafield.value.scale_max | json -}},
+          "scale_min": {{- metafield.value.scale_min | json -}}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "product_reference" -%}
+          {%- render '_json', input: metafield.value, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- elsif metafield.type == "list.product_reference" -%}
+          [{%- for p in metafield.value -%}{%- render '_json', input: p, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]{%- unless forloop.last -%},{%- endunless -%}
+        {%- else -%}
+          {{- metafield.value | json -}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+      }
+    {%- else -%}
+      {}
+    {%- endif -%}
+
+{%- endcase -%}
+
+{%- if opts -%}
+  {% assign opts = opts | sort %}
+  {
+  {%- for option in opts -%}
+    {%- case option -%}
+      {%- when "" -%}
+        {%- continue -%}
+      {%- when 'created_at' or 'published_at' or 'updated_at' -%}
+        "{{- option -}}": "{{- input[option] | date: "%Y-%m-%dT%H:%M:%S%z" -}}"
+
+      {%- when 'metafields' -%}
+        "{{- option -}}": {
+        {%- for namespace in metafieldNamespaces -%}
+          "{{- namespace -}}": {%- render '_json', input: input.metafields[namespace], type: 'metafields' -%}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+        }
+
+      {%- when 'variants' -%}
+        "{{- option -}}": [{%- for variant in input[option] -%}{%- render '_json', input: variant, select: variantSelect, type: 'variant' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'selected_or_first_available_variant' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], select: variantSelect, type: 'variant' -%}
+
+      {%- when 'featured_image' or 'image' or 'featured_media' -%}
+        "{{- option -}}": {%- render '_json', input: input[option], type: 'image' -%}
+
+      {%- when 'featured_media_url' -%}
+        "{{- option -}}": {% if input['featured_media'].src %}{{ input['featured_media'].src | image_url | prepend: "https:" | json }}{% else %}null{% endif %}
+
+      {%- when 'featured_image_url' -%}
+        "{{- option -}}": {% if input['featured_image'].src %}{{ input['featured_image'].src | image_url | prepend: "https:" | json }}{% else %}null{% endif %}
+
+      {%- when 'featured_image_id' -%}
+        "{{- option -}}": {{ input['featured_image'].id | json }}
+
+      {%- when 'featured_media_id' -%}
+        "{{- option -}}": {{ input['featured_media'].id | json }}
+
+      {%- when 'filters' -%}
+        "{{- option -}}": [{%- for filter in input[option] -%}{%- render '_json', input: filter, type: 'collection_filter' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'images' or 'media' -%}
+        "{{- option -}}": [{%- for image in input[option] -%}{%- render '_json', input: image, type: 'image' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+
+      {%- when 'products' -%}
+        "{{- option -}}": [{%- paginate input.products by page_size -%}{%- for product in input[option] -%}{%- render '_json', input: product, select: productSelect, type: 'product' -%}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}{%- endpaginate -%}]
+
+      {%- when 'seo_description' -%}
+        "{{- option -}}": {% if input['content'] %}{{- input['content'] | strip_html | truncate: 200 | json -}}{% else %}{{- input['description'] | strip_html | truncate: 200 | json -}}{% endif %}
+
+      {%- else -%}
+        "{{- option -}}": {{- input[option] | json -}}
+    {%- endcase -%}{%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+  }
+{%- endif -%}

@@ -1,0 +1,59 @@
+{%- liquid
+  assign image__ratio = settings.image__ratio | default: 'pb-[125%]'
+  assign image__background = settings.image__background | default: "transparent"
+  assign image__drop_shadow = settings.image__drop_shadow | default: false
+
+  assign imageClasses = 'w-full h-full object-cover inset-0 '
+  if image__drop_shadow
+    assign imageClasses = imageClasses | append: "drop-shadow-product"
+  endif
+
+  assign collectionProducts = collection.products | sort: 'price_min'
+
+-%}
+
+<article class="flex flex-col space-y-1 relative items-stretch" {{ html_attributes }}
+         data-card>
+
+  {% comment %} IMAGE {% endcomment %}
+  <a class="grid relative outline-none hf:outline-none h-0 w-full {{ image__ratio }}"
+     href="{{ collection.url }}">
+    <div class="w-full h-full inset-0 absolute overflow-hidden"
+         style="background: {{ image__background }};"
+         data-card-image>
+      {% render '_image', image: collection.image, width: 500, class: imageClasses, placeholder: 'product-3' %}
+    </div>
+  </a>
+
+  {% comment %} TITLE {% endcomment %}
+  <h1 class=" inline-flex pt-2 font-semibold tracking-tight text-base">
+    <a class="outline-none hf:outline-none hf:underline"
+       data-card-title
+       href="{{ collection.url }}">{{ collection.title }}</a>
+  </h1>
+
+  {% comment %}  Published At {% endcomment %}
+  {% comment %}  <div class="text-sm text-gray-600"
+         data-card-date>
+      {{ collection.published_at | date: "%B %d, %Y" }}
+  </div>{% endcomment %}
+
+  {% if collectionProducts[0] %}
+    {% comment %}  PRICE {% endcomment %}
+    <div class="text-sm text-gray-600"
+         data-card-price>
+      {{ "collection_card.starting_at" | t }} {{ collectionProducts[0].price_min | money }}
+    </div>
+  {% endif %}
+
+
+  {% comment %} LINK TO ARTICLE {% endcomment %}
+  <div class="self-end mt-auto w-full flex-1 flex flex-col justify-end mt-4 text-center">
+    <a class="mt-2 w-full button-primary"
+       href="{{ collection.url }}"
+       data-card-cta-link>
+      <span class="whitespace-nowrap"
+            data-card-cta-content>View Collection</span>
+    </a>
+  </div>
+</article>

@@ -1,0 +1,439 @@
+{%- comment -%} Auto Generated Variables start {%- endcomment -%}
+{%- liquid
+  assign image = section.settings.image
+  assign image__overlay = section.settings.image__overlay
+  assign image__aspect_ratio = section.settings.image__aspect_ratio
+  assign image__order = section.settings.image__order
+  assign preheading = section.settings.preheading
+  assign preheading_font = section.settings.preheading_font
+  assign title = section.settings.title
+  assign title_font = section.settings.title_font
+  assign subtitle = section.settings.subtitle
+  assign subtitle_font = section.settings.subtitle_font
+  assign content = section.settings.content
+  assign button_primary__text = section.settings.button_primary__text
+  assign button_primary__url = section.settings.button_primary__url
+  assign button_primary__style = section.settings.button_primary__style
+  assign button_secondary__text = section.settings.button_secondary__text
+  assign button_secondary__url = section.settings.button_secondary__url
+  assign button_secondary__style = section.settings.button_secondary__style
+  assign align__vertical = section.settings.align__vertical
+  assign align__horizontal = section.settings.align__horizontal
+  assign section_layout = section.settings.section_layout
+  assign responsive_visibility = section.settings.responsive_visibility
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign color_scheme = section.settings.color_scheme
+-%}
+{%- comment -%} Auto Generated Variables end {%- endcomment -%}
+
+{% liquid
+  assign grid_layout = image__aspect_ratio | append: image__order
+
+  if button_primary__text and button_primary__url
+    assign button_primary__show = true
+  endif
+
+  if button_secondary__text and button_secondary__url
+    assign button_secondary__show = true
+  endif
+
+  case grid_layout
+    when 'pb-[125%]-order-1'
+      assign gridClasses = 'md:grid-cols-[44%_1fr]'
+    when 'pb-[100%]-order-1'
+      assign gridClasses = 'md:grid-cols-2'
+    when 'pb-[75%]-order-1'
+      assign gridClasses = 'md:grid-cols-[66%_1fr]'
+    when 'pb-[125%]order-2'
+      assign gridClasses = 'md:grid-cols-[1fr_44%]'
+    when 'pb-[100%]order-2'
+      assign gridClasses = 'md:grid-cols-2'
+    when 'pb-[75%]order-2'
+      assign gridClasses = 'md:grid-cols-[1fr_66%]'
+  endcase
+%}
+
+
+<div class="{{ section_layout }} {{ color_scheme }} {{ padding_top }} {{ padding_bottom }} {{ responsive_visibility }}">
+  <div class="grid {{ gridClasses }}">
+    <section class="container h-full w-full flex flex-col md:px-12 py-8 {{ align__vertical }} {{ align__horizontal }}">
+      <div class="max-w-md grid gap-3">
+        {% render 'typography', type: preheading_font, content: preheading %}
+        {% render 'typography', type: title_font, content: title %}
+        {% render 'typography', type: subtitle_font, content: subtitle %}
+        {% render 'typography', type: "prose", content: content %}
+
+        {% if button_secondary__show or button_primary__show %}
+          <div class="mt-4 -mx-2 flex flex-col sm:flex-row {{ align__horizontal | replace: "items", "sm:justify" | replace: "items-end", "sm:justify-end" }}">
+            {% if button_secondary__show %}
+              <a href="{{ button_secondary__url }}"
+                 class="{{ button_secondary__style }} m-2">
+                {{ button_secondary__text }}
+              </a>
+            {% endif %}
+            {% if button_primary__show %}
+              <a href="{{ button_primary__url }}"
+                 class="{{ button_primary__style }} m-2">
+                {{ button_primary__text }}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      </div>
+    </section>
+    <section class="flex-1 w-full flex items-center justify-center overflow-hidden {{ image__order }}">
+      <picture class="relative grid flex-1 {{ image__aspect_ratio }}">
+        {% render '_image', image: image, width: 1200, placeholder: 'lifestyle-2', class: 'absolute inset-0 w-full h-full object-cover' %}
+      </picture>
+    </section>
+  </div>
+</div>
+
+{% render '_color-group-access', colorGroup: section.settings.color_scheme, paddingTop: section.settings.padding_top, paddingBottom: section.settings.padding_bottom %}
+{% schema %}
+{
+  "name": "t:sections.image_with_text.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.image_with_text.settings.header__1.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.image_with_text.settings.image.label"
+    },
+    {
+      "type": "color_background",
+      "id": "image__overlay",
+      "label": "t:sections.image_with_text.settings.image__overlay.label",
+      "default": "linear-gradient(134deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) 100%)"
+    },
+    {
+      "type": "select",
+      "id": "image__aspect_ratio",
+      "default": "pb-[100%]",
+      "label": "t:sections.image_with_text.settings.image__aspect_ratio.label",
+      "options": [
+        {
+          "value": "pb-[125%]",
+          "label": "t:sections.image_with_text.settings.image__aspect_ratio.options__1.label"
+        },
+        {
+          "value": "pb-[100%]",
+          "label": "t:sections.image_with_text.settings.image__aspect_ratio.options__2.label"
+        },
+        {
+          "value": "pb-[75%]",
+          "label": "t:sections.image_with_text.settings.image__aspect_ratio.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "image__order",
+      "label": "t:sections.image_with_text.settings.image__order.label",
+      "default": "-order-1",
+      "options": [
+        {
+          "value": "-order-1",
+          "label": "t:sections.image_with_text.settings.image__order.options__1.label"
+        },
+        {
+          "value": "order-2",
+          "label": "t:sections.image_with_text.settings.image__order.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image_with_text.settings.header__2.content"
+    },
+    {
+      "type": "text",
+      "id": "preheading",
+      "label": "t:sections.image_with_text.settings.preheading.label"
+    },
+    {
+      "type": "range",
+      "id": "preheading_font",
+      "label": "t:sections.image_with_text.settings.preheading_font.label",
+      "default": 3,
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "info": "t:sections.image_with_text.settings.preheading_font.info"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.image_with_text.settings.title.label"
+    },
+    {
+      "type": "range",
+      "id": "title_font",
+      "label": "t:sections.image_with_text.settings.title_font.label",
+      "default": 1,
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "info": "t:sections.image_with_text.settings.title_font.info"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "t:sections.image_with_text.settings.subtitle.label"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font",
+      "label": "t:sections.image_with_text.settings.subtitle_font.label",
+      "default": 2,
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "info": "t:sections.image_with_text.settings.subtitle_font.info"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "t:sections.image_with_text.settings.content.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image_with_text.settings.header__3.content"
+    },
+    {
+      "type": "text",
+      "id": "button_primary__text",
+      "label": "t:sections.image_with_text.settings.button_primary__text.label"
+    },
+    {
+      "type": "url",
+      "id": "button_primary__url",
+      "label": "t:sections.image_with_text.settings.button_primary__url.label"
+    },
+    {
+      "type": "radio",
+      "id": "button_primary__style",
+      "label": "t:sections.image_with_text.settings.button_primary__style.label",
+      "default": "button-primary",
+      "options": [
+        {
+          "value": "button-primary",
+          "label": "t:sections.image_with_text.settings.button_primary__style.options__1.label"
+        },
+        {
+          "value": "button-primary--outline",
+          "label": "t:sections.image_with_text.settings.button_primary__style.options__2.label"
+        },
+        {
+          "value": "button-secondary",
+          "label": "t:sections.image_with_text.settings.button_primary__style.options__3.label"
+        },
+        {
+          "value": "button-secondary--outline",
+          "label": "t:sections.image_with_text.settings.button_primary__style.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image_with_text.settings.header__4.content"
+    },
+    {
+      "type": "text",
+      "id": "button_secondary__text",
+      "label": "t:sections.image_with_text.settings.button_secondary__text.label"
+    },
+    {
+      "type": "url",
+      "id": "button_secondary__url",
+      "label": "t:sections.image_with_text.settings.button_secondary__url.label"
+    },
+    {
+      "type": "radio",
+      "id": "button_secondary__style",
+      "label": "t:sections.image_with_text.settings.button_secondary__style.label",
+      "default": "button-primary--outline",
+      "options": [
+        {
+          "value": "button-primary",
+          "label": "t:sections.image_with_text.settings.button_secondary__style.options__1.label"
+        },
+        {
+          "value": "button-primary--outline",
+          "label": "t:sections.image_with_text.settings.button_secondary__style.options__2.label"
+        },
+        {
+          "value": "button-secondary",
+          "label": "t:sections.image_with_text.settings.button_secondary__style.options__3.label"
+        },
+        {
+          "value": "button-secondary--outline",
+          "label": "t:sections.image_with_text.settings.button_secondary__style.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "align__vertical",
+      "label": "t:sections.image_with_text.settings.align__vertical.label",
+      "default": "justify-center",
+      "options": [
+        {
+          "value": "justify-start",
+          "label": "t:sections.image_with_text.settings.align__vertical.options__1.label"
+        },
+        {
+          "value": "justify-center",
+          "label": "t:sections.image_with_text.settings.align__vertical.options__2.label"
+        },
+        {
+          "value": "justify-end",
+          "label": "t:sections.image_with_text.settings.align__vertical.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "align__horizontal",
+      "label": "t:sections.image_with_text.settings.align__horizontal.label",
+      "default": "items-center text-center",
+      "options": [
+        {
+          "value": "items-start text-left",
+          "label": "t:sections.image_with_text.settings.align__horizontal.options__1.label"
+        },
+        {
+          "value": "items-center text-center",
+          "label": "t:sections.image_with_text.settings.align__horizontal.options__2.label"
+        },
+        {
+          "value": "items-end text-right",
+          "label": "t:sections.image_with_text.settings.align__horizontal.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image_with_text.settings.header__5.content"
+    },
+    {
+      "type": "radio",
+      "id": "section_layout",
+      "label": "t:sections.image_with_text.settings.section_layout.label",
+      "default": "container-bg-full",
+      "options": [
+        {
+          "value": "container-bg-full",
+          "label": "t:sections.image_with_text.settings.section_layout.options__1.label"
+        },
+        {
+          "value": "fullwidth",
+          "label": "t:sections.image_with_text.settings.section_layout.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "responsive_visibility",
+      "label": "t:sections.image_with_text.settings.responsive_visibility.label",
+      "default": "responsive",
+      "options": [
+        {
+          "value": "responsive",
+          "label": "t:sections.image_with_text.settings.responsive_visibility.options__1.label"
+        },
+        {
+          "value": "md:hidden",
+          "label": "t:sections.image_with_text.settings.responsive_visibility.options__2.label"
+        },
+        {
+          "value": "max-md:hidden",
+          "label": "t:sections.image_with_text.settings.responsive_visibility.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "default": "pt-0",
+      "options": [
+        {
+          "value": "pt-0",
+          "label": "t:sections.image_with_text.settings.padding_top.options__1.label"
+        },
+        {
+          "value": "pt-sm",
+          "label": "t:sections.image_with_text.settings.padding_top.options__2.label"
+        },
+        {
+          "value": "pt-md",
+          "label": "t:sections.image_with_text.settings.padding_top.options__3.label"
+        },
+        {
+          "value": "pt-lg",
+          "label": "t:sections.image_with_text.settings.padding_top.options__4.label"
+        }
+      ],
+      "label": "t:sections.image_with_text.settings.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "default": "pb-0",
+      "options": [
+        {
+          "value": "pb-0",
+          "label": "t:sections.image_with_text.settings.padding_bottom.options__1.label"
+        },
+        {
+          "value": "pb-sm",
+          "label": "t:sections.image_with_text.settings.padding_bottom.options__2.label"
+        },
+        {
+          "value": "pb-md",
+          "label": "t:sections.image_with_text.settings.padding_bottom.options__3.label"
+        },
+        {
+          "value": "pb-lg",
+          "label": "t:sections.image_with_text.settings.padding_bottom.options__4.label"
+        }
+      ],
+      "label": "t:sections.image_with_text.settings.padding_bottom.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "default": "bg-theme-bg text-theme-text color-inherit",
+      "options": [
+        {
+          "value": "bg-theme-bg text-theme-text color-inherit",
+          "label": "t:sections.image_with_text.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-1",
+          "label": "t:sections.image_with_text.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-2",
+          "label": "t:sections.image_with_text.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "bg-theme-bg text-theme-text color-group-3",
+          "label": "t:sections.image_with_text.settings.color_scheme.options__4.label"
+        }
+      ],
+      "label": "t:sections.image_with_text.settings.color_scheme.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_with_text.presets.image_with_text.name"
+    }
+  ]
+}
+{% endschema %}

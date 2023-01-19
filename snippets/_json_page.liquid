@@ -1,0 +1,91 @@
+{%- liquid
+
+  assign page_options = 'author,content,handle,id,published_at,template_suffix,title,url,seo_content,url' | split: ','
+
+  assign page_sub_selects = 'metafields' | split: ','
+
+  assign subset = select | strip_newlines | replace: ' ', "" | split: ',' | default: page_options
+
+  assign subset_with_prefix = subset | join: ",|" | prepend: "|" | split: ','
+  assign select_with_prefix = subset_with_prefix | join: ","
+
+  for item in subset
+    assign test_item = item | split: '.' | first
+    if page_options contains test_item
+      assign opt = opt | join: ',' | append: ',' | append: test_item | split: ','
+    endif
+  endfor
+
+  assign options = opt | join: ',' | split: ','
+
+  if options.size == 0
+    assign options = page_options
+  endif
+
+  assign options = options | sort
+
+  for sub_select in page_sub_selects
+    assign prefixed_sub_select = '|' | append: sub_select | append: '.'
+    assign sub_selection = null
+
+    if select_with_prefix contains prefixed_sub_select
+      unless options contains sub_select
+        assign options = options | join: ',' | append: ',' | append: sub_select | split: ','
+      endunless
+      assign opt = null
+      for option in subset_with_prefix
+        if option contains prefixed_sub_select
+          assign opt = opt | join: ',' | append: ',' | append: option | replace: prefixed_sub_select, '' | split: ','
+        endif
+      endfor
+      assign sub_selection = opt | join: ',' | remove_first: ','
+    endif
+
+    case sub_select
+      when 'metafields'
+        assign metafields_namespaces = sub_selection | split: ','
+    endcase
+  endfor
+
+-%}
+
+{%- capture json -%}
+  {
+  {%- if options contains 'author' -%}
+    ,"author": {{- input["author"] | json -}}
+  {% endif %}
+  {%- if options contains 'content' -%}
+    ,"content": {{- input["content"] | json -}}
+  {% endif %}
+  {%- if options contains 'handle' -%}
+    ,"handle": {{- input["handle"] | json -}}
+  {% endif %}
+  {%- if options contains 'id' -%}
+    ,"id": {{- input["id"] | json -}}
+  {% endif %}
+  {%- if options contains 'published_at' -%}
+    ,"published_at": "{{- input["published_at"] | date: "%Y-%m-%dT%H:%M:%S%z" -}}"
+  {% endif %}
+  {%- if options contains 'template_suffix' -%}
+    ,"template_suffix": {{- input["template_suffix"] | json -}}
+  {% endif %}
+  {%- if options contains 'title' -%}
+    ,"title": {{- input["title"] | json -}}
+  {% endif %}
+  {%- if options contains 'url' -%}
+    ,"url": {{- input["url"] | split: '?' | first | json -}}
+  {% endif %}
+  {%- if options contains "seo_content" -%}
+    ,"seo_content": {{- input['content'] | strip_html | strip_newlines | truncate: 200 | json -}}
+  {%- endif -%}
+  {%- if metafields_namespaces.size > 0 -%}
+    ,"metafields": {
+    {%- for namespace in metafields_namespaces -%}
+      "{{- namespace -}}": {%- render '_json_metafields', input: input.metafields[namespace] -%}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+    }
+  {%- endif -%}
+  }
+{%- endcapture -%}
+
+{{- json | remove_first: ',' | trim | strip_newlines -}}

@@ -1,0 +1,49 @@
+{% capture precise_rating %}{{ rating }}{% endcapture %}
+
+
+{% liquid
+
+  assign star_precise = precise_rating | round: 2
+  assign star_floor = precise_rating | floor
+  assign star_ceil = precise_rating | ceil
+  assign star_percentage_root = star_precise | minus: star_floor | times: 100
+
+  assign scale_max = rating.scale_max | default: 5
+  assign scale_min = rating.scale_min | default: 1
+%}
+
+<div class="relative flex items-center {{ class }}">
+  {% for iterator in (scale_min..scale_max) %}
+    {% assign i = iterator | minus: 1 %}
+    {% if i < star_floor %}
+      {% assign star_percentage = "100" %}
+    {% endif %}
+    {% if i >= star_floor and i < star_ceil %}
+      {% assign star_percentage = star_percentage_root %}
+    {% endif %}
+    {% if i >= star_ceil %}
+      {% assign star_percentage = "0" %}
+    {% endif %}
+    <svg class="w-auto h-full"
+         fill="url(#{{ id_prefix }}_{{ i }})"
+         viewBox="0 0 20 20"
+         xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+      <linearGradient id="{{ id_prefix }}_{{ i }}">
+        <stop offset="0%"
+              stop-color="var(--color-review-stars--hex)" />
+        <stop offset="{{ star_percentage }}%"
+              data-star-rating="{{ i }}"
+              stop-color="var(--color-review-stars--hex)" />
+        <stop offset="{{ star_percentage }}%"
+              data-star-rating="{{ i }}"
+              stop-color="rgb(var(--color-gray-400))" />
+        <stop offset="100%"
+              stop-color="rgb(var(--color-gray-400))" />
+
+
+      </linearGradient>
+    </svg>
+  {% endfor %}
+</div>

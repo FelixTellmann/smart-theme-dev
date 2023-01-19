@@ -1,0 +1,2 @@
+{%- if color -%}{%- assign lighten = lighten | default: 0 -%}{%- assign darken = darken | default: 0 -%}{{ color | color_lighten: lighten | color_darken: darken | color_extract: "red" }} {{ color | color_lighten: lighten | color_darken: darken | color_extract: "green" }} {{ color | color_lighten: lighten | color_darken: darken | color_extract: "blue" }}{%- endif -%}
+

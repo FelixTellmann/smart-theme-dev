@@ -1,0 +1,14 @@
+{% case element %}
+  {% when "scrollbar" %}
+    <div class="group/scrollbar absolute top-full flex h-4 w-full cursor-pointer touch-none items-center {{ class }}"
+         data-scroll-bar>
+      <div class="relative h-1 w-full rounded-full bg-gray-200 transition-all ease-in-out group-hover/scrollbar:h-1.5">
+        <button type="button"
+                class="absolute top-1/2 flex min-h-full cursor-grab items-center justify-center py-2 will-change-transform active:cursor-grabbing [&:active_div]:!h-2"
+                data-scroll-bar-thumb>
+          <span class="block h-1 w-full rounded-full bg-gray-900 transition-all ease-in-out group-hover/scrollbar:h-1.5"></span>
+        </button>
+      </div>
+    </div>
+
+{% endcase %}
