@@ -9364,6 +9364,282 @@
         }
       }
     },
+    "richtext": {
+      "name": "Richtext",
+      "settings": {
+        "header__1": {
+          "content": "Layout"
+        },
+        "max_width": {
+          "label": "Max width"
+        },
+        "align__horizontal": {
+          "label": "Horizontal Alignment",
+          "options__1": {
+            "label": "Left"
+          },
+          "options__2": {
+            "label": "Center"
+          },
+          "options__3": {
+            "label": "Right"
+          }
+        },
+        "width": {
+          "label": "Width",
+          "options__1": {
+            "label": "Fullwidth"
+          },
+          "options__2": {
+            "label": "Container"
+          },
+          "options__3": {
+            "label": "3xl"
+          },
+          "options__4": {
+            "label": "2xl"
+          },
+          "options__5": {
+            "label": "xl"
+          },
+          "options__6": {
+            "label": "lg"
+          },
+          "options__7": {
+            "label": "md"
+          },
+          "options__8": {
+            "label": "sm"
+          }
+        },
+        "responsive_visibility": {
+          "label": "Responsive Visibility",
+          "options__1": {
+            "label": "Mobile & Desktop"
+          },
+          "options__2": {
+            "label": "Mobile only"
+          },
+          "options__3": {
+            "label": "Desktop only"
+          }
+        },
+        "padding_top": {
+          "label": "Top Padding",
+          "options__1": {
+            "label": "None"
+          },
+          "options__2": {
+            "label": "Small"
+          },
+          "options__3": {
+            "label": "Medium"
+          },
+          "options__4": {
+            "label": "Large"
+          }
+        },
+        "padding_bottom": {
+          "label": "Bottom Padding",
+          "options__1": {
+            "label": "None"
+          },
+          "options__2": {
+            "label": "Small"
+          },
+          "options__3": {
+            "label": "Medium"
+          },
+          "options__4": {
+            "label": "Large"
+          }
+        },
+        "color_scheme": {
+          "label": "Color scheme",
+          "options__1": {
+            "label": "Inherit from parent\/theme"
+          },
+          "options__2": {
+            "label": "Color group 1"
+          },
+          "options__3": {
+            "label": "Color group 2"
+          },
+          "options__4": {
+            "label": "Color group 3"
+          }
+        }
+      },
+      "blocks": {
+        "text": {
+          "name": "Text",
+          "settings": {
+            "title": {
+              "label": "Content"
+            },
+            "title_type": {
+              "label": "Type",
+              "info": "h1-h6, Set to 7 for body text"
+            },
+            "header__1": {
+              "content": "Layout"
+            },
+            "margin_bottom": {
+              "label": "Margin Bottom"
+            },
+            "responsive_visibility": {
+              "label": "Responsive Visibility",
+              "options__1": {
+                "label": "Mobile & Desktop"
+              },
+              "options__2": {
+                "label": "Mobile only"
+              },
+              "options__3": {
+                "label": "Desktop only"
+              }
+            }
+          }
+        },
+        "inline_image": {
+          "name": "Inline Image",
+          "settings": {
+            "image": {
+              "label": "Image"
+            },
+            "height": {
+              "label": "Height"
+            },
+            "header__1": {
+              "content": "Layout"
+            },
+            "margin_bottom": {
+              "label": "Margin Bottom"
+            },
+            "responsive_visibility": {
+              "label": "Responsive Visibility",
+              "options__1": {
+                "label": "Mobile & Desktop"
+              },
+              "options__2": {
+                "label": "Mobile only"
+              },
+              "options__3": {
+                "label": "Desktop only"
+              }
+            }
+          }
+        },
+        "accent_line": {
+          "name": "Accent line",
+          "settings": {
+            "color": {
+              "label": "Color"
+            },
+            "height": {
+              "label": "height"
+            },
+            "width": {
+              "label": "Width"
+            },
+            "header__1": {
+              "content": "Layout"
+            },
+            "margin_bottom": {
+              "label": "Margin Bottom"
+            },
+            "responsive_visibility": {
+              "label": "Responsive Visibility",
+              "options__1": {
+                "label": "Mobile & Desktop"
+              },
+              "options__2": {
+                "label": "Mobile only"
+              },
+              "options__3": {
+                "label": "Desktop only"
+              }
+            }
+          }
+        },
+        "buttons": {
+          "name": "Buttons",
+          "settings": {
+            "header__1": {
+              "content": "Primary Button"
+            },
+            "button_primary__text": {
+              "label": "Text"
+            },
+            "button_primary__url": {
+              "label": "Url"
+            },
+            "button_primary__style": {
+              "label": "Style",
+              "options__1": {
+                "label": "Primary"
+              },
+              "options__2": {
+                "label": "Primary Outline"
+              },
+              "options__3": {
+                "label": "Secondary"
+              },
+              "options__4": {
+                "label": "Secondary Outline"
+              }
+            },
+            "header__2": {
+              "content": "Secondary Button"
+            },
+            "button_secondary__text": {
+              "label": "Text"
+            },
+            "button_secondary__url": {
+              "label": "Url"
+            },
+            "button_secondary__style": {
+              "label": "Style",
+              "options__1": {
+                "label": "Primary"
+              },
+              "options__2": {
+                "label": "Primary Outline"
+              },
+              "options__3": {
+                "label": "Secondary"
+              },
+              "options__4": {
+                "label": "Secondary Outline"
+              }
+            },
+            "header__3": {
+              "content": "Layout"
+            },
+            "margin_bottom": {
+              "label": "Margin Bottom"
+            },
+            "responsive_visibility": {
+              "label": "Responsive Visibility",
+              "options__1": {
+                "label": "Mobile & Desktop"
+              },
+              "options__2": {
+                "label": "Mobile only"
+              },
+              "options__3": {
+                "label": "Desktop only"
+              }
+            }
+          }
+        }
+      },
+      "presets": {
+        "richtext": {
+          "name": "Richtext"
+        }
+      }
+    },
     "scrollable_images": {
       "name": "Scrollable images",
       "settings": {
