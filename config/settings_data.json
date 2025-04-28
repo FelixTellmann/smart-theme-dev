@@ -567,7 +567,7 @@
         "disabled": false,
         "settings": {
           "trigger_style": "badge",
-          "alignment": "bottom",
+          "alignment": "right",
           "position": 50,
           "offset": 0,
           "trigger_text": "Registry",
