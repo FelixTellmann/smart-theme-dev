@@ -21,7 +21,7 @@
     {% assign url_2 = product.url %}
     {% assign title_2 = product.title %}
 
-  {%- when 'collection' and collection.handle -%}
+  {%- when 'collection' -%}
     {% assign url_1 = collection.url %}
     {% assign title_1 = collection.title %}
 
@@ -83,3 +83,13 @@
   {% endif %}
 
 </nav>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- when 'collection' and collection.handle -%}"
+  to: "{%- when 'collection' -%}"
+  position: 636..661
+{% endcomment %}
